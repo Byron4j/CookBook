@@ -1,4 +1,4 @@
-# CookBook 个人JAVA技术栈学习手册记录总结
+# CookBook 个人 JAVA 技术栈学习手册记录总结
 - MySQL
 - Spring
 - Nginx
