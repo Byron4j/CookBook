@@ -1,6 +1,6 @@
 
 
-##Windows环境Nginx
+## Windows环境Nginx
 
 ### [下载Nginx](http://nginx.org/en/download.html) 
 
