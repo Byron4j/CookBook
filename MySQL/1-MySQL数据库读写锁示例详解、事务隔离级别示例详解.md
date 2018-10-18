@@ -232,7 +232,6 @@ ERROR 1100 (HY000): Table 'employee' was not locked with LOCK TABLES
 
 - session持有表A的写锁，则session可以对表A进行查询、更新操作
 - 排他性，其他session不能对表A进行查询、更新操作
-- 
 
 #### 读写锁注意事项
 
@@ -409,8 +408,7 @@ SET TRANSACTION ISOLATION LEVEL READ UMCOMMITED;
 
 
 使用读提交的隔离级别，会有额外影响：
->
-- 对于UPDATE、DELETE 语句，InnoDB 仅仅持有更新或者删除的行的锁。 MySQL 在评估完 WHERE 条件之后，会释放不匹配的行的锁，大大减少了思索的可能性，但是还是有可能会发生死锁的。
+>- 对于UPDATE、DELETE 语句，InnoDB 仅仅持有更新或者删除的行的锁。 MySQL 在评估完 WHERE 条件之后，会释放不匹配的行的锁，大大减少了思索的可能性，但是还是有可能会发生死锁的。
 - 对于 UPDATE 语句，如果一条记录已经被锁了，InnoDB会采取“半一致性” 的读方式，会返回最新的已经提交的版本记录给MySQL，来匹配WHERE条件是否匹配。 如果存在记录匹配到了（必须会被UPDATE的），MySQL会再次读取这些记录并且这次 InnoDB 要么锁定它 要么 等待它的锁。
 
 
