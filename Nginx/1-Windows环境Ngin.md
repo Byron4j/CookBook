@@ -1,6 +1,6 @@
 
 
-##Windows环境Nginx
+## Windows环境Nginx使用简介
 
 ### [下载Nginx](http://nginx.org/en/download.html) 
 
@@ -14,12 +14,47 @@
 - error.log ： 错误日志
 - nginx.pid ： nginx进程id号
 
+### 浏览器访问Nginx
+
+在浏览器输入：http://localhost/ ，看到如下内容：
+
+
+==========================================================================
+
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+==========================================================================
+
+### 查看Nginx版本 nginx -v
+
+```shell
+>nginx -v
+nginx version: nginx/1.15.5
+```
+
 
 ### 查看Nginx进程
 
 在命令行运行 **tasklist** 查看nginx进程：
 
-```batch
+```shell
 E:\111softwares\nginx-1.15.5> tasklist /fi "imagename eq nginx.exe"
 
 PS E:\111softwares\nginx-1.15.5> tasklist /fi "imagename eq nginx.exe"
