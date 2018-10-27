@@ -109,4 +109,20 @@ public class SingletonTest {
 
     }
 
+    @Test
+    public void testSReadResolve() throws Exception {
+
+         s = SingletonZCloneSerializableReadResolve.getInstance();
+
+
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("test.ser"));
+        oos.writeObject(s);
+        oos.close();
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.ser"));
+        SingletonZCloneSerializableReadResolve test = (SingletonZCloneSerializableReadResolve) ois.readObject();
+        ois.close();
+        System.out.println(s == test);
+
+    }
+
 }
