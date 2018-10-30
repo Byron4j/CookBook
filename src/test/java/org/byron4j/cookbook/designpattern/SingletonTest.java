@@ -112,7 +112,7 @@ public class SingletonTest {
     @Test
     public void testSReadResolve() throws Exception {
 
-         s = SingletonZCloneSerializableReadResolve.getInstance();
+        SingletonZCloneSerializableReadResolve s = SingletonZCloneSerializableReadResolve.getInstance();
 
 
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("test.ser"));
