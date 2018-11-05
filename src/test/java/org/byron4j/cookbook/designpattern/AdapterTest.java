@@ -14,5 +14,6 @@ public class AdapterTest {
         //Calling getBalance() on Adapter
         AccountAdapter adapter = new AccountAdapter(new OffshoreAccount(2000));
         System.out.println("Account Balance= " + adapter.getBalance());
+
     }
 }
