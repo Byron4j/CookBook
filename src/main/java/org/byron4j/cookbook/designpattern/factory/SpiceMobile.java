@@ -1,5 +1,8 @@
 package org.byron4j.cookbook.designpattern.factory;
 
+import lombok.ToString;
+
+@ToString
 public abstract  class SpiceMobile {
     public double price;
 
@@ -14,4 +17,6 @@ public abstract  class SpiceMobile {
     public abstract void prepare();
     public abstract void bundle();
     public abstract void label();
+
+
 }

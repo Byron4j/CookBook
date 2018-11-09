@@ -9,7 +9,7 @@ public class OffshoreAccount {
     private double balance;
 
     /**税率*/
-    private static final double TAX_RATE = 0.04;
+    private static final double TAX_RATE = 0.03;
 
     public OffshoreAccount(final double balance) {
         this.balance = balance;
