@@ -35,6 +35,7 @@ public abstract  class ObjectPool<T> {
      *
      * */
     public synchronized  T checkout(){
+        System.out.println("准备\"检出\"可用连接对象");
         // 新的起始时间，当前有使用且有效，则延长其有效时间
         long now = System.currentTimeMillis();
         T t;
@@ -82,6 +83,7 @@ public abstract  class ObjectPool<T> {
      * @param t
      */
     public synchronized void checkin(T t){
+        System.out.println("准备\"归还\"当前连接对象");
         // 将对象从锁定列表中移除
         locked.remove(t);
         // 将对象加入到可用列表中，时间从当前开始
