@@ -1,6 +1,16 @@
 
 [AWK入门指南](https://awk.readthedocs.io/en/latest/chapter-one.html)
 
+
+### 安装AWK
+
+```shell
+yum install gawk
+
+which awk
+```
+
+
 ### AWK 起步示例
 
 假设存在一个文件 emp.data，其中包含员工的姓名、薪资（美元/小时）以及小时数，一个员工一行数据,其内容如下:
@@ -586,3 +596,108 @@ kathy   4.00    10
 Dan     3.75    0
 Beth    4.00    0
 ```
+
+#### --dump-variables 操作查看全局变量
+
+-dump-variables[=file] 操作可以打印全局变量到文件中，默认是“awkvars.out”文件。
+
+```awk
+awk --dump-variables ''
+
+# 查看文件awkvars.out 
+cat awkvars.out 
+
+ARGC: number (1)
+ARGIND: number (0)
+ARGV: array, 1 elements
+BINMODE: number (0)
+CONVFMT: string ("%.6g")
+ERRNO: number (0)
+FIELDWIDTHS: string ("")
+FILENAME: string ("")
+FNR: number (0)
+FS: string (" ")
+IGNORECASE: number (0)
+LINT: number (0)
+NF: number (0)
+NR: number (0)
+OFMT: string ("%.6g")
+OFS: string (" ")
+ORS: string ("\n")
+RLENGTH: number (0)
+RS: string ("\n")
+RSTART: number (0)
+RT: string ("")
+SUBSEP: string ("\034")
+TEXTDOMAIN: string ("messages")
+
+```
+
+
+#### --help 操作可以寻得帮助
+
+```awk
+awk --help
+# 输出信息如下：
+
+Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
+Usage: awk [POSIX or GNU style options] [--] 'program' file ...
+POSIX options:          GNU long options:
+        -f progfile             --file=progfile
+        -F fs                   --field-separator=fs
+        -v var=val              --assign=var=val
+        -m[fr] val
+        -O                      --optimize
+        -W compat               --compat
+        -W copyleft             --copyleft
+        -W copyright            --copyright
+        -W dump-variables[=file]        --dump-variables[=file]
+        -W exec=file            --exec=file
+        -W gen-po               --gen-po
+        -W help                 --help
+        -W lint[=fatal]         --lint[=fatal]
+        -W lint-old             --lint-old
+        -W non-decimal-data     --non-decimal-data
+        -W profile[=file]       --profile[=file]
+        -W posix                --posix
+        -W re-interval          --re-interval
+        -W source=program-text  --source=program-text
+        -W traditional          --traditional
+        -W usage                --usage
+        -W use-lc-numeric       --use-lc-numeric
+        -W version              --version
+
+To report bugs, see node `Bugs' in `gawk.info', which is
+section `Reporting Problems and Bugs' in the printed version.
+
+gawk is a pattern scanning and processing language.
+By default it reads standard input and writes standard output.
+
+Examples:
+        gawk '{ sum += $1 }; END { print sum }' file
+        gawk -F: '{ print $1 }' /etc/passwd
+```
+
+#### --version 查看版本信息
+
+```awk
+awk --version
+# 输出结果如下:
+
+GNU Awk 3.1.7
+Copyright (C) 1989, 1991-2009 Free Software Foundation.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see http://www.gnu.org/licenses/.
+```
+
