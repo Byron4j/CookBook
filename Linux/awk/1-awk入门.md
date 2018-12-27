@@ -5,9 +5,12 @@
 ### 安装AWK
 
 ```shell
+# 使用yum安装
 yum install gawk
 
+# 安装后检查是否安装ok
 which awk
+## 一般输出安装路径是在： /bin/awk
 ```
 
 
@@ -322,6 +325,18 @@ Susie   4.25    18
 - >awk 可以在一行上放多个语句，步过要使用分号;进行分隔。
 
 - >普通的 print 是打印当前输入行， print "" 则会打印一个空行。
+
+
+#### AWK 工作流图
+
+![Awk 工作流图](awk_workflow.jpg)
+
+AWK 是按一行一行地读取输入的。
+- 1.首先执行 **BEGIN** 块
+- 2.从输入中读取一行
+- 3.在这次读取的这一行中执行 AWK 命令
+- 4.如果文件还没有读取完毕，则重复步骤2、3
+- 5.执行 **END** 块中的 awk 命令
 
 #### 使用 AWK 进行计算
 
@@ -701,3 +716,929 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see http://www.gnu.org/licenses/.
 ```
 
+#### -v 操作
+
+**-v**  操作允许给一个变量分配值。允许在程序执行之前分配。
+
+```awk
+awk -v name=LFF 'BEGIN {printf("username=%s\n", name)}'
+
+# 输出结果为：
+username=LFF
+```
+
+#### --lint 操作提示信息
+
+**--lint** 操作允许输出检查信息，比如当参数提供错误，会将警告信息当作错误。
+
+```awk
+awk --lint '' /bin/ls
+
+# 输出结果为：
+awk: warning: empty program text on command line
+awk: warning: source file does not end in newline
+awk: warning: no program text at all!
+```
+
+#### 正则匹配
+
+匹配输入行中包含字符a的行，全部输出。
+```shell
+awk '/a/ {print $0}'  emp.data
+
+# 输出结果为：
+Dan     3.75    0
+kathy   4.00    10
+Mark    5.00    20
+Mary    5.50    22
+```
+
+打印输入行中包含字符a的行数：
+
+```shell
+awk '/a/ {++cnt} END {print "匹配的行数为:", cnt}' emp.data
+
+# 输出结果为:
+匹配的行数为: 4
+```
+
+
+#### 内置变量
+
+##### ARGC ：命令行中提供的参数个数
+
+``shell
+awk 'BEGIN {print "Arguments =", ARGC}' One Two Three Four
+Arguments = 5
+``
+
+##### ARGV 表示命令行入参构成的数组，索引是 0~ARGC-1
+
+```shell
+ awk 'BEGIN { 
+>    for (i = 0; i < ARGC - 1; ++i) { 
+>       printf "ARGV[%d] = %s\n", i, ARGV[i] 
+>    } 
+> }' one two three four
+
+# 输出结果为：
+ARGV[0] = awk
+ARGV[1] = one
+ARGV[2] = two
+ARGV[3] = three
+```
+
+##### CONVFMT 
+
+表示数字的转换格式。默认值是 **%.6g**。
+
+```
+awk 'BEGIN { print "Conversion Format =", CONVFMT }'
+
+#输出：
+Conversion Format = %.6g
+```
+
+
+##### ENVIRON 环境变量  
+
+```shell
+awk 'BEGIN { print ENVIRON["USER"] }'
+
+# 输出当前用户
+deploy
+```
+
+我们可以借助env命令查看linux服务器上的全部环境变量：
+
+```shell
+env
+
+# 查看当前服务器上的所有环境变量
+HOSTNAME=sz-local3
+TERM=vt100
+SHELL=/bin/bash
+HISTSIZE=1000
+SSH_CLIENT=10.89.4.224 53217 22
+QTDIR=/usr/lib64/qt-3.3
+OLDPWD=/data/app
+QTINC=/usr/lib64/qt-3.3/include
+SSH_TTY=/dev/pts/0
+GREP_OPTTIONS=--color=always
+USER=deploy
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.tbz=01;31:*.tbz2=01;31:*.bz=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:
+MAIL=/var/spool/mail/deploy
+PATH=/usr/lib/jdk1.7.0_76/bin:/usr/lib64/qt-3.3/bin:/data/app/node-v4.2.4-linux-x64/bin:/usr/lib/jdk1.7.0_76/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/deploy/bin
+PWD=/data/app/lff
+JAVA_HOME=/usr/lib/jdk1.7.0_76
+LANG=en_US.UTF-8
+HISTCONTROL=ignoredups
+SHLVL=1
+HOME=/home/deploy
+LOGNAME=deploy
+QTLIB=/usr/lib64/qt-3.3/lib
+CVS_RSH=ssh
+CLASSPATH=/usr/lib/jdk1.7.0_76/lib:/usr/lib/jdk1.7.0_76/lib:
+SSH_CONNECTION=10.89.4.224 53217 10.193.1.27 22
+LESSOPEN=||/usr/bin/lesspipe.sh %s
+G_BROKEN_FILENAMES=1
+_=/bin/env
+```
+
+
+##### FILENAME 表示当前文件
+
+```shell
+awk 'END {print FILENAME}' emp.data
+
+# 输出结果为：
+emp.data
+```
+
+##### FS 表示文件分隔符
+
+FS 表示文件分割符，默认是空白字符。也可以使用 **-F** 命令行变更。
+
+```shell
+awk 'BEGIN {print "FS = " FS}' | cat -vte
+
+# 输出结果为：
+FS =  $
+```
+
+
+##### NF 表示当前行的字段（列数）
+
+##### NR 表示当前读到的行数
+
+##### RLENGTH 
+
+表示匹配函数 **match** 到的字符串的长度。
+
+```shell
+awk '
+BEGIN {
+       if(match("One Two Three", "re")){
+          print RLENGTH
+       }
+}'
+
+# 匹配到了Three中的re，输出结果为：
+2
+```
+
+##### RSTART 表示第一个**match**函数匹配到的字符串中的位置
+
+```
+awk '
+BEGIN {
+       if(match("One Two Three There", "re")){
+          print RSTART 
+       }
+}'
+
+# 从O开始，到Three的r，位置处于11，输出结果为：
+11
+```
+
+##### $0 表示全部的输入记录
+##### $n 表示第n列(第n个字段)，以文件分隔符分隔，默认是空白字符。
+
+
+##### ARGIND 表示当前处理的 ARGV 的索引值
+
+##### PROCINFO 表示进程相关信息
+
+```shell
+awk 'BEGIN {print PROCINFO["pid"]}'
+5142
+```
+
+#### 运算符操作
+
+#####  自增符操作
+
+```shell
+awk 'BEGIN {print ++a}'
+# 先自增，输出结果为：
+1
+# 后自增，输出结果为：
+awk 'BEGIN {print a++}'
+0
+```
+
+#####  自减符操作
+
+```shell
+awk 'BEGIN {print --a}'
+-1
+awk 'BEGIN {print a--}'
+0
+```
+
+##### +=、 -=、 *=、/=、%=、 ^=、**=操作
+
+```shell
+awk 'BEGIN {print cnt+=10; print cnt}'
+10
+10
+
+awk 'BEGIN {cnt=10 ;print cnt*=10; print cnt}'
+100
+100
+
+awk 'BEGIN {cnt=10 ;print cnt-=10; print cnt}'
+0
+0
+awk 'BEGIN {cnt=10 ;print cnt/=10; print cnt}'
+1
+1
+awk 'BEGIN {cnt=10 ;print cnt%=10; print cnt}'
+0
+0
+awk 'BEGIN {cnt=10 ;print cnt^=10; print cnt}'
+10000000000
+10000000000
+awk 'BEGIN {cnt=10 ;print cnt**=10; print cnt}'
+10000000000
+10000000000
+```
+
+##### 关系运算符
+
+- ==
+- !=
+- <
+- <=
+- &gt;
+- &gt;=
+
+##### 逻辑运算符
+
+- &&
+- ||
+- !
+
+##### 三目运算符
+
+- ? :
+
+##### 字符串连接符
+
+空白字符是字符串连接符
+
+```shell
+awk 'BEGIN {a="hello, "; b="world!"; c= a b; print(c)}'
+
+# 输出连接结果
+hello, world!
+```
+
+##### 数组关系操作符
+
+**for in** 操作常用于遍历数组。
+
+```shell
+awk '
+> BEGIN { arr[1] = "a"; arr[2] = "b"; arr[3] = "c";  
+> for(i in arr){
+>     print("a[", i, "]=", arr[i])
+> }
+> }'
+
+# 遍历输出数组元素：
+a[ 1 ]= a
+a[ 2 ]= b
+a[ 3 ]= c
+
+```
+
+##### 正则表达式操作符
+
+- 点符**.** ： 匹配任意单个字符
+
+示例：
+
+```shell
+echo -e "cat\nbat\nfun\nfin\nfan" | awk '/f.n/'
+
+fun
+fin
+fan
+```
+
+- **^**符：匹配开头
+
+匹配 **The** 开头的字符串：
+
+```shell
+echo -e "This\nThat\nThere\nTheir\nthese" | awk '/^The/'
+
+There
+Their
+```
+
+- **$**符：匹配结尾
+
+匹配 **n** 结尾的字符串：
+
+```shell
+echo -e "knife\nknow\nfun\nfin\nfan\nnine" | awk '/n$/'
+
+fun
+fin
+fan
+```
+
+- **[]** 符 ：匹配字符集多选一
+
+匹配 Call 或者 Tall：
+
+```shell
+echo -e "Call\nTall\nBall" | awk '/[CT]all/'
+ 
+Call
+Tall
+```
+
+
+- 排除匹配
+
+使用^排除，匹配不是 Call且不是Tall的字符串：
+
+```shell
+echo -e "Call\nTall\nBall" | awk '/[^CT]all/'
+
+Ball
+```
+
+
+- 可选匹配
+
+匹配 Call 或者 Tall
+
+```shell
+echo -e "Call\nTall\nBall\nSmall\nShall" | awk '/Call|Ball/'
+
+Call
+Ball
+```
+
+- **？** 符号 ：0 或 1次匹配
+
+```shell
+echo -e "Colour\nColor" | awk '/Colou?r/'
+
+Colour
+Color
+```
+
+- \* 符号： 表示0或多个匹配
+
+```shell
+echo -e "ca\ncat\ncatt" | awk '/cat*/'
+
+ca
+cat
+catt
+```
+
+- **()** 分组匹配
+
+```shell
+echo -e "Apple Juice\nApple Pie\nApple Tart\nApple Cake" | awk 
+   '/Apple (Juice|Cake)/'
+   
+Apple Juice
+Apple Cake
+```
+
+
+#### 数组
+
+```shell
+awk 'BEGIN {
+   fruits["mango"] = "yellow";
+   fruits["orange"] = "orange"
+   print fruits["orange"] "\n" fruits["mango"]
+}'
+
+orange
+yellow
+```
+
+
+
+##### **delete**  删除数组元素
+
+```shell
+awk 'BEGIN {
+   fruits["mango"] = "yellow";
+   fruits["orange"] = "orange";
+   delete fruits["orange"];
+   for(i in fruits){print fruits[i]}
+}'
+
+# 删除orange后，只剩下yello
+yellow
+
+```
+
+##### 多维数组
+
+```shell
+100   200   300
+400   500   600
+700   800   900
+```
+
+array[0][0] 存储 100，array[0][1] 存储 200。
+**正确的语法是 array["0,0"] = 100**
+
+```shell
+awk 'BEGIN {
+   array["0,0"] = 100;
+   array["0,1"] = 200;
+   array["0,2"] = 300;
+   array["1,0"] = 400;
+   array["1,1"] = 500;
+   array["1,2"] = 600;
+
+   # print array elements
+   print "array[0,0] = " array["0,0"];
+   print "array[0,1] = " array["0,1"];
+   print "array[0,2] = " array["0,2"];
+   print "array[1,0] = " array["1,0"];
+   print "array[1,1] = " array["1,1"];
+   print "array[1,2] = " array["1,2"];
+}'
+```
+
+#### 字符串函数
+
+##### index(str, substr) 
+子串 substr 出现在字符串 str 中的开始位置，从1开始计数。
+
+```shell
+awk 'BEGIN {print index("Hello", "ll")}'
+3
+```
+
+##### gsub(regex, sub, string)
+
+正则匹配 regex，将其替换为 sub指定的内容， string是所选的字符串。
+
+```shell
+awk 'BEGIN { str = "Hello,World！"; gsub("World", "Lily", str); print str}'
+Hello,Lily！
+```
+
+##### match(str, regex)
+
+匹配则返回regex在str中的起始位置，否则返回0表示没有匹配到。
+
+```shell
+awk 'BEGIN {str = "Hello,world!"; ret = match(str, "wo"); print str, ret}'
+Hello,world! 7
+```
+
+##### split(str, arr, regex)
+
+将 str 按 regex 匹配拆分，得到的每个拆分作为元素保存在 arr 数组中。
+
+```shell
+awk 'BEGIN {str = "Hello,Hellokitty"; split(str, arr, ",");  
+for(ele in arr){
+    print arr[ele]
+}}'
+
+Hello
+Hellokitty
+```
+
+
+##### strtonum(str)
+ 
+ 将字符串强转成数值类型， str开头是0的话会转为八进制， 是0x或0X开头的话会转为十六进制。
+ 
+ ```shell
+  awk 'BEGIN {
+ >    print "Decimal num = " strtonum("123")
+ >    print "Octal num = " strtonum("0123")
+ >    print "Hexadecimal num = " strtonum("0x123")
+ > }'
+ Decimal num = 123
+ Octal num = 83
+ Hexadecimal num = 291
+ ```
+ 
+##### substr(str, start, l)
+ 
+ 获取字串，从字符串 str 中的 start位置开始截取长度为 ***L*** 的字符串。
+ 
+ ```shell
+ awk 'BEGIN {str = "nihaoya!"; print substr(str, 1, 2)}'
+ ni
+ ```
+ 
+##### tolower(str) 
+ 将字符串 str 小写化。
+ 
+ ```shell
+ awk 'BEGIN{ print tolower("HeLLo")}'
+ hello
+ ```
+ 
+##### toupper(str) 
+  将字符串 str 大写化。
+  
+  ```shell
+  awk 'BEGIN{ print toupper("HeLLo")}'
+  HELLO
+  ```
+ 
+ 
+ 
+#### 时间函数
+
+##### systime() 
+获取自 1970-01-01 00:00:00 至今的unix时间戳
+
+```shell
+awk 'BEGIN {print systime()}'
+1545742584
+```
+
+##### mktime(datespec)
+
+将指定的日期格式串转换为时间戳，datespec 格式是 YYYY mm dd HH MM SS
+
+```shell
+awk 'BEGIN {print mktime("2018 12 25 21 07 00")}'
+1545743220
+```
+
+##### strftime(format, timestamp)
+将时间戳 timestamp 转换成指定格式format的字符串
+
+```shell
+ awk 'BEGIN {
+>    print strftime("Time = %m/%d/%Y %H:%M:%S", systime())
+> }'
+Time = 12/25/2018 21:11:09
+```
+
+#### 位操作函数
+
+##### and 
+
+按位与
+
+```shell
+awk 'BEGIN {
+   num1 = 10
+   num2 = 6
+   printf "(%d AND %d) = %d\n", num1, num2, and(num1, num2)
+}'
+
+# 输出结果为：
+(10 AND 6) = 2
+```
+
+
+##### lshift(num, size)
+将num按位左移size位数, 左移一位相当于乘以2
+
+```shell
+awk 'BEGIN {print lshift(10, 1)}'
+20
+```
+
+##### rshift(num, size)
+将num按位右移size位数, 右移一位相当于除以2
+
+```shell
+awk 'BEGIN {print rshift(10, 1)}'
+5
+```
+
+
+##### or 按位或
+
+```shell
+awk 'BEGIN {
+   num1 = 10
+   num2 = 6
+   printf "(%d OR %d) = %d\n", num1, num2, or(num1, num2)
+}'
+
+# 输出结果为：
+(10 OR 6) = 14
+```
+
+##### xor 异或
+
+```shell
+awk 'BEGIN {
+   num1 = 10
+   num2 = 6
+   printf "(%d XOR %d) = %d\n", num1, num2, xor(num1, num2)
+}'
+
+# 输出结果为：
+(10 XOR 6) = 12
+```
+
+### 自定义函数
+
+语法形式:
+
+```shell
+function function_name(argument1, argument2, ...) { 
+   function body
+}
+```
+
+示例：
+
+```shell
+# Returns minimum number
+function find_min(num1, num2){
+   if (num1 < num2)
+   return num1
+   return num2
+}
+# Returns maximum number
+function find_max(num1, num2){
+   if (num1 > num2)
+   return num1
+   return num2
+}
+# Main function
+function main(num1, num2){
+   # Find minimum number
+   result = find_min(10, 20)
+   print "Minimum =", result
+  
+   # Find maximum number
+   result = find_max(10, 20)
+   print "Maximum =", result
+}
+# Script execution starts here
+BEGIN {
+   main(10, 20)
+}
+```
+
+#### 输出转移操作
+
+
+##### 重定向数据到文件
+我们还可以将数据导入到文件中。在 **print** 或者 **printf** 后增加重定向的文件语句。
+语法：
+>print data > outputfile
+
+将数据 data 写入到 outputfile，如果 outputfile 不存在则创建。当指定重定向时，文件 output 会清除所有内容，然后写入数据。顺序写操作则不会提前清除文件内容，只是追加。
+
+```shell
+# 将 "Old data" 写入 message.txt 文件中，没有则创建 message.txt 文件。
+echo "Old data" > message.txt
+# 查看文件内容
+cat message.txt 
+# 输出结果：
+Old data
+```
+
+然后执行：
+```shell
+awk 'BEGIN {print "Hello,World!" > "message.txt"}'
+cat message.txt 
+# 文件的旧内容清楚了，内容已经被替换
+Hello,World!
+```
+
+
+##### 追加内容到文件中
+
+>print DATA >> output-file
+
+```shell
+echo "Old data" > /tmp/message.txt
+cat /tmp/message.txt
+# 查看文件内容
+Old data
+
+# 追加内容到文件中
+awk 'BEGIN { print "Hello, World !!!" >> "/tmp/message.txt" }'
+cat /tmp/message.txt
+
+#  输出内容：
+Old data
+Hello, World !!!
+```
+
+##### 管道 pipe
+
+可能需要发送输出数据到其它程序，通过管道而不是文件。
+这种转移方式会打开一个管道命令，并且会通过管道将数据项通过管道传到另一个进程去执行命令。
+转移参数是一个 awk 表达式。 
+
+管道的语法如下：
+
+>print items | command
+
+示例：使用 **tr** 命令将小写转换为大写
+
+```shell
+awk 'BEGIN { print "hello, world !!!" | "tr [a-z] [A-Z]" }'
+HELLO, WORLD !!!
+```
+
+更过关于 **tr** 的使用方法，可以使用 tr --help 查看帮助信息。
+
+
+##### 双向通信
+
+awk 可以通过 **|&** 跟外部进程通信。
+
+
+```shell
+awk 'BEGIN {
+>    cmd = "tr [a-z] [A-Z]"
+>    print "hello, world !!!" |& cmd
+>    close(cmd, "to")
+>    
+>    cmd |& getline out
+>    print out;
+>    close(cmd);
+> }'
+HELLO, WORLD !!!
+```
+
+说明：
+- 第一条语句，**cmd="tr [a-z] [A-Z]"** ，是我们建立双向通信的命令。
+- 接下来的语句，print 命令提供输入到 **tr** 命令。 这里的 **|&** 表示双向通信。
+- 第三条语句，**close(cmd,"to")** ，在完成执行后，关闭 **to** 进程。
+- **cmd |& getline out** 借助getline函数将结果输出 到 out 变量中。
+- 最后打印out，并使用**close**函数关闭命令。
+
+#### 整齐打印
+
+```shell
+awk 'BEGIN { printf "Hello\nWorld\n" }'
+
+# 输出结果为：
+Hello
+World
+```
+
+##### 水平tab间隔打印
+
+```shell
+awk 'BEGIN { printf "Sr No\tName\tSub\tMarks\n" }'
+
+Sr No   Name    Sub Marks
+```
+
+##### 垂直tab打印
+
+```shell
+awk 'BEGIN { printf "Sr No\vName\vSub\vMarks\n" }'
+
+# 输出结果为：
+Sr No
+     Name
+         Sub
+            Marks
+
+```
+
+##### 回车打印
+```shell
+awk 'BEGIN { printf "Field 1\rField 2\rField 3\rField 4\n" }'
+
+输出：
+Field 4
+```
+
+##### 换页打印
+
+```shell
+awk 'BEGIN { printf "Sr No\fName\fSub\fMarks\n" }'
+Sr No
+     Name
+         Sub
+            Marks
+```
+
+
+##### 格式说明符
+
+- %c ： 表示一个单个字符
+
+```shell
+awk 'BEGIN { printf "ASCII value 65 = character %c\n", 65 }'
+ASCII value 65 = character A
+```
+
+- %d and %i : 表示十进制的整数
+
+```shell
+awk 'BEGIN { printf "Percentags = %d\n", 80.66 }'
+
+输出结果为：
+Percentags = 80
+```
+
+- %e and %E ： 科学记数法
+
+```shell
+awk 'BEGIN { printf "Percentags = %E\n", 80.66 }'
+
+输出结果为：
+Percentags = 8.066000e+01
+```
+
+- %f : 浮点数
+
+```shell
+awk 'BEGIN { printf "Percentags = %f\n", 80.66 }'
+
+输出结果为：
+Percentags = 80.660000
+```
+
+- %s ： 表示字符串
+
+```shell
+awk 'BEGIN { printf "Name = %s\n", "Sherlock Holmes" }'
+
+输出结果为：
+
+Name = Sherlock Holmes
+```
+
+- %nd : 指定宽度打印
+
+```shell
+
+awk 'BEGIN { 
+   num1 = 10; num2 = 20; printf "Num1 = %10d\nNum2 = %10d\n", num1, num2 
+}'
+
+# 输出结果为：
+Num1 =         10
+Num2 =         20
+```
+
+
+
+### AWK 概览
+
+AWK 是一种解释性编程语言。是专门为处理文本而设计的。名字是来自于设计者的名字 —— Alfred Aho, Peter Weinberger, and Brian Kernighan.
+
+#### AWK 的类型
+
+- AWK ： AT&T 实验室
+- NAWK ：AWK 的新的改进版本
+- GAWK ： GNU AWK。 所有GNU/Linux发行版都是GAWK。它与AWK和NAWK完全兼容。
+
+#### AWK 的典型应用场景
+
+- 文本处理
+- 生成格式化的文本报告
+- 处理算术操作
+- 处理字符串操作
+
+#### AWK 环境
+描述如何在 GNU/Linux 系统中安装 AWK 环境。
+
+##### 安装包管理器
+
+一般情况下， AWK 默认在大都数 GNU/Linux 系统中都是安装发行的。
+你可以使用 **which** 命令，检查awk在系统中是否安装好了。
+如果没有安装 awk， 可以按如下命令借助 高级安装包 APT安装 AWK：
+
+```shell
+sudo apt-get update
+sudo apt-get install gawk
+```
+
+```shell
+yum install gawk
+
+# 查看
+which awk
+
+# 输出结果为：
+/bin/awk
+```
+
+从源代码中安装：
+- wget http://ftp.gnu.org/gnu/gawk/gawk-4.1.1.tar.xz
+- tar xvf gawk-4.1.1.tar.xz
+- ./configure
+- make
+- make check
+- sudo make install
+- which awk
