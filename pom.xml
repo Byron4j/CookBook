@@ -33,7 +33,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -47,15 +46,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>4.1.5.Final</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-    </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>

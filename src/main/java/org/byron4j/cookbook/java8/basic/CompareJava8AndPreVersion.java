@@ -1,6 +1,6 @@
 package org.byron4j.cookbook.java8.basic;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 /**
  * 比较java8与之前的编码方式
