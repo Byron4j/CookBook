@@ -1,8 +1,9 @@
-# CookBook JAVA 技术栈学习手册
+# CookBook 技术栈学习手册
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份食谱，你只需要增加自己练习的次数。
 
 - MySQL
+    - 1.[MySQL数据库锁、事务隔离级别详解](MySQL/1-MySQL数据库读写锁示例详解、事务隔离级别示例详解.md)
 - Spring
 - Nginx
 - Maven
@@ -30,10 +31,9 @@
 - Dubbo
 - RPC
 - Code Refactoring 代码重构
+- Linux
+    - [AWK 脚本语言](Linux/awk/1-awk入门.md)
 
 
-## 一天一模式一算法一命令
-
-- 设计模式
-- 基础算法(排序等)
-- Linux 命令
+- Python3 编程语言
+    - 1.[概览](Python3/1-Python3概览.md)
