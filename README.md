@@ -1,4 +1,4 @@
-# CookBook 技术栈学习手册
+# CookBook 技术栈手册
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份食谱，你只需要增加自己练习的次数。
 
@@ -25,6 +25,7 @@
 - Redis
 - RabbitMQ
 - NIO/Netty
+    - 1.[Netty入门基础](Netty/1-Netty入门基础.md)
 - Tomcat
 - JVM知识点总结
 - Zookeeper
@@ -37,3 +38,4 @@
 
 - Python3 编程语言
     - 1.[概览](Python3/1-Python3概览.md)
+    - 2.[Python3基本语法以及常见数据类型](Python3/2-Python3基本语法.md)

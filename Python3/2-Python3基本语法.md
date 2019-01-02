@@ -1,4 +1,4 @@
-# Python3 基本语法
+# Python3 基本语法、常见数据类型、基本的操作符
 
 ## 第一个 Python 程序
 
@@ -382,34 +382,601 @@ del var1,var2
 
 Python 支持3种不同类型的数值类型：
 
-- **int** 符号整数
-- **float** 浮点数
-- **complex** 复数
+- **int** 符号整数 : 1、-1、0 、080、-0x260、0x69 等
+- **float** 浮点数 ： 15.2、-21.9、0.0、32.3+e18、70.2-E12、-32.54e100 等
+- **complex** 复数 ： 3.14j、9.322e-36j、.876j、-.6545+0J、 4.53e-7j 等； 复数是 **x + yj** 的形式，x表示实部，y表示虚部。
 
-Python3 种所有的整型数都是长整型的。因此，并没有像long这样的类型。
+**Python3 种所有的整型数都是长整型的。因此，并没有像long这样的类型。**
+
+## Python 字符串类型
+
+Python中的字符串被引号包围的连续的字符集。允许使用单引号或者双引号。
+子串可以使用 **[ ] 或者 [ : ]** 操作联合索引，0开始，-1表示末尾 来截取。
+**+** 可以作为字符串连接操作符，* 符号 表示字符串的重复操作。
+
+```python
+str = 'Hello World!'
+>>> print(str)
+Hello World!
+>>> print(str[0])
+H
+>>> print(str[2:5])
+llo
+>>> print(str[2:])
+llo World!
+>>> print(str * 2)
+Hello World!Hello World!
+>>> print(str + "TEST")
+Hello World!TEST
+```
+
+## Python 列表类型
+
+列表是Python最通用的复合数据类型。
+列表包含以逗号分隔开，且以方括号[]闭合的数据项。在一定程度上，列表有点类似C语言中的数组，只是Python列表中的元素可以是不同的数据类型。
+列表中的元素访问可以使用 **[ ]** 、**[ : ]** 操作联合索引下标，和字符串一样，0表示起始位置，-1表示末尾位置。
+**+** 符号可以将2个列表进行连接操作，* 符号是重复操作符。
+
+```python
+>>> list = ['abcd', 786, 2.23, 'john', 70.2]
+>>> tinylist = [123, 'john']
+>>> print(list)
+['abcd', 786, 2.23, 'john', 70.2]
+>>> print(list[0])
+abcd
+>>> print(list[1:3])
+[786, 2.23]
+>>> print(list[2:])
+[2.23, 'john', 70.2]
+>>> print(tinylist * 2)
+[123, 'john', 123, 'john']
+>>> print(tinylist + list)
+[123, 'john', 'abcd', 786, 2.23, 'john', 70.2]
+``` 
+
+## Python 中的元组数据类型
+
+元组是另外一个序列数据类型，和列表类似，元素以逗号分隔，以圆括号()包围结束。
+列表是以[]包围，而元组是以()包围的。
+元组是只读列表，初始化之后，不能再对其进行变更。
+
+```python
+>>> tuple = ('abcd', 786, 2.23, 'john', 70.2)
+>>> tinytuple = (123, 'john')
+>>> print(tuple)
+('abcd', 786, 2.23, 'john', 70.2)
+>>> print(tuple[0])
+abcd
+>>> print(tuple[1:3])
+(786, 2.23)
+>>> print(tuple[2:])
+(2.23, 'john', 70.2)
+>>> print(tinytuple * 2)
+(123, 'john', 123, 'john')
+>>> print(tinytuple + tuple)
+(123, 'john', 'abcd', 786, 2.23, 'john', 70.2)
+```
+
+示例，列表在初始化后可以进行变更，但是元组不能再支持元素变更：
+
+```python
+>>> tinylist
+[123, 'john']
+>>> tinylist[0] = 7
+>>> tinylist
+[7, 'john']
+>>> tinytuple
+(123, 'john')
+>>> tinytuple[0] = 7
+Traceback (most recent call last):
+  File "<pyshell#50>", line 1, in <module>
+    tinytuple[0] = 7
+TypeError: 'tuple' object does not support item assignment
+```
+
+## Python 字典数据类型
+
+Python 字典是一种哈希表类型。
+他们的工作方式类似于Perl中的联合数组或者哈希表，由键值对组成。
+字典类型的 key 可以是任意的Python数据类型， 但是通常使用数值或者字符串类型。value 可以是任意的Python对象。
+字典类型以花括号 **{}** 包围，值可以使用方括号 **[]** 进行访问或者分配值。
+
+```python
+>>> dict = {}
+>>> dict['one'] = "This is one"
+>>> dict[2] = "This is two"
+>>> tinydict = {'anme': 'john', 'code': 6743, 'dept': 'sales'}
+>>> print(dict['one'])
+This is one
+>>> print(dict[2])
+This is two
+# 不存在key为two，则访问发生错误
+>>> print(dict['two'])
+Traceback (most recent call last):
+  File "<pyshell#81>", line 1, in <module>
+    print(dict['two'])
+KeyError: 'two'
+>>> print(tinydict)
+{'anme': 'john', 'code': 6743, 'dept': 'sales'}
+>>> print(tinydict.keys())
+dict_keys(['anme', 'code', 'dept'])
+>>> print(tinydict.values())
+dict_values(['john', 6743, 'sales'])
+```
+
+## Python 数据类型转换
+
+有时候，可能需要在内置数据类型之间进行转换。你只需要使用 类型名 的函数即可。
+一些内置函数，可以完成数据类型间的转换。
+
+|序号|函数|描述|
+|----|----|----|
+|1|**int(x [, base])**| 将x转换为一个整数。基数由可选参数base指定|
+|2|**float(x)**|将x转换为一个浮点数|
+|3|**complex(real [, imag]**)|创建一个复数|
+|4|**str(x)**|将一个对象x转换成其字符串表示|
+|5|**repr(x)**|将一个对象x转换成一个字符串表达式|
+|6|**eval(str)**|评估一个字符串，并返回一个对象|
+|7|**tuple(s)**|转换成一个元组|
+|8|**list(s)**|转换成一个列表|
+|9|**set(s)**|转换成一个set集合|
+|10|**dict(d)**|创建一个字典，d必须是键值对的一个元组序列|
+|11|**frozenset(s)**|转换为一个冻结集合，冻结后集合不能再添加或删除任何元素|
+|12|**chr(x)**|将一个整数转换为一个字符|
+|13|**unichr(x)**|将一个整数转换为一个unicode字符|
+|14|**ord(x)**|将单个字符转换为其整型值|
+|15|**hex(x)**|将一个整数专程16进制字符串|
+|16|**oct(x)**|将整数转换成8进制字符串|
 
 
 
+## Python 中的基本操作符
+
+### 操作符类型
+
+Python 支持以下类型的操作符
+
+- 算数操作符
+- 比较（关系）运算符
+- 赋值运算符
+- 逻辑运算符
+- 位运算符
+- 成员关系运算符
+- 标志运算符
+
+### Python 算数运算符
+
+|运算符|描述|示例|
+|:----:|:----:|:----:|
+|+|加运算|1 + 2 = 3|
+|-|减运算|1 - 2 = -1|
+|*|乘运算|1 * 2 = 2|
+|/|除运算|9 / 2 = 4.5|
+|%|取模运算|9 % 4 = 1|
+|**|指数运算|2 ** 10 = 1024|
+|//|向下除|9 // 2 = 4|
+
+### Python 关系运算符
+
+==、!= 、 >、<、>=、<=
+
+### Python 赋值运算符
+
+和算数运算符配套
+
+|运算符|描述|示例|
+|:----:|:----:|:----:|
+|=|赋值运算符|c = 1|
+|+=|加运算|c +=a 等同于 c = c + a|
+|-=|减运算|c -=a 等同于 c = c - a|
+|*=|乘运算|c *=a 等同于 c = c * a|
+|/=|除运算|c /=a 等同于 c = c / a|
+|%=|取模运算|c %=a 等同于 c = c % a|
+|**=|指数运算|c **=a 等同于 c = c ** a|
+|//=|向下除|c //=a 等同于 c = c // a|
 
 
+### Python 中的位运算符
+
+位运算符是对二进制补码进行运算的操作符。假设 a = 60； b = 13； 他们的二进制格式如下：
+
+a = 0011 1100
+
+b = 0000 1101
+
+-----------------
+
+a&b = 0000 1100 : 与
+
+a|b = 0011 1101 ： 或
+
+a^b = 0011 0001 ： 异或
+
+~a = 1100 0011 ： 非
+
+a << 2 = 240 ： 左移2位相当于乘以 2的2次方
+a >> 2 = 15 : 右移两位相当于除以2的2次方
+
+### Python 逻辑运算符
+
+假设 a 为 True， b 为 False。
+
+a **and** b = False
+a **or** b = True
+**not** b = True
+
+### Python 成员关系运算符
+
+成员关系运算符是针对于一个序列的成员的关系运算。例如 字符串、列表、元组等。
+共 2 种成员关系运算符： **in** 、 **not in**。
+
+```python
+>>> tinylist
+[7, 'john']
+>>> 7 in tinylist
+True
+>>> 'hello' not in tinylist
+True
+```
+
+### Python 标识符
+
+python 中的身份标志运算符用来比较两个对象在内存中的位置是否相等。
+
+|运算符|描述|示例|
+|:----:|:----:|:----:|
+|is|如果两边的操作数是同一个则返回True|x is y, 这里的 **is** 结果由 **id(x)是否等于id(y)** 决定|
+|is not|是is运算符的反义|如果 x is y 为 True， 则 x is not y 为 False|
 
 
+### Python 中的运算符优先级
+
+|优先级1为最高|运算符|
+|:----:|:----:|
+|1|** 指数运算符|
+|2|~ + - 正负号|
+|3|* / % // 乘、除、取模、向下除|
+|4|+ - 加减运算|
+|5|>> << 位移|
+|6|& 位与|
+|7|^ &#124; 位异或和或 |
+|8|<= < > >= 关系运算符|
+|9|<> == != 不等、等于|
+|10|= %= /= //= -= += *= **= 赋值运算符|
+|11|is 、is not 标志运算符|
+|12|in 、not in 成员关系运算符|
+|13|not or and 逻辑运算符|
 
 
+## Python 分支决策
 
+决策是对程序运行时发生的条件的预期。
 
+主要语句： if、 else、 elif 
 
+![决策图](decision_making.jpg)
 
+### if 语句
 
+```python
+if expression:
+   statement(s)
+```
 
+### if...else 语句
+```python
+if expression:
+   statement(s)
 
+else:
+   statement(s)
+```
 
+### 嵌套if...else 组件
+```python
+if expression1:
+   statement(s)
+   if expression2:
+      statement(s)
+   elif expression3:
+      statement(s)
+   else
+      statement(s)
+elif expression4:
+   statement(s)
+else:
+   statement(s)
+```
 
+## Python 循环
 
+### while 循环
 
+while 循环语法如下：
+```python
+while expression:
+   statement(s)
+```
 
+数据流图：
 
+![](python_while_loop.jpg)
 
+示例：
+```python
+while(count < 9):
+	print("count current value is:" , count)
+	count += 1
 
+	
+count current value is: 0
+count current value is: 1
+count current value is: 2
+count current value is: 3
+count current value is: 4
+count current value is: 5
+count current value is: 6
+count current value is: 7
+count current value is: 8
+```
 
+**使用带有循环的else语句**:
 
+Python 支持 **else** 语句关联循环语句。
+- 如果 else 语句和for循环一起使用，else 语句会在循环语句耗尽时执行。
+- 如果 else 语句和while循环一起使用，当while的条件为False时执行
+
+示例：
+
+```python
+>>> count = 0
+>>> while count < 5:
+	print(count, " is less than 5")
+	count = count + 1
+else : print(count, " is not less than 5")
+
+0  is less than 5
+1  is less than 5
+2  is less than 5
+3  is less than 5
+4  is less than 5
+5  is not less than 5
+```
+
+### for 循环
+
+for 循环语法:
+
+```python
+for iterating_var in sequence:
+   statements(s)
+```
+
+for 循环数据流图：
+
+![](python_for_loop.jpg)
+
+#### range() 函数
+
+内置函数 **range()** 是迭代一系列数字的函数。会生产一个算术迭代器。
+
+```python
+>>> list = [1, 2]
+>>> for idx in list:
+	print(idx)
+
+	
+1
+2
+```
+
+#### 按序列索引迭代
+
+```python
+>>> fruits = ['banana', 'apple',  'mango']
+>>> for index in range(len(fruits)):
+        print ('Current fruit :', fruits[index])
+
+Current fruit : banana
+Current fruit : apple
+Current fruit : mango
+```
+
+```python
+>>> numbers = [11,33,55,39,55,75,37,21,23,41,13]
+>>> for num in numbers:
+   if num%2 == 0:
+      print ('the list contains an even number')
+      break
+else:
+   print ('the list doesnot contain even number')
+
+   
+the list doesnot contain even number
+```
+
+### 嵌套循环
+
+示例:
+
+```python
+for iterating_var in sequence:
+   for iterating_var in sequence:
+      statements(s)
+   statements(s)
+```
+
+or
+
+```python
+while expression:
+   while expression:
+      statement(s)
+   statement(s)
+```
+
+示例：
+
+```python
+>>> for i in range(1,11):
+   for j in range(1,11):
+      k = i*j
+      print (k, end=' ')
+   print()
+
+   
+1 2 3 4 5 6 7 8 9 10 
+2 4 6 8 10 12 14 16 18 20 
+3 6 9 12 15 18 21 24 27 30 
+4 8 12 16 20 24 28 32 36 40 
+5 10 15 20 25 30 35 40 45 50 
+6 12 18 24 30 36 42 48 54 60 
+7 14 21 28 35 42 49 56 63 70 
+8 16 24 32 40 48 56 64 72 80 
+9 18 27 36 45 54 63 72 81 90 
+10 20 30 40 50 60 70 80 90 100 
+```
+
+### 循环控制语句
+
+#### break 语句
+
+break 语句会终止当前循环，可用于 while 和 for 循环中。
+
+程序流图:
+
+![](cpp_break_statement.jpg)
+
+示例:
+
+```python
+>>> for letter in 'Python':     # First Example
+   if letter == 'h':
+      break
+   print ('Current Letter :', letter)
+
+   
+Current Letter : P
+Current Letter : y
+Current Letter : t
+```
+
+#### continue 语句
+
+continue 是指跳过本次循环，不再执行continue下面本次剩下的循环内的语句。
+
+示例：
+
+```python
+>>> for letter in 'Python':     # First Example
+   if letter == 'h':
+      continue
+   print ('Current Letter :', letter)
+
+   
+Current Letter : P
+Current Letter : y
+Current Letter : t
+Current Letter : o
+Current Letter : n
+```
+
+#### pass 语句
+
+**pass** 语句， 它用于在语法上需要语句，但不希望执行任何命令或代码时。 类似于java代码中的： // TODO。
+pass 是一个空操作，不会执行任何动作。
+但是当你需要后面再回过头来编写程序时，可以在当前位置编写 pass 语句，用以标记。
+
+```python
+>>> for letter in 'Python': 
+   if letter == 'h':
+      pass
+      print ('This is pass block')
+   print ('Current Letter :', letter)
+
+   
+Current Letter : P
+Current Letter : y
+Current Letter : t
+This is pass block
+Current Letter : h
+Current Letter : o
+Current Letter : n
+```
+
+## 迭代器和生成器
+
+### 迭代器
+
+Iterator 迭代器是一个对象，它允许程序员遍历集合的所有元素，而不关心具体实现。
+在 Python 中，一个迭代器对象需要实现2个方法： **iter()、next()**。
+字符串、列表和元组都可以用来创建一个迭代器。
+
+示例：
+
+```python
+>>> list = [1, 2, 3, 4]
+>>> it = iter(list)
+>>> it
+<list_iterator object at 0x000001BCB210A7F0>
+>>> print(next(it))
+1
+>>> 
+>>> for x in it:
+	print(x, end = ' ')
+
+	
+2 3 4 
+```
+
+### 生成器
+
+>生成器是使用 **yield** 方法生成或生成一系列值的函数。
+
+当一个生成器函数被调用时，它不开始执行函数就会返回一个生成器对象。
+当 next 函数被第一次调用时，生成器函数则开始执行直到它到达 **yield** 语句，会返回生成的值。
+yield 会保持跟踪，即记住最后一次执行，当第二次执行next()的时候会继续从前一个值开始。
+
+示例，定义一个生成器，生成一个所有斐波那契数列的迭代器：
+
+```python
+def fibonacci(n): # 定义一个生成器函数
+	a, b, counter = 0, 1, 0
+	while True:
+		if counter > n:
+			return
+		yield a
+		a, b = b, a + b
+		counter += 1
+		
+f = fibonacci(5) # f 是一个迭代器对象
+
+while True:
+	try:
+		print (next(f), end = ' ')
+	except StopIteration:
+		break
+		
+0 1 1 2 3 5
+````
+
+再看一个实例用于生成2的整型指数值：
+
+```python
+>>> def myGenerator(n):
+	a, cnt = 1, 0
+	while True:
+		if cnt > n:
+			return
+		yield a # 保存a的值返回
+		a *= 2
+		cnt += 1
+
+		
+>>> gen = myGenerator(10)
+>>> for ele in gen:
+	print(ele, end = ' ')
+
+	
+1 2 4 8 16 32 64 128 256 512 1024 
+```
