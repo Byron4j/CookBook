@@ -38,4 +38,7 @@
 
 - Python3 编程语言
     - 1.[概览](Python3/1-Python3概览.md)
-    - 2.[Python3基本语法以及常见数据类型](Python3/2-Python3基本语法.md)
+    - 2.[Python3 基本语法、操作运算符、分支决策、循环控制、迭代器、生成器示例](Python3/2-Python3基本语法.md)
+    
+- Lua 编程语言
+    - 1.[Lua 编程语言入门指南](Lua/1-Lua语言入门指南.md)
