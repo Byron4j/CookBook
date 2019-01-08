@@ -625,13 +625,377 @@ function square(iteratorMaxCount, currentNumber)
     end
 end
 
-for i, n in square(3, 0) do
-    print(i, n)
+for i,n in square,3,0
+do
+   print(i,n)
+end
+
+-- 输出：
+1    1
+2    4
+3    9
+```
+
+迭代的状态包括被遍历的表（循环过程中不会改变的状态常量）和当前的索引下标（控制变量），ipairs和迭代函数都很简单，还可以这样实现：
+```lua
+function iter (a, i)
+    i = i + 1
+    local v = a[i]
+    if v then
+       return i, v
+    end
+end
+ 
+function ipairs (a)
+    return iter, a, 0
 end
 ```
 
+当Lua调用ipairs(a)开始循环的时候，它获取三个值：迭代函数iter、状态常量a、控制变量初始值0；
+然后Lua调用iter(a,0)返回1,a[1](除非a[1]为nil);
+第二次迭代调用 iter(a, 1)，返回2,a[2]......直到第一个nil元素。
+
+### 多状态的迭代器
+
+很多情况下，迭代器需要村村多个状态信息而不是简单的状态常量和控制变量，最简单的方法是使用闭包。
+还有一种方法是将所有的状态信息封装到table中，将table作为迭代器的状态常量，因为这种情况下将所有的信息存放在table内，
+所以迭代函数通常不需要第二个参数。
+
+```lua
+function iterator(collection)
+    local index = 0
+    local count = #collection
+    --闭包函数
+    return function()
+        index = index + 1
+        if index <= count
+        then
+            -- 返回迭代器的当前元素
+            return collection[index]
+        end
+    end
+end
+
+array = {"Lua", "Hello"}
+
+for ele in iterator(array)
+do
+    print(ele)
+end
+```
+
+## Lua 表 Tbale
+
+table 是 Lua的一种数据结构，以帮助我们创建不同的数据类型，如：数组、字典等。
+Lua table 使用关联数组，可以用任意类型的值作为数组的索引，只要索引值不是nil。
+Lua table 是不固定大小的，剋根据自己需要进行扩充。
+Lua 也是通过table来解决模块、包和对象的。
+例如 string.format 表示使用"format"来索引table string。
+
+### table 的构造
+
+构造器是创建和初始化表的表达式。最简单的构造是{}，用以构建一个空表。
+
+```lua
+myTb = {}
+
+-- 指定值构造
+myTb[1] = "Hello"
+
+-- 移除引用，Lua 垃圾回收会释放内存
+myTb = nul
+
+```
 
 
+## Lua 模块与包
+
+模块类似于一个封装库，从Lua5.1开始，Lua加入了标准的模块管理机制，可以把一些公用的代码放在一个文件里。以API接口的形式放在其他地方调用，有利于代码的重用和降低代码耦合度。
+Lua模块是由变量、函数等已知元素组成的 table，因此创建一个模块很简单，就是创建一个table。
+自定义一个模块，格式如下：
+
+```lua
+-- 文件名为 module.lua
+-- 定义一个名为 module 的模块
+module = {}
+
+-- 定义一个常量
+module.constant = "这是一个常量"
+
+-- 定义一个函数
+function mudule.func1()
+    io.write("这是一个公有函数!\n")
+end
 
 
+local function func2()
+    print("这是一个私有函数!")
+end
+
+
+function module.func3()
+    func2()
+end
+
+```
+
+func2 声明为程序块的局部变量，表示是一个私有函数，不能从外部直接访问。
+
+
+### 模块引入函数 require
+
+Lua 提供了一个名为 require 的函数来加载模块。要加载一个模块，只需要简单调用就可以了。例如：
+```lua
+require("模块名")
+
+-- 或者
+
+require "模块名"
+```
+
+**注意**:执行 require 后会返回一个由模块常量或函数组成的table，并且还会定义一个包含该 table 的全局变量。
+
+```lua
+--当前是 test_module.lua 文件
+-- module 模块是前面提到的 module.lua
+require("module")
+
+-- 调用引入模块的常量
+print(module.constant)
+
+-- 调用模块内定义的公有函数
+module.func3()
+```
+
+### 加载机制
+
+对于自定义的模块，模块文件不是放在那个文件目录都可以的。
+函数 require 有它自己的文件路径加载策略，会尝试从 Lua 文件 或 C 程序库中加载模块。
+
+require 用于搜索 Lua 文件的路径是存放在全局变量 package.path 中，当 Lua 启动后，会以环境变量 **LUA_PATH** 的值来初始化这个环境变量。
+如果没有找到该环境变量，则使用一个编译时定义的默认路径来初始化。
+
+## Lua 元表
+
+在 Lua table 中我们可以访问对应的 key 来得到 value 的值，但是却无法对两个 table 进行操作。
+因此 Lua 提供了元表（Metatable），允许我们改变table的行为，每个行为关联了对应的元方法。
+例如： 使用 元表我们可以定义 Lua 如何计算两个 table 的相加操作 a+b。
+当 Lua 试图对两个表进行相加时，先检查两者之一是否有元素，之后检查是否有一个叫 "__add" 的字段，有则调用对应的值。
+
+有2个很重要的函数来处理元素：
+- setmetatable(table, metatable): 对指定 table 设置元表（metatable），如果元表（metatable）中存在  __metatable 键值，setmetatable 会失败。
+- getmetatable(table): 返回对象的元素（metatable）
+
+示例：
+```lua
+mytable = {}                         -- 普通表
+mymetatable = {}                     -- 元表
+setmetatable(mytable, mymetatable)   -- 把 mymetatable 设为 mytable 的元素
+```
+
+以上代码也可以直接写成一行：
+```lua
+mytable = setmetatable({}, {})
+
+-- 返回 mymetatable
+getmetatable(mytable)
+```
+
+### __index 元方法
+
+#### __index 包含表table示例
+
+这是 metatable 最常用的键。
+当你通过键来访问 table 的时候，如果这个键没有值，那么Lua就会寻找该table的metatable(假设有metatable)中的__index键。
+如果 __index 包含一个表格，Lua 会在表格中查找相应的键。
+
+```lua
+other = { foo = 3 }
+t = setmetatable({}, { __index = other })
+t.foo
+-- 值为3
+```
+
+解析：通过键foo访问table，就寻找表t的元表的__index键,存在 __index 包含一个表格other，则在other表中查找对应的foo键，找到值为3.
+
+#### __index 包含函数示例
+
+**如果 __index 包含一个函数的话，Lua 就会调用那个函数， table 和 键会作为参数传递给函数。**
+__index 元方法查看表中元素是否存在，如果不存在，返回结果为 nil；如果存在则由 __index 返回结果。
+
+```lua
+mytable = setmetatable({key1 = "value1"}, {
+    __index = function(mytable, key)
+                    if key == "key2" then
+                        return "metatablevalue"
+                    else
+                        return nil
+                    end
+                end
+})
+
+print(mytable.key1, mytable.key2, mytable.key3)
+-- 输出结果为：
+val1    val2    nil
+
+```
+
+**给表 mytable 亦即 {key1 = "value1"}，设置了元方法 __index 指向一个函数，如果传入key为key2的话，返回value2，这样类似增加了 key2=value2，
+使得 mytable = {key1 = "value1", key2 = "value2"}**
+
+解析如下：
+- mytable 赋值为 **{key1="value1"}**
+- mytable 设置了元素，元方法为 __index
+- 在 mytable 中查找 key1，如果找到，返回该元素，找不到则继续
+- 在 mytable 中查找 key2，如果找到，返回 metatablevalue，找不到则继续
+- 判断表有没有  __index方法，如果 __index方法是一个函数，则调用该函数
+- 元方法中查看是否传入了 "key2" 键的参数(mytable.key2已设置)，如果传入"key2" 参数返回"metatablevalue",否则返回mytable对应的键值。
+
+上述使用函数的可以改写为使用表table：
+```lua
+mytable = setmetatable({key1="key1"}, __index = {key2="metatablevalue"})
+
+print(mytable.key1, mytable.key2)
+```
+
+**总结**
+
+Lua 查找一个表元素时的规则，其实就是如下三个步骤：
+
+- 在表中查找，如果找到，返回该元素，找不到则继续。
+- 判断该表是否有元素，如果没有元素，返回nil，有元素则继续。
+- 判断元素有没有 __index 方法， 如果 __index 方法为nil， 则返回nil；如果 __index 方法是一个表，则重复1、2、3；如果 __index 方法是一个函数，则返回该函数的返回值。
+
+### __newindex 元方法
+
+**__newindex 元方法用来对表更新， __index 则用来对表访问。**
+当你给表的一个缺少的索引赋值，解释器就会查找 __newindex 元方法；如果存在则调用这个函数而不进行赋值操作。
+示例：
+
+```lua
+mymetatable = {}
+mytable = setmetatable({key1="value1"}, {__newindex=mymetatable})
+
+print(mytable.key1)
+
+> mytable.newkey = "新值2"
+> print(mytable.newkey, mymetatable.newkey)
+nil     新值2
+> mytable.key1 = "新值1"
+> print(mytable.key1, mymetatable.key1)
+```
+
+上述示例：给表设置了元方法 __newindex，在对新索引键（newkey）赋值时（mytable.newkey="新值2"），会调用元方法，而不进行赋值。
+而如果对已存在的索引键（key1），则会进行赋值，而不调用元方法 __newindex。
+
+### 给表添加操作符
+
+演示为2个表添加相加操作：
+
+```lua
+-- 计算表中最大值， table.maxn 在 Lua5.2以上版本中已无法使用
+-- 自定义计算表中最大键值函数 table_maxen,即计算表的元素个数
+
+function table_maxn(t)
+    local mn = 0
+    for k, v in pairs(t) do
+        if mn < k then
+            mn = k
+        end
+    end
+    return mn
+end
+
+-- 两表相加操作
+mytable = setmetatable({1, 2, 3}, {
+            __add = function(mytable, newtable)
+                        for i = 1, table_maxn(newtable) do
+                                table.insert(mytable, table_maxn(mytable)+1, newtable[i])
+                        end
+                     return mytable
+                   end
+})
+
+secondtable = {4,5,6}
+
+mytable = mytable + secondtable
+for k, v in ipairs(mytable) do
+    print(k, v)
+end
+
+
+```
+
+__add 键包含在元素中，并进行相加操作。表中对应的操作列表如下：
+
+|模式|描述|
+|----|----|
+|__add|对应的运算符'+'|
+|__sub|对应的运算符'-'|
+|__mul|对应的运算符'*'|
+|__div|对应的操作符'/'|
+|__mod|对应运算符'%'|
+|__concat|对应连接符'...'|
+|__eq|对应'=='|
+|__lt|对应'<'|
+|__le|对应'<='|
+|__unm|对应负号'-'|
+
+### __call 元方法
+
+__call 元方法在Lua调用一个值时调用。
+演示计算表中元素的和：
+```lua
+function table_maxn(t)
+    local mn = 0
+    for k, v in pairs(t) do
+        if mn < k then
+            mn = k
+        end
+    end
+    return mn
+end
+
+-- 定义元方法__call
+mytable = setmetatable({10}, {
+  __call = function(mytable, newtable)
+    sum = 0
+    for i = 1, table_maxn(mytable) do
+        sum = sum + mytable[i]
+    end
+    for i = 1, table_maxn(newtable) do
+        sum = sum + newtable[i]
+    end
+    return sum
+  end
+})
+
+newtable = {10,20,30}
+print(mytable(newtable))
+-- 输出：
+70
+
+```
+
+### __tostring 元方法
+
+__tostring 元方法用于修改表的输出行为。
+```lua
+mytable = setmetatable({10, 20, 30}, {
+            __tostring = function(mytable)
+                            sum = 0
+                            for k, v in pairs(mytable) do
+                                sum = sum + v
+                            end
+                            return "表所有元素之和为:" ... sum
+                        end
+})
+
+-- 直接打印表，则调用其tostring方法
+print(mytable)
+-- 输出：
+表所有元素的和为 60
+```
+
+**总结**： 元表可以很好的简化代码功能，了解元表，可以写出更加简洁优秀的Lua代码。
 
