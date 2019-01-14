@@ -31,7 +31,7 @@ import io.netty.buffer.ByteBufAllocator;
  *     <b><font color=red>可写区间</font></b> 指 writerIndex 到 capacity 区间
  *     <br/>
  *     <b><font color=red>可扩容区间</font></b> 指的是 capacity 到 maxcapacity 区间
- *     
+ *
  *
  */
 public class ByteBufTest {
