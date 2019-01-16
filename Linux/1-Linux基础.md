@@ -381,8 +381,244 @@ hello3.txt
 [deploy@sz-local3 test1]$ ls
 ```
 
+##### mv （移动文件与目录，或修改名称）
+
+>mv [-fiu] 源文件 目标文件
+
+选项与参数：
+- -f : 强制。如果目标文件已经存在，不会询问，直接覆盖。
+- -i ：若目标文件已存在，则询问是否覆盖。
+- -u ： 若目标文件已存在，且源比较新，才会升级。
+
+```shell
+[deploy@sz-local3 test1]$ cat hello.txt 
+hello
+[deploy@sz-local3 test1]$ cat boy.txt 
+boy
+[deploy@sz-local3 test1]$ mv hello.txt boy.txt   # 将hello.txt命名为boy.txt，原来的boy.txt没了
+[deploy@sz-local3 test1]$ ls
+boy.txt  tmpdir
+[deploy@sz-local3 test1]$ cat boy.txt 
+hello
+[deploy@sz-local3 test1]$ mv boy.txt tmpdir/
+[deploy@sz-local3 test1]$ ls
+tmpdir
+[deploy@sz-local3 test1]$ cd tmpdir/
+[deploy@sz-local3 tmpdir]$ ls
+boy.txt
+
+[deploy@sz-local3 test1]$ echo 'hello' > hello.txt
+[deploy@sz-local3 test1]$ echo 'boy' > boy.txt
+[deploy@sz-local3 test1]$ mv -i hello.txt boy.txt #提示是否覆盖已存在的boy.txt文件
+mv: overwrite `boy.txt'? 
+```
+
+### Linux 文件内容查看
+
+Linux 系统中使用以下命令来查看文件的内容：
+
+- cat : 由第一行开始显示内容
+- tac ： 从最后一行开始显示，可以看出 tac 是 cat 的倒写
+- nl ： 显示的时候，顺道输出行号
+- more ： 一页一页的显示文件
+- less ： 与 more 类似，但是比more更好的是，less可以往前翻页
+- head ： 只看头几行
+- tail ： 只看尾几行
+
+#### cat 由第一行开始显示文件内容
+
+>cat [-AbEnTv]
+
+选项与参数：
+- -A ： 相当于 -vET 的组合项，可列出一些特殊字符而不是空白而已
+- -b ： 列出行号，仅针对非空白行做行号显示，空白行不标行号
+- -E ： 将结尾的断行字节$显示出来
+- -n ： 列出行号，连同空白行也会有行号，与 -b 选项不同
+- -T ： 将tab键以 ^| 显示出俩
+- -v ： 列出一些看不出来的特殊字符
+
+#### tac 和cat相反
 
 
+QuickSortTest.java 的内容如下：
+
+```java
+package org.byron4j.cookbook.algrithms;
+
+import org.junit.Test;
+
+public class QuickSortTest {
+    @Test
+    public void test(){
+        int[] arr = new int[]{6, 2, 4, 1, 5, 9};
+        QuickSort.sortCore(arr, 0, 5);
+        for (int i : arr) {
+            System.out.println(i);
+        }
+    }
+}
+
+```
+
+示例如下：
+```shell
+[deploy@sz-local3 test1]$ cat QuickSortTest.java 
+package org.byron4j.cookbook.algrithms;
+
+import org.junit.Test;
+
+public class QuickSortTest {
+    @Test
+    public void test(){
+        int[] arr = new int[]{6, 2, 4, 1, 5, 9};
+        QuickSort.sortCore(arr, 0, 5);
+        for (int i : arr) {
+            System.out.println(i);
+        }
+    }
+}
+[deploy@sz-local3 test1]$ 
+[deploy@sz-local3 test1]$ 
+[deploy@sz-local3 test1]$ tac QuickSortTest.java 
+}
+    }
+        }
+            System.out.println(i);
+        for (int i : arr) {
+        QuickSort.sortCore(arr, 0, 5);
+        int[] arr = new int[]{6, 2, 4, 1, 5, 9};
+    public void test(){
+    @Test
+public class QuickSortTest {
+
+import org.junit.Test;
+
+package org.byron4j.cookbook.algrithms;
+```
+
+
+#### nl 显示行号查看内容
+
+>nl [-bnw] 文件
+
+选项与参数：
+- -b : 指定行号指定的方式，主要有两种： 
+    - -b a：表示不论是否为空行，也同样列出行号（类似 cat -n）；
+    - -b t：如果有空行，空的那一行不要列出行号（默认值）
+- -n ：列出行号表示的方法，有三种：
+    - -n ln ： 行号在屏幕的最左方显示
+    - -n rn ： 行号在行号栏位的最右方显示
+    - -n rz ： 行号在行号栏位的最右方显示，且补足0
+- -w ： 行号栏位的占用的位数
+
+实例,分别展示了行号在行号栏位的展示位置：
+```shell
+[deploy@sz-local3 test1]$ nl -nln QuickSortTest.java 
+1       package org.byron4j.cookbook.algrithms;
+2     
+3       import org.junit.Test;
+4     
+5       public class QuickSortTest {
+6           @Test
+7           public void test(){
+8               int[] arr = new int[]{6, 2, 4, 1, 5, 9};
+9               QuickSort.sortCore(arr, 0, 5);
+10              for (int i : arr) {
+11                  System.out.println(i);
+12              }
+13          }
+14      }
+[deploy@sz-local3 test1]$ nl -nrn QuickSortTest.java 
+     1  package org.byron4j.cookbook.algrithms;
+     2
+     3  import org.junit.Test;
+     4
+     5  public class QuickSortTest {
+     6      @Test
+     7      public void test(){
+     8          int[] arr = new int[]{6, 2, 4, 1, 5, 9};
+     9          QuickSort.sortCore(arr, 0, 5);
+    10          for (int i : arr) {
+    11              System.out.println(i);
+    12          }
+    13      }
+    14  }
+[deploy@sz-local3 test1]$ nl -nrz QuickSortTest.java 
+000001  package org.byron4j.cookbook.algrithms;
+000002
+000003  import org.junit.Test;
+000004
+000005  public class QuickSortTest {
+000006      @Test
+000007      public void test(){
+000008          int[] arr = new int[]{6, 2, 4, 1, 5, 9};
+000009          QuickSort.sortCore(arr, 0, 5);
+000010          for (int i : arr) {
+000011              System.out.println(i);
+000012          }
+000013      }
+000014  }
+
+```
+
+
+#### more 一页一页的翻动
+
+lovelyman.txt 摘录了魏巍的《谁是最可爱的人？》文章。下面以此为例演示：
+
+![](more.png)
+
+使用了 ``` more lovelyman.txt ``` 查看文件内容，一页后显示了当前所占文件内容的比例。
+在 more 这个程序的运行过程中，你有几个按键可以按的：
+- 空白键 ： 代表向下翻一页
+- Enter ： 代表向下翻一行
+- /str ： 代表这个显示的内容当中，向下搜寻str这个关键字
+- :f ： 立刻显示出文档名以及当前显示的行数
+- q ： quit，表示立刻离开more，不再显示该文件内容
+- b 或 ctrl-b ： 代表往回翻页，但是这只对文件有用，对管道无用
+
+#### less 一页一页翻动
+
+>less 文件
+
+less 运行时可以输入的命令有：
+- 空白键 ： 向下翻一页
+- pagedow ： 向下翻一页
+- pageup ： 向上翻一页
+- /str : 向下搜寻str
+- ?str : 向上搜寻str
+- n ： 重复前一个搜寻（与/或？相关）
+- N ： 反向的重复前一个搜寻（与/或？相关）
+- q ： 离开less这个程序
+
+#### head 去除文件前面几行
+
+>head [-n 行数] 文件
+
+```shell
+[deploy@sz-local3 test1]$ head -n 5 QuickSortTest.java 
+package org.byron4j.cookbook.algrithms;
+
+import org.junit.Test;
+
+public class QuickSortTest {
+```
+
+#### tail 取出文件后面几行
+
+>tail [-n 行数] 文件
+
+- -n : 后面接数字，代表显示几行的意思
+- -f ：表示持续侦测后面所接的档名，要等到按下ctrl-c才会结束tail的侦测
+
+```shell
+[deploy@sz-local3 test1]$ tail -n 5 QuickSortTest.java 
+        for (int i : arr) {
+            System.out.println(i);
+        }
+    }
+}
+```
 
 
 
