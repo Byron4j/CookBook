@@ -34,7 +34,9 @@
 - Code Refactoring 代码重构
 - Linux
     - [AWK 脚本语言](Linux/awk/1-awk入门.md)
-
+    - [Linux基础](Linux/1-Linux基础.md)
+    - [Linux用户磁盘管理](Linux/2-Linux用户磁盘管理.md)
+    - [Linux的vi、vim使用](Linux/3-Linux的vi、vim使用.md)
 
 - Python3 编程语言
     - 1.[概览](Python3/1-Python3概览.md)
