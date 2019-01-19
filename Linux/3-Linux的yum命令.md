@@ -128,4 +128,45 @@ pam_mapi.x86_64
 
 网易63的yum源是国内最好的yum源之一。
 
-#### 
+#### 安装步骤
+
+- 1. 首先备份 /etc/yum.repos.d/CentOS-Base.repo
+
+```shell
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+```
+
+- 2.下载对应版本 repo 文件, 放入 /etc/yum.repos.d/ (操作前请做好相应备份):
+
+- **CentOS5** ：http://mirrors.163.com/.help/CentOS5-Base-163.repo
+- **CentOS6** ：http://mirrors.163.com/.help/CentOS6-Base-163.repo
+- **CentOS7** ：http://mirrors.163.com/.help/CentOS7-Base-163.repo
+
+```shell
+wget http://mirrors.163.com/.help/CentOS6-Base-163.repo  # 下载
+mv CentOS6-Base-163.repo CentOS-Base.repo # 重命名
+```
+
+- 3. 运行以下命令生成缓存
+
+```shell
+yum clean all
+yum makecache
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
