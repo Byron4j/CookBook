@@ -9,7 +9,6 @@
 - Maven
 - Git
 - Jenkins
-- Java并发
 - 设计模式
     - 1.[单例模式](设计模式/1-单例模式/1-单例模式.md)
     - 2.[观察者模式](设计模式/2-观察者模式/2-观察者模式.md)
@@ -25,7 +24,8 @@
 - Redis
 - RabbitMQ
 - NIO/Netty
-    - 1.[Netty入门基础](Netty/1-Netty入门基础.md)
+    - 1.[Netty第一个程序示例](org.byron4j.cookbook.netty.first)
+    - 2.[Netty自定义传输协议](org.byron4j.cookbook.netty.apidemo)
 - Tomcat
 - JVM知识点总结
 - Zookeeper
@@ -52,3 +52,6 @@
     
 - Lua 编程语言
     - 1.[Lua 编程语言入门指南](Lua/1-Lua语言入门指南.md)
+    
+- JSON
+    - [阿里巴巴 fastjson 框架](https://github.com/alibaba/fastjson)
