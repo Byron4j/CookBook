@@ -8,8 +8,6 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.byron4j.cookbook.netty.apidemo.protocol.PacketCodeC;
 import org.byron4j.cookbook.netty.message.MessageRequestPacket;
 
@@ -53,32 +51,29 @@ public class MessageClient {
      */
     private static void connect(Bootstrap bootstrap, String host, int port, int maxRetryTimes){
         bootstrap.connect(host, port).addListener(
-                new GenericFutureListener<Future<? super Void>>() {
-                    @Override
-                    public void operationComplete(Future<? super Void> future) throws Exception {
-                        // 监听连接状态
-                        if( future.isSuccess() ){
-                            // 连接成功，则发送给消息
-                            System.out.println(new Date() + ": 连接服务端成功，启动控制台线程...");
-                            Channel channel = ((ChannelFuture)future).channel();
-                            // 客户端处理逻辑
-                            startConsoleThread(channel);
-                        }else if( 0 == maxRetryTimes){
-                            System.err.println("重试最大次数:" + MAX_RETRY_TIMES + ", 放弃连接.");
-                        }else{
-                            // 重连
-                            // 第多少次连接
-                            int cnt = (MAX_RETRY_TIMES - maxRetryTimes) + 1;
+                ( future ) -> {
+                    // 监听连接状态
+                    if( future.isSuccess() ){
+                        // 连接成功，则发送给消息
+                        System.out.println(new Date() + ": 连接服务端成功，启动控制台线程...");
+                        Channel channel = ((ChannelFuture)future).channel();
+                        // 客户端处理逻辑
+                        startConsoleThread(channel);
+                    }else if( 0 == maxRetryTimes){
+                        System.err.println("重试最大次数:" + MAX_RETRY_TIMES + ", 放弃连接.");
+                    }else{
+                        // 重连
+                        // 第多少次连接
+                        int cnt = (MAX_RETRY_TIMES - maxRetryTimes) + 1;
 
-                            // 次幂时间重连，2、4、8、...
-                            int delay = 1 << cnt;
-                            System.err.println(new Date() + ": 连接失败，第" + cnt + "次连接...");
+                        // 次幂时间重连，2、4、8、...
+                        int delay = 1 << cnt;
+                        System.err.println(new Date() + ": 连接失败，第" + cnt + "次连接...");
 
-                            // 定时重连
-                            bootstrap.config().group().schedule(() -> {
-                                connect(bootstrap, HOST, PORT, maxRetryTimes - 1);
-                            },delay, TimeUnit.SECONDS);
-                        }
+                        // 定时重连
+                        bootstrap.config().group().schedule(() -> {
+                            connect(bootstrap, HOST, PORT, maxRetryTimes - 1);
+                        },delay, TimeUnit.SECONDS);
                     }
                 }
         );

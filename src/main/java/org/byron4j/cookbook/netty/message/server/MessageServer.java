@@ -5,8 +5,6 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 
 public class MessageServer {
 
@@ -33,14 +31,11 @@ public class MessageServer {
 
     private static void bind(ServerBootstrap serverBootstrap, final int port){
         serverBootstrap.bind(port).addListener(
-                new GenericFutureListener<Future<? super Void>>() {
-                    @Override
-                    public void operationComplete(Future<? super Void> future) throws Exception {
-                        if( future.isSuccess() ){
-                            System.out.println("服务端启动成功，绑定端口为:" + port);
-                        }else{
-                            System.err.println("服务端启动失败，绑定端口为:" + port);
-                        }
+                (future) -> {
+                    if( future.isSuccess() ){
+                        System.out.println("服务端启动成功，绑定端口为:" + port);
+                    }else{
+                        System.err.println("服务端启动失败，绑定端口为:" + port);
                     }
                 }
         );
