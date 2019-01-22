@@ -46,12 +46,14 @@ public class MessageClientHandler extends ChannelInboundHandlerAdapter {
                 LoginUtil.markLogon(ctx.channel());
             }else{
                 // 登录失败
-                System.out.println(new Date() + ": 登陆失败,原因位:" + loginResponsePacket.getFailReason());
+                System.out.println(new Date() + ": 登陆失败,原因为:" + loginResponsePacket.getFailReason());
             }
         }else if( packet instanceof MessageResponsePacket){
             // 消息响应
             MessageResponsePacket messageResponsePacket = (MessageResponsePacket)packet;
-            System.out.println(new Date() + ": 接收到的响应消息为:" + messageResponsePacket.getMessage());
+            System.out.println(new Date() + ": 接收到服务端的响应消息为:" + messageResponsePacket.getMessage());
+        }else{
+            System.err.println(new Date() + ": 接收到的是其他的数据包类型.");
         }
     }
 }
