@@ -1,4 +1,4 @@
-package org.byron4j.cookbook.netty.login;
+package org.byron4j.cookbook.netty.message.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,13 +7,13 @@ import org.byron4j.cookbook.netty.apidemo.packet.LoginRequestPacket;
 import org.byron4j.cookbook.netty.apidemo.packet.LoginResponsePacket;
 import org.byron4j.cookbook.netty.apidemo.packet.Packet;
 import org.byron4j.cookbook.netty.apidemo.protocol.PacketCodeC;
+import org.byron4j.cookbook.netty.message.MessageRequestPacket;
+import org.byron4j.cookbook.netty.message.MessageResponsePacket;
 
 import java.util.Date;
 
-/**
- * 服务端处理逻辑器
- */
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+@SuppressWarnings("all")
+public class MessageServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println(new Date() + "客户端开始登陆...");
@@ -47,6 +47,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             ByteBuf responseByteBuf = PacketCodeC.encode(loginResponsePacket);
             ctx.channel().writeAndFlush(responseByteBuf);
 
+        }else if( packet instanceof MessageRequestPacket){
+
+
+            MessageRequestPacket messageRequestPacket = (MessageRequestPacket)packet;
+            System.out.println(new Date() + ": 收到客户端的消息:" + messageRequestPacket.getMessage());
+
+            // 准备回复消息
+            MessageResponsePacket messageResponsePacket = MessageResponsePacket.builder().message(new Date() + ":【服务端回复】" + messageRequestPacket.getMessage()).build();
+
+            ByteBuf byteBuf1 = PacketCodeC.encode(messageResponsePacket);
+            ctx.channel().writeAndFlush(byteBuf1);
+
         }
     }
 
@@ -54,13 +66,3 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         return true;
     }
 }
-
-
-
-
-
-
-
-
-
-

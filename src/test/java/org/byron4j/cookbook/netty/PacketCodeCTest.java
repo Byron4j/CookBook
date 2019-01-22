@@ -2,7 +2,7 @@ package org.byron4j.cookbook.netty;
 
 import io.netty.buffer.ByteBuf;
 import org.byron4j.cookbook.netty.apidemo.packet.LoginRequestPacket;
-import org.byron4j.cookbook.netty.apidemo.tool.PacketCodeC;
+import org.byron4j.cookbook.netty.apidemo.protocol.PacketCodeC;
 import org.junit.Test;
 
 public class PacketCodeCTest {

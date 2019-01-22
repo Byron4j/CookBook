@@ -6,11 +6,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.byron4j.cookbook.netty.apidemo.packet.LoginRequestPacket;
 import org.byron4j.cookbook.netty.apidemo.packet.LoginResponsePacket;
 import org.byron4j.cookbook.netty.apidemo.packet.Packet;
-import org.byron4j.cookbook.netty.apidemo.tool.PacketCodeC;
+import org.byron4j.cookbook.netty.apidemo.protocol.PacketCodeC;
 
-import javax.sound.midi.SoundbankResource;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 消息处理器
