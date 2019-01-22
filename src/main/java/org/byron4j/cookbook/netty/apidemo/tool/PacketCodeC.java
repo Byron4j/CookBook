@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import org.byron4j.cookbook.netty.apidemo.command.Command;
 import org.byron4j.cookbook.netty.apidemo.packet.LoginRequestPacket;
+import org.byron4j.cookbook.netty.apidemo.packet.LoginResponsePacket;
 import org.byron4j.cookbook.netty.apidemo.packet.Packet;
 import org.byron4j.cookbook.netty.apidemo.serializer.JSONSerializer;
 import org.byron4j.cookbook.netty.apidemo.serializer.Serializer;
@@ -38,6 +39,9 @@ public class PacketCodeC {
     static{
         packetMap = new HashMap();
         packetMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
+
+        // 响应对象映射响应指令
+        packetMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
 
         serializerMap = new HashMap<>();
         serializerMap.put(SerializerAlgorithm.JSON, new JSONSerializer());

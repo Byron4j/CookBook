@@ -9,4 +9,9 @@ public interface Command {
      * 代表登陆请求的指令
      */
     Byte LOGIN_REQUEST = 1;
+
+    /**
+     * 登陆响应指令
+     */
+    Byte LOGIN_RESPONSE = 2;
 }
