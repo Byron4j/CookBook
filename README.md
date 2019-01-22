@@ -24,8 +24,10 @@
 - Redis
 - RabbitMQ
 - NIO/Netty
+    - 0.ByteBuf数据结构![ByteBuf数据结构](Netty/ByteBuf.png)
     - 1.[Netty第一个程序示例](org.byron4j.cookbook.netty.first)
-    - 2.[Netty自定义传输协议](org.byron4j.cookbook.netty.apidemo)
+    - 2.[Netty自定义传输协议](org.byron4j.cookbook.netty.PacketCodeCTest)
+    - 3.[Netty登陆请求、验证登陆、获取响应示例](org.byron4j.cookbook.netty.login.Server)
 - Tomcat
 - JVM知识点总结
 - Zookeeper
