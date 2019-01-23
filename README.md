@@ -44,6 +44,7 @@
     - Shell 脚本编程语言
         - [shell基础入门知识](Linux/shell/1-shell基础教程.md)
         - [shell基本语法](Linux/shell/2-shell基本语法.md)
+        - [shell运算符汇总](Linux/shell/3-shell运算符汇总.md)
 
 - Python3 编程语言
     - 1.[概览](Python3/1-Python3概览.md)
