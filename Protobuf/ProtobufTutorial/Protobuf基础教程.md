@@ -400,9 +400,9 @@ class ListPeople {
 - 您可以添加新的optional或者repeated字段，但那时您必须使用新的tag编号（即该tag编号没有在这个protocol buffer文件中使用，或者已经被删除了）
 
 如果您遵循这些规则，旧代码可以友好地读取新的message，并且忽略新的字段。对于旧代码，那些删除地optional字段会使用它们默认的值，而repeated字段则为空。
-新代码显然会读取旧的message。不论如何，切记新的optional字段在旧的message中是不会出现的，所以您需要检查它们是否设置了值，可以使用**has_**，或者在您的 **.proto**文件中在该字段的tab编号后面使用**[default = value]**为其提供一个default值。
+新代码显然会读取旧的message。不论如何，切记新的optional字段在旧的message中是不会出现的，所以您需要检查它们是否设置了值，可以使用 **has_**，或者在您的 **.proto**文件中在该字段的tab编号后面使用 **[default = value]** 为其提供一个default值。
 如果optional字段没有指定default值，则会根据该类型自动为其赋值：string类型则赋值空串，对于布尔类型则赋值为false，对于数值类型则赋值为0.
-请注意，假如您添加了一个repeated字段，您的新代码将无从知晓该字段是空的(新代码)，还是从来没有设置过值(旧代码)，因为它没有**has_**方法。
+请注意，假如您添加了一个repeated字段，您的新代码将无从知晓该字段是空的(新代码)，还是从来没有设置过值(旧代码)，因为它没有 **has_** 方法。
 
 ### 高级用法
 
