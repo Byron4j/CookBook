@@ -353,3 +353,33 @@ npm install hexo-deployer-git --save
 ### 展示成型的博客
 
 ![](8-localhost.png)
+
+
+### linux作为后台服务启动
+
+安装 pm2
+
+```
+npm  install -g pm2
+```
+
+博客根目录下面创建一个hexo_run.js：
+
+```js
+const { exec } = require('child_process')
+exec('hexo server',(error, stdout, stderr) => {
+        if(error){
+                console.log('exec error: ${error}')
+                return
+        }
+        console.log('stdout: ${stdout}');
+        console.log('stderr: ${stderr}');
+})
+```
+
+根目录下执行：
+```
+pm2 start hexo_run.js
+```
+
+启动后台服务。
