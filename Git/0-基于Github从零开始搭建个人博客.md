@@ -39,4 +39,51 @@
 
 ![](github-pages/7-files.png)
 
+### 初始化后的页面文件
+
+#### _config.yml 配置文件
+
+该配置文件仅含一行代码，指定了页面使用的主题，也就是我们在前面指定的：cayman。
+从主题命名可以看到，该页面是基于 [jekyll](https://jekyllrb.com/) 的, jekyll的中文网站是：https://www.jekyll.com.cn/。
+
+```yaml
+theme: jekyll-theme-cayman
+```
+
+
+#### index.md 首页
+
+该文件描述了初始化后的 Github pages 页面展示的内容。
+
+
+### 绑定域名
+
+用户可以选择去域名服务商购买域名，这里使用阿里云购买的域名：
+
+![](github-pages/8.png)
+
+绑定域名后，可以看到项目根目录下增加了一个 ```CNAME``` 的文件，打开可以看到是我们刚才绑定的域名：
+
+```
+f12e24i.com
+```
+
+### 在域名服务端将域名解析到 account.github.io
+
+添加域名解析，添加： 
+
+- 记录类型：**CNAME**
+- 主机记录： **@**
+- 记录值： **ydgw2407.github.io**
+- TTL ： 默认10分钟即可
+
+![](github-pages/9.png)
+
+过一会刷新下，就可以看到解析完成。
+
+### 域名解析成功
+
+域名解析成功后，就可以使用你的域名访问页面了。
+
+![](github-pages/10.png)
 
