@@ -32,7 +32,7 @@
 - Tomcat
 - JVM知识点总结
 - Zookeeper
-    - 1.[ZK基础](Zokeeper/Zookeeper分布式过程协同技术详解Note/第一章 Zk基础.md)
+    - 1.[ZK基础](Zokeeper/Zookeeper分布式过程协同技术详解Note/第一章-Zk基础.md)
 - Dubbo
 - RPC
     - Protobuf
