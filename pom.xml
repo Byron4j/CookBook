@@ -81,6 +81,11 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.55</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.rocketmq</groupId>
+			<artifactId>rocketmq-all</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
