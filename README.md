@@ -24,6 +24,8 @@
 - MyBatis
 - Redis
 - RabbitMQ
+    - 参与开源
+        - 1.[翻译客户端配置部分-中文翻译成英文](RocketMQ/参与阿里巴巴RocketMQ项目/1-客户端配置_en.md)
 - NIO/Netty
     - 0.ByteBuf数据结构![ByteBuf数据结构](Netty/ByteBuf.png)
     - 1.[Netty第一个程序示例](org.byron4j.cookbook.netty.first)
@@ -32,7 +34,8 @@
 - Tomcat
 - JVM知识点总结
 - Zookeeper
-    - 1.[ZK基础](Zokeeper/Zookeeper分布式过程协同技术详解Note/第一章-Zk基础.md)
+    - 1.[ZK概览](Zokeeper/Zookeeper分布式过程协同技术详解Note/第一章-Zk概览.md)
+    - 3.[了解Zk](Zokeeper/Zookeeper分布式过程协同技术详解Note/第三章-了解Zk.md)
 - Dubbo
 - RPC
     - Protobuf
