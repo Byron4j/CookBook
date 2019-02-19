@@ -217,3 +217,210 @@ process: WatchedEvent state:SyncConnected type:None path:null
 >一般而言，客户端会很快重建会话，以便最小化应用的影响。所以不要关闭会话后在启动一个新的会话，这样反而增加了系统负载，并导致更长时间的中断。
 
 
+Zk有两种管理接口：JMX和四个字母组成的命令。现在我们通过 **stat**、**dump** 来看看服务端发生了什么。
+
+ 
+ >**关闭会话：**
+ >
+ >当程序功能执行完毕后，最好的方式是关闭会话。可以通过 ZooKeeper.close() 方法来结束，一旦调用close方法后，Zk对象实例所表示的会话就会被销毁。
+ 
+ 
+ 让我们在示例程序 Master 中加入 close 调用：
+ 
+ ```java
+    void stopZk() throws InterruptedException {
+         zk.close();
+     }
+     
+    public static void main(String[] args) throws Exception {
+        Master master = new Master("localhost:2181,localhost:2182,localhost:2183");
+
+        master.startZk();
+
+        Thread.sleep(60000);
+
+        master.stopZk();
+    }     
+ ```
+ 
+ ## 获取管理权
+ 
+ 多个进程创建 /master 节点，但是只有一个会成功，称为主节点。
+ 
+ ZK 的常量 **ZooDefs.Ids.OPEN_ACL_UNSAFE** 为所有进程提供了所有权限（但是正如其名，这个ACL策略在某些不可信环境下是不安全的）。
+ 
+ Zk 通过插件式的认证方法提供了每个节点的ACL策略功能，因此可以限制某个用户对某个znode的哪些权限。
+ 我们希望在主节点死后 /master 节点消失，我们需要创建临时性节点 **EPHEMERAL**。
+ 我们在程序中增加以下代码：
+ 
+ ```java
+    String serverId = Integer.toHexString(new Random().nextInt());
+...
+
+    void runForMaster() throws KeeperException, InterruptedException {
+        /*
+            path， 节点数据， 访问控制策略， 节点模式
+         */
+        zk.create("/master", serverId.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+    }
+    
+...
+
+    public static void main(String[] args) throws Exception {
+        Master master = new Master("localhost:2181,localhost:2182,localhost:2183");
+
+        master.startZk();
+
+        master.runForMaster();
+
+        Thread.sleep(60000);
+
+        master.stopZk();
+    }
+ ```
+ 
+ 运行程序输出了一个新的创建 /master 节点的日志信息：
+ 
+ ```
+ 16:51:43.286 [main-SendThread(localhost:2181)] DEBUG org.apache.zookeeper.ClientCnxn - Reading reply sessionid:0x1690410d9190001, packet:: clientPath:null serverPath:null finished:false header:: 1,1  replyHeader:: 1,21474836488,0  request:: '/master,#6533383765613230,v{s{31,s{'world,'anyone}}},1  response:: '/master 
+
+ ```
+
+ - 尝试创建znode节点： /master。 如果这个znode存在，create就会失败。同时在 /master 节点的数据字段保存了一个随机的serverId。
+ 
+ - 节点数据字段只能存放字节数组类型
+ 
+ - 我们使用开放的 ACL 策略
+ 
+ - 创建的节点类型为临时性的： **EPHEMERAL**
+ 
+ 我们看到 create 方法需要捕获2个异常： ```KeeperException```, ```InterruptedException```。
+ 我们需要确保处理了这两种异常，ConnectionLossException（KeeperException 的子类）和 InterruptedException，因为对于这两种异常，create方法有可能已经成功了。
+ 
+ **ConnectionLossException** 异常发生于客户端与Zk服务端失去连接时。一般是由于网络原因导致，如网络分区、Zk服务端故障等。当这个异常发生的时候，客户端并不知道在Zk服务器处理前丢失了还是处理完成后丢失的。
+ 如前面所说，Zk客户端会为丢失的会话重新建立连接，但是进程必须知道一个悬而未决的请求是否已经处理了 or 需要再次发送请求尝试。
+ 
+ **InterruptedException** 异常源于客户端线程调用了 Thread.interrupt ，通常这是因为应用程序部分关闭。进程会终端本地客户端的请求，并使该请求处于未知状态。
+ 
+ 当我们在处理这些异常时，必须知道系统的状态：
+ **如果发生群选举，在没有确认情况之前，不希望确定主节点。**
+ **如果create成功了，活动主节点死掉以前，没有任何进程能够成为主节点。**
+ **如果活动主节点还不知道自己已经获得了管理权，不会有任何进程成为主节点。**
+ 
+ 当处理 ConnectionLossException 异常时，我们需要找出哪个进程创建的 /master 节点，如果进程是自身，就开始称为群首角色。通过 ```getData``` 方法来处理：
+ 
+ ```java
+ public byte[] getData(String path, boolean watch, Stat stat)
+ ```
+ 
+ 其中：
+ 
+ - **path**
+  类似其它Zk方法一样，第一个参数为我们想要获取数据的znode节点的路径
+  
+- **watcher**
+  表示我们是否想要监听后续的数据变更。如果设置为 true， 就可通过创建句柄时所设置的Watcher对象得到事件。
+  同时另一个版本的方法提供了以 Watcher 对象作为入参，通过这个传入的对象来接收变更的事件。
+  现在我们先设置为false，仅仅想知道当前的数据是什么。
+  
+**stat**
+  最后一个Stat数据结构，getData 方法会填充znode节点的元数据信息。
+  
+修改一下程序见 Master2，在 funForMaster 方法中引入异常处理的逻辑：
+
+```java
+    boolean isLeader = false;
+
+...
+
+    /**
+     * 如果存在了 /master 返回true
+     * @return
+     */
+    boolean checkMaster(){
+        while(true){
+            Stat stat = new Stat();
+            try {
+                byte[] data = zk.getData("/master", false, stat);
+
+                isLeader = new String(data).equals(serverId);
+                return true;
+            } catch (KeeperException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+...
+
+    void runForMaster() throws InterruptedException {
+        while(true){
+            try {
+                zk.create("/master", serverId.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+                // 创建完成，为主节点
+                isLeader = true;
+                break;
+            } catch (KeeperException.NodeExistsException e) {
+                isLeader = false;
+                break;
+            }catch (KeeperException.ConnectionLossException ex){
+
+            }catch (KeeperException ex2){
+
+            }
+
+            // 检查 /master 是否存在
+            if(checkMaster()){
+                break;
+            }
+
+        }
+
+    }
+```
+
+运行第一次Master，输出：I'm a leader.
+接着立马运行第二次，输出：Someone else is the leader.
+
+
+这个案例知悉了：
+
+- 通过获取 /master 节点的数据来检查活动主节点： ```byte[] data = zk.getData("/master", false, stat);```
+- 获取节点数据后，比较是否和当前服务id一致，一致则为群首：```isLeader = new String(data).equals(serverId);```
+- 在 zk.create方法包在try块之中，以便捕获 ConnectionLossException 异常。
+- create成功，则为主节点
+- 处理 ConnectionLossException 异常时，并没有做任何事情，让他继续循环重新create并判断
+- 后面检查主节点是否存在，不存在则重试
+
+在Master2中，我们并没有处理 InterruptedException ，而是简单的将其抛给了上层服务调用。InterruptedException 异常的处理依赖于成俗的上下文环境。
+
+看一下main方法：
+
+```java
+    public static void main(String[] args) throws Exception {
+        Master2 master = new Master2("localhost:2181,localhost:2182,localhost:2183");
+
+        master.startZk();
+
+        master.runForMaster();
+
+        if(master.isLeader){
+            System.out.println("I'm a leader.");
+        }else{
+            System.out.println("Someone else is the leader.");
+        }
+        Thread.sleep(60000);
+        master.stopZk();
+    }
+```
+
+- 调用 runForMaster 方法， 当前进程或者其他进程称为主节点时返回
+- 当开发主节点的逻辑时：```if(master.isLeader)``` ，在这个分支里执行这些逻辑，当然目前仅仅需要输出简单的文本信息即可
+
+### 异步获取管理权
+
+
+
+
