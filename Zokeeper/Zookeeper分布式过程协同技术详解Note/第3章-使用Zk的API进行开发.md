@@ -136,7 +136,7 @@ public class Master implements Watcher {
 11:58:14.923 [main] INFO org.apache.zookeeper.ZooKeeper - Client environment:user.name=BYRON.Y.Y
 11:58:14.923 [main] INFO org.apache.zookeeper.ZooKeeper - Client environment:user.home=C:\Users\BYRON.Y.Y
 11:58:14.923 [main] INFO org.apache.zookeeper.ZooKeeper - Client environment:user.dir=F:\217my_optLogs\001系统相关\系统设计\007\CookBook
-11:58:14.925 [main] INFO org.apache.zookeeper.ZooKeeper - Initiating client connection, connectString=localhost:2181,localhost:2182,localhost:2183 sessionTimeout=15000 watcher=org.byron4j.cookbook.zk.zkApi.Master@c2e1f26
+11:58:14.925 [main] INFO org.apache.zookeeper.ZooKeeper - Initiating client connection, connectString=localhost:2181,localhost:2182,localhost:2183 sessionTimeout=15000 watcher=Master@c2e1f26
 11:58:14.930 [main] DEBUG org.apache.zookeeper.ClientCnxn - zookeeper.disableAutoWatchReset is false
 11:58:15.660 [main-SendThread(localhost:2183)] INFO org.apache.zookeeper.ClientCnxn - Opening socket connection to server localhost/0:0:0:0:0:0:0:1:2183. Will not attempt to authenticate using SASL (unknown error)
 11:58:15.663 [main-SendThread(localhost:2183)] INFO org.apache.zookeeper.ClientCnxn - Socket connection established to localhost/0:0:0:0:0:0:0:1:2183, initiating session
@@ -315,15 +315,18 @@ Zk有两种管理接口：JMX和四个字母组成的命令。现在我们通过
  
  其中：
  
- - **path**
+- **path**
+ 
   类似其它Zk方法一样，第一个参数为我们想要获取数据的znode节点的路径
   
 - **watcher**
+
   表示我们是否想要监听后续的数据变更。如果设置为 true， 就可通过创建句柄时所设置的Watcher对象得到事件。
   同时另一个版本的方法提供了以 Watcher 对象作为入参，通过这个传入的对象来接收变更的事件。
   现在我们先设置为false，仅仅想知道当前的数据是什么。
   
-**stat**
+- **stat**
+  
   最后一个Stat数据结构，getData 方法会填充znode节点的元数据信息。
   
 修改一下程序见 Master2，在 funForMaster 方法中引入异常处理的逻辑：
@@ -421,6 +424,366 @@ Zk有两种管理接口：JMX和四个字母组成的命令。现在我们通过
 
 ### 异步获取管理权
 
+**在 Zk 中，所有同步调用方法都有对应的异步调用方法。** 通过异步调用，可以在单线程中同时进行多个调用，简化实现方式。
+
+现在将前面的管理权的示例修改为异步调用的方式。
+
+**create** 方法的异步调用定义：
+
+```java
+public void create(final String path, 
+                    byte data[], 
+                    List<ACL> acl,
+                    CreateMode createMode,  
+                    StringCallback cb, 
+                    Object ctx)
+```
+
+相比同步调用版本的方法锁了2个参数cb、ctx。
+
+- ```StringCallback cb``` : 提供回调方法的对象
+- 用户指定上下文信息（回调方法调用是传入的对象实例）
+- 回调对象cb通过传入的上下文参数ctx来获取数据，当从服务器接收到create请求的结果的时候，上下文参数ctx就会通过回调对象cb提供给应用程序
+
+回调对象的实现需要实现 StringCallback 接口, 只有一个方法：
+
+```public void processResult(int rc, String path, Object ctx, String name);```
+
+>**异步方法的调用**：
+>
+>简单化队列对Zk服务器的请求，并在另一个线程中参数请求。
+>
+>当接收到响应信息，这些请求就会在一个专用的回调线程中被处理，只会有一个单独的线程按照接收顺序处理响应包。
+
+处理结果方法 processResult 的参数含义如下：
+
+- **rc**
+
+  返回调用的结构，返回 OK 或与 KeeperException 异常对应的编码值
+ 
+- **path**
+
+  传给create方法的path参数的值，即节点的path
+
+- **ctx**
+
+  传递给create方法的上下文参数
+ 
+- **name**
+
+  创建的znode节点名称
+  
+目前，调用成功后，path 和 name 的值一样，但是如果采用 CreateMode.SEQUENTIAL 模式的话，这两个参数值就不会相等。
+
+>**注意：回调函数处理**
+>
+>因为只有一个线程负责处理所有的回调调用，如果回调函数阻塞，所有后续的回调调用都会被阻塞，所以一般不要在回调函数中集中操作或阻塞操作。
+>
+>有时候，在回调函数中调用同步方法是允许的，但是建议最好不要这样做，以便后来的回调调用可以被快速处理。
+
+继续改造我们的程序，见 Master3.java，创建了回调方法对象 masterCreateCallback：
+
+```java
+    // 创建回调方法对象
+    static AsyncCallback.StringCallback masterCreateCallback = new AsyncCallback.StringCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, String name) {
+            switch (KeeperException.Code.get(rc)){
+                case CONNECTIONLOSS:
+                    checkMaster();
+                    return;
+                case OK:
+                    isLeader = true;
+                    break;
+                default:
+                    isLeader = false;
+            }
+
+            System.out.println("I'm " + (isLeader ? "" : "not ") + "the leader");
+        }
+    };
+```
+
+调整 runForMaster 方法，改为异步调用：
+
+```java
+    void runForMaster(){
+        zk.create("/master", serverId.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL, masterCreateCallback, null);
+    }
+```
+
+- 从 rc 参数中获得了 create 请求的结果，并将其转换为 KeeperException.Code 枚举类型。rc 如果不为0，则对应 KeeperException 异常。
+- 如果因连接丢失导致 create 请求失败，会得到 CONNECTIONLOSS 编码结果。当连接丢失时，需要检查系统当前的状态，并判断需要如何恢复，
+- 现在成为了群首，此例还是先简单的将 isLeader 赋值为true表示
+- 在 runForMaster 方法中，我们将回调方法对象 masterCreateCallback 传递给 create 方法，null 作为上下文对象参数（因为现在不需要向masterCreateCallback.processResult放啊传入任何信息）。
+
+现在需要实现 checkMaster 的异步方法调用，也通过回调方法来实现逻辑，```getData``` 方法的异步调用方式。
+首先实现一个回调方法对象 ```masterCheckCallback``` 实现 ```DataCallback```：
+
+```java
+    static AsyncCallback.DataCallback masterCheckCallback = new AsyncCallback.DataCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, byte[] data, Stat stat) {
+            switch (KeeperException.Code.get(rc)){
+                case CONNECTIONLOSS:
+                    checkMaster();
+                    return;
+                case NONODE:
+                    runForMaster();
+                    return;
+            }
+        }
+    };
+```
+
+checkMaster 方法中则仅保留 getData 方法的异步调用方式代码:
+
+```java
+    static void checkMaster(){
+        zk.getData("/master",false, masterCheckCallback, null);
+    }
+```
+
+**同步调用、异步调用要处理的逻辑是一样的，只是异步方法中，我们没有使用while循环，而是通过在异步调用中的回调函数中纪念性的错误处理。**
 
 
+### 设置元数据
+
+我们的主从模式依赖于三个目录： /workers、/tasks、/assign。
+**我们可以在系统启动前通过某些系统环境配置进行创建这些目录，或者通过主节点程序每次启动时都创建这个目录。**
+
+```java
+    /**
+     * 初始化时，创建主从模式的三个目录
+     */
+    static void bootstrap(){
+        createParent("/workers", new byte[0]);
+        createParent("/tasks", new byte[0]);
+        createParent("/assign", new byte[0]);
+    }
+```
+
+使用持久性模式创建 /workers、/tasks、/assign 节点：
+
+```java
+    /**
+     * 创建 /workers、/tasks、/assign
+     * @param path
+     * @param data
+     */
+    static void createParent(String path, byte[] data){
+        zk.create(path, data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT, createParentCallback, data);
+    }
+```
+
+创建 /workers、/tasks、/assign 的回调方法对象：
+
+```java
+    // 创建主从模型目录的回调方法对象
+    static AsyncCallback.StringCallback createParentCallback = new AsyncCallback.StringCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, String name) {
+            switch (KeeperException.Code.get(rc)){
+                case OK:
+                    log.info("Parent " + path + " created");
+                    break;
+                case CONNECTIONLOSS:
+                    createParent(path, (byte[]) ctx);
+                    break;
+                case NODEEXISTS:
+                    log.warn("Parent already registered: " + path);
+                    break;
+                default:
+                    log.error("Something went wrong: ", KeeperException.create(KeeperException.Code.get(rc), path));
+            }
+        }
+    };
+```
+
+至此，完整的示例代码见 Master4.java， 运行程序之前，我们先看一下当前的znode节点：
+
+```
+[zk: localhost:2181,localhost:2182,localhost:2183(CONNECTED) 6] ls /
+[zookeeper, workers, tasks, assign]
+[zk: localhost:2181,localhost:2182,localhost:2183(CONNECTED) 7]
+
+```
+
+这是因为我们在前面使用 ZkCli 演示Zk相关命令创建的，现在删除这些节点后(**非空节点使用 ```rmr /path``` 删除**)，再来运行程序：
+
+```
+15:44:00.857 [main-EventThread] INFO Master4 - Parent /workers created
+15:44:00.857 [main-EventThread] INFO Master4 - Parent /tasks created
+15:44:00.857 [main-EventThread] INFO Master4 - Parent /assign created
+```
+
+
+说明：
+- 因为没有数据存入这些znode，所以传入空的字节数组
+- ```zk.create(path, data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT, createParentCallback, data);``` 这一行看起来有点怪异，但是我们需要知道第一个 data 参数表示要保存到znode节点的数据；而第二个 data 则可以在回调函数中继续使用。
+- 如果回调函数返回的是 ```CONNECTIONLOSS``` 就重新调用create重试。
+
+
+## 注册从节点
+
+我们已经有了主节点 Master 了， 还需要配置从节点，以便主节点发号施令。根据前面的设计和ZkCli案例的介绍，每个从节点需要在 /workers 下创建一个临时性znode节点：
+
+```java
+package org.byron4j.cookbook.zk.zkFollow;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.zookeeper.*;
+
+import java.io.IOException;
+import java.util.Random;
+
+@Slf4j
+public class Worker implements Watcher {
+
+    ZooKeeper zk;
+    String hostPort;
+    String serverId = Integer.toHexString(new Random().nextInt());
+
+    @Override
+    public void process(WatchedEvent event) {
+        log.info("process:" + event + ": " + hostPort);
+    }
+
+    /**
+     * 构造器
+     * @param hostPort
+     */
+    Worker(String hostPort){
+        this.hostPort = hostPort;
+    }
+
+    /**
+     * 连接Zk服务器
+     * @throws IOException
+     */
+    void startZk() throws IOException {
+        zk = new ZooKeeper(hostPort, 15000, this);
+    }
+
+    /**
+     * 关闭Zk会话
+     * @throws InterruptedException
+     */
+    void stopZk() throws InterruptedException {
+        zk.close();
+    }
+
+    // 创建 回调方法对象
+    AsyncCallback.StringCallback createWorkCallback = new AsyncCallback.StringCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, String name) {
+            switch (KeeperException.Code.get(rc)){
+                case CONNECTIONLOSS:
+                    register(); // 连接丢失，则重新连接重试
+                    break;
+                case OK:
+                    log.info("Registered successfully: " + serverId); // 输出创建OK的信息
+                    break;
+                case NODEEXISTS:
+                    log.warn("Already registered: " + serverId); // 已经存在了
+                    break;
+                default:
+                    log.error("Something went wrong:" + KeeperException.create(KeeperException.Code.get(rc), path));
+            }
+        }
+    };
+
+    /**
+     * 注册从节点
+     */
+    void register(){
+        zk.create("/workers/worker-" + serverId,
+                "Idle".getBytes(),
+                ZooDefs.Ids.OPEN_ACL_UNSAFE,
+                CreateMode.EPHEMERAL,
+                createWorkCallback,
+                null);
+    }
+
+
+
+    public static void main(String[] args) throws Exception {
+        Worker worker = new Worker("localhost:2181,localhost:2182,localhost:2183");
+        worker.startZk(); // 连接Zk
+
+        worker.register(); // 注册从节点
+
+        Thread.sleep(30000);
+
+        worker.stopZk(); // 关闭会话
+    }
+}
+
+```
+
+- 我们将从节点的状态信息存入代表从节点的znode节点中
+- 如果进程死掉，希望代表从节点的znode节点得到清理，所以设置为临时性节点 EPHEMERAL， 这意味着，简单的关注 /workers 节点就可以得到有效从节点的列表
+
+运行程序后可以看到创建了一个从节点：
+
+```
+[zk: localhost:2181,localhost:2182,localhost:2183(CONNECTED) 31] ls /workers
+[worker-306b249]
+
+```
+
+- 因为这个进程是唯一创建表示该进程的临时性znode节点的进程，如果创建节点时连接丢失，进程就会简单地重试创建过程
+
+我们将从节点信息存入了代表从节点的znode节点，如此就可以通过查询Zk来获取从节点地状态。当前，只有初始化和空闲状态，但是，一旦从节点开始处理某些事情，还需要设置其他状态信息。
+
+**以下是setStat方法的实现，该方法与常规方法有所不同，我们希望异步方式来设置状态，以便不会延迟常规流程的操作：**
+
+```java
+    // 异步设置状态
+    AsyncCallback.StatCallback statusUpdateCallback = new AsyncCallback.StatCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, Stat stat) {
+            switch (KeeperException.Code.get(rc)){
+                case CONNECTIONLOSS:
+                    updateStatus((String)ctx);
+                    return;
+            }
+        }
+    };
+
+    /**
+     * 设置节点状态
+     * @param status
+     */
+    synchronized void updateStatus(String status){
+        if( this.status == status ){
+            zk.setData("/workers/worker-" + serverId, status.getBytes(), -1, statusUpdateCallback, status);
+        }
+    }
+
+    /**
+     * 设置节点状态
+     * @param status
+     */
+    void setStatus(String status){
+        this.status = status;
+        updateStatus(status);
+    }
+```
+
+- 我们将状态信息保存到本地变量中ctx="done"，万一更新失败，需要重试
+- 我们并未在 setStatus 方法中进行更新，而是新建了一个 updateStatus 方法， 在 setStatus 中使用它，并且可以在重试逻辑中使用
+- ```zk.setData("/workers/worker-" + serverId, status.getBytes(), -1, statusUpdateCallback, status);``` 第三个参数 -1 表示禁止版本号检查，通过上下文对象参数即最后一个参数传递状态
+- 收到连接丢失的事件则重新更新，updateStatus 方法是一个 synchronized 方法
+
+>**注意：顺序和 ConnectionLossException 异常**
+>
+>Zk 会严格维护执行顺序，并提供强有力的有序保障，然而，在多线程环境中，需要小心顺序问题。
+>
+>多线程下，当回调函数中包括重试逻辑的代码时，一些常见的错误都可能发生。
+>
+>当遇到 ConnectionLossException 异常而补发一个请求时，新建立的请求可能排序在其他线程的请求之后，但是实际上其他线程的请求应该在原来的请求之后。
+
+
+## 任务队列化
 

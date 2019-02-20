@@ -1,7 +1,6 @@
 package org.byron4j.cookbook.zk.zkApi;
 
 import org.apache.zookeeper.*;
-import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
 import java.util.Random;
