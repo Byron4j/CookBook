@@ -787,3 +787,168 @@ public class Worker implements Watcher {
 
 ## 任务队列化
 
+除去 Master、Worker，最后的组件 Client 程序会队列化新任务，以便从节点执行这些任务，我们在 /tasks 节点下面添加子节点来表示需要从节点要执行的命令。
+
+我们使用有序节点来设计，这样的初衷是：
+- 序列号指定了任务被队列化的顺序
+- 可以通过很少的工作为任务创建唯一的序列号
+
+```java
+package org.byron4j.cookbook.zk.zkFollow;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.zookeeper.*;
+
+import java.io.IOException;
+
+@Slf4j
+public class Client implements Watcher {
+
+    ZooKeeper zk;
+    String hostPort;
+
+    Client(String hostPort){
+        this.hostPort = hostPort;
+    }
+
+    void startZk() throws IOException {
+        zk = new ZooKeeper(hostPort, 15000, this);
+    }
+
+    String queueCommand(String command) throws Exception {
+        while(true){
+            try{
+                String znodeName = zk.create("/tasks/task-", command.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL);
+                return znodeName;
+            }catch (KeeperException.NodeExistsException e){
+                throw  new Exception("Already exists");
+            }catch (KeeperException.ConnectionLossException ex){
+                // 连接丢失，则不做任何处理，继续while循环重试
+            }
+
+        }
+    }
+
+    @Override
+    public void process(WatchedEvent event) {
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        Client client = new Client("localhost:2181,localhost:2182,localhost:2183");
+        client.startZk();// 连接到Zk
+
+        String znodeName = client.queueCommand("repayNotify");
+        log.info("Created " + znodeName);
+    }
+}
+
+```
+
+多次运行程序可以看到输出：
+
+>Created /tasks/task-0000000001
+>
+>......
+>
+>Created /tasks/task-0000000004
+
+
+
+- 在 /tasks 节点下创建 znode 节点来标志一个任务，节点前缀为 task- 。
+- 因为采用的是 ```CreateMode.PERSISTENT_SEQUENTIAL``` 模式的节点，task- 后面会接一个单调递增的数字，这样保证每个节点是唯一的，通知 Zk 会确定任务的顺序。因为是持久性节点，所以即使 Client 结束了，该节点依然会存在。
+- create 会返回创建的节点的名称，我们可以看到序列号。
+- 如果在创建节点时遇到连接丢失，则需要重试，对于绝大都数至少执行一次的任务重试当然是OK的。 但是对于那些最多执行一次的任务，需要为每一个任务制定一个唯一的ID（如会话ID），将其编码到znode节点名中，在遇到连接丢失时，只有在 /tasks 下不存在以这个会话ID命名的节点时才重试命令。
+
+
+
+## 管理客户端
+
+最后通过一个程序来 AdminClient 展示系统运行状态。
+ZooKeeper 优点之一是可以通过 *ZkCli* 工具来查看系统的状态，但是通常情况下我们需要自己编写管理客户端，以便更快更简单管理系统。
+我们通过 ```getData```、```getChildren``` 方法来获得系统状态。
+
+```java
+package org.byron4j.cookbook.zk.zkFollow;
+
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.data.Stat;
+
+import java.io.IOException;
+import java.util.Date;
+
+public class AdminClient implements Watcher {
+
+    ZooKeeper zk;
+    String hostPort;
+
+    AdminClient(String hostPort){
+        this.hostPort = hostPort;
+    }
+
+    void startZk() throws IOException {
+        zk = new ZooKeeper(hostPort, 15000, this);
+    }
+
+
+    void listState() throws KeeperException, InterruptedException {
+        try {
+            Stat stat = new Stat();
+            byte[] masterData = zk.getData("/master", false, stat);
+
+            Date startDate = new Date(stat.getCtime());
+
+            System.out.println("Master: " + new String(masterData) + " since " + startDate);
+        }catch (KeeperException.NoNodeException e){
+            System.out.println("No znode which named Master");
+        }
+
+        System.out.println("Workers:");
+
+        for (String w: zk.getChildren("/workers", false)) {
+            byte[] data = zk.getData("/workers/" + w, false, null);
+            String state = new String(data);
+            System.out.println("\t" + w + ": " + state);
+        }
+
+        System.out.println("Tasks:");
+        for( String t : zk.getChildren("/tasks", null)){
+            System.out.println("\t" + t);
+        }
+
+    }
+
+    @Override
+    public void process(WatchedEvent event) {
+        System.out.println(event);
+    }
+
+    public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
+        AdminClient adminClient = new AdminClient("localhost:2181,localhost:2182,localhost:2183");
+        adminClient.startZk();
+
+        adminClient.listState();
+    }
+}
+
+```
+
+- 我们通过 **State** 结构，可以获得主节点 /master 称为主节点的事件信息。ctime 为该 znode 节点建立的毫秒数。
+- **getData** 获取节点数据
+- **getChildren** 获取节点的子节点名称
+
+此例我们使用的是简单的同步获取系统状态信息， 可以改写为异步的，此处不再展示。
+
+至此为止， Master、Worker、Client 这些基本实现已经带领我们走进了主从系统的开端，但是目前还没有实际调度起来。
+
+如：
+- 当一个任务加入队列，主节点需要唤醒并分配任务给一个从节点
+- 从节点需要找出分配给自己的任务
+- 任务完成时，客户端需要知道
+- 如果主节点故障，另一个等待中的主节点需要接管主节点工作
+- 如果从节点故障，已分配的任务需要分配给其他从节点
+
+后续...
