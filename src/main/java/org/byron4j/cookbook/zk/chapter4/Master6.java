@@ -27,6 +27,8 @@ public class Master6 implements Watcher {
 
     static MasterStates states;
 
+    static List<String> workerList;
+
 
     // 创建 getData 回调方法对象
     static AsyncCallback.DataCallback masterCheckCallback = new AsyncCallback.DataCallback() {
@@ -206,6 +208,7 @@ public class Master6 implements Watcher {
                     // OK
                     // TODO 重新分配崩溃的节点，并重新设置监视点
                     reassignAndSet(children);
+                    workerList = children;
                 default:
                     log.error("getChildren failed", KeeperException.create(KeeperException.Code.get(rc), path));
             }
@@ -256,6 +259,83 @@ public class Master6 implements Watcher {
     }
 
    /*********************************主节点等待从节点列表的变化END****************************************/
+
+
+
+    /*********************************主节点等待新任务分配START****************************************/
+    static Watcher tasksChangeWatcher = new Watcher() {
+        @Override
+        public void process(WatchedEvent event) {
+            if( event.getType() == Event.EventType.NodeChildrenChanged ){
+                // 子节点变更事件
+                log.info( "Is /tasks's children znode changed: " + "/tasks".equalsIgnoreCase(event.getPath()));
+
+                getTasks();
+            }
+        }
+    };
+
+    static void getTasks(){
+        zk.getChildren("/tasks", tasksChangeWatcher, tasksGetChildrenCallback, null);
+    }
+
+    static AsyncCallback.ChildrenCallback tasksGetChildrenCallback = new AsyncCallback.ChildrenCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, List<String> children) {
+            switch (KeeperException.Code.get(rc)){
+                case CONNECTIONLOSS:
+                    // 连接丢失，重新获取子节点并设置监视点
+                    getTasks();
+                    break;
+                case OK:
+                    // OK
+                    // TODO 重新分配崩溃的节点，并重新设置监视点
+                    if( children != null ){
+                        assignTasks(children);
+                    }
+                default:
+                    log.error("getChildren failed", KeeperException.create(KeeperException.Code.get(rc), path));
+            }
+        }
+    };
+
+    static void assignTasks(List<String> tasks){
+        for( String task : tasks ){
+            getTaskData(task);
+        }
+    }
+
+    static void getTaskData(String task){
+        zk.getData("/tasks" + task, false, taskDataCallback, task);
+    }
+
+    static AsyncCallback.DataCallback taskDataCallback = new AsyncCallback.DataCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, byte[] data, Stat stat) {
+            switch (KeeperException.Code.get(rc)){
+                case CONNECTIONLOSS:
+                    // 连接丢失则重试
+                    getTaskData((String)ctx);
+                    break;
+                case OK:
+                    // 随机选择一个从节点分配任务
+                    int worker = new Random().nextInt(workerList.size());
+                    String targetWorker = workerList.get(worker);
+
+                    // 分配任务给选中的从节点 targetWorker
+                    String assignPath = "/assign/" + targetWorker + "/" + (String)ctx;
+                    createAssignment(assignPath, data);
+            }
+        }
+    };
+
+    static void createAssignment( String path, byte[] data ){
+        
+    }
+
+    /*********************************主节点等待新任务分配END****************************************/
+
+
 
     public static void main(String[] args) throws Exception {
         Master6 master = new Master6("localhost:2181,localhost:2182,localhost:2183");
