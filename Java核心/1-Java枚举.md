@@ -278,3 +278,96 @@ public enum OperationGracefulField {
 
 ```
 
+## 计算加班工资的案例
+
+在五个工作日中，正常超过8个小时，就会产生加班工资（当然现实其实是不可能的，万恶的资本主义丿_\）。周末全部算加班。加班费按基本工资的一半计算。
+```java
+public enum PayrollDay {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY;
+
+    private static final int HOUR_PER_SHIFT = 8;
+
+    double pay(double hourseWorked, double payRate){
+        double basePay = hourseWorked * payRate;
+
+        double overtimePay;
+
+        switch (this){
+            case SATURDAY:
+            case SUNDAY:
+                overtimePay = hourseWorked * payRate / 2;
+             default:
+                 overtimePay = hourseWorked <= HOUR_PER_SHIFT
+                         ? 0 : (hourseWorked - HOUR_PER_SHIFT) * payRate / 2;
+                 break;
+        }
+
+        return  basePay + overtimePay;
+    }
+}
+```
+
+这个程序可以运行，达到基本的业务需求，但是从维护角度来看，比较危险，假设将一个元素添加到枚举中，或许是一个表示假期天数的特殊值，但是非常不幸，忘记了在switch分支添加代码区分，虽然程序可以编译，但是实际运行时可能会出现尴尬的结果，比如假期也计算了工资，带薪假期忘了计算工资等等。
+
+## 策略枚举的计算加班工资实现
+
+我们可以根据是否工作日、双休日，将加班工资计算移到一个私有的嵌套枚举中，然后将这个 **策略枚举** 的实例传递到 PayrollDay 枚举的构造器中。
+之后 PayrollDay 的加班费计算规则委托给策略枚举， PayrollDay 就不需要switch 语句或者特定于常量的方法了。
+
+```java
+public enum PayrollDayStrategy {
+    MONDAY(PayType.WEEKDAY),
+    TUESDAY(PayType.WEEKDAY),
+    WEDNESDAY(PayType.WEEKDAY),
+    THURSDAY(PayType.WEEKDAY),
+    FRIDAY(PayType.WEEKDAY),
+    SATURDAY(PayType.WEEKEND),
+    SUNDAY(PayType.WEEKEND);
+
+    private final PayType payType;
+
+    PayrollDayStrategy(PayType payType){
+        this.payType = payType;
+    }
+
+    private enum PayType{
+        WEEKDAY{
+            @Override
+            double overtimePay(double hrs, double payRate) {
+                return hrs <= HOUR_PER_SHIFT ?
+                        0 : (hrs - HOUR_PER_SHIFT) * payRate / 2;
+            }
+        },
+        WEEKEND {
+            @Override
+            double overtimePay(double hrs, double payRate) {
+                return hrs * payRate /2;
+            }
+        };
+
+        private static final int HOUR_PER_SHIFT = 8;
+
+        abstract double overtimePay(double hrs, double payRate);
+
+        double pay( double hoursWork, double payRate ){
+            double basePay = hoursWork * payRate;
+            return basePay + overtimePay(hoursWork, payRate);
+        }
+    }
+}
+```
+
+## 枚举的使用场景
+
+- 需要一组固定常量的时候
+
+  例如： 行星、一周的天数等等
+  
+- 如果多个枚举常量同时共享相同的行为， 则考虑策略枚举
+
