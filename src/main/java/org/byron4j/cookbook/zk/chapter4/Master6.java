@@ -330,8 +330,25 @@ public class Master6 implements Watcher {
     };
 
     static void createAssignment( String path, byte[] data ){
-        
+        zk.create(path, data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT, createAssignCallback, data);
     }
+
+    static AsyncCallback.StringCallback createAssignCallback = new AsyncCallback.StringCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, String name) {
+            switch (KeeperException.Code.get(rc)){
+                case CONNECTIONLOSS:
+                    // 失去连接重试
+                    createAssignment(path, (byte[])ctx);
+                    break;
+                case OK:
+                    log.info("assigned a task:" + path);
+                    break;
+                default:
+                    log.error("assigned a task failed", KeeperException.create(KeeperException.Code.get(rc), path));
+            }
+        }
+    };
 
     /*********************************主节点等待新任务分配END****************************************/
 

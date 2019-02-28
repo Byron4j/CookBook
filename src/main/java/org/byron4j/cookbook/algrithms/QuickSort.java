@@ -1,5 +1,7 @@
 package org.byron4j.cookbook.algrithms;
 
+import org.byron4j.cookbook.util.ArraysUtil;
+
 public class QuickSort {
     /**
      * 排序的核心算法
@@ -55,5 +57,12 @@ public class QuickSort {
         return leftIndex;
     }
 
+
+    public static void main(String[] args){
+        int[] arr = ArraysUtil.generateRandomIntArray(10, 100);
+        ArraysUtil.printArray(arr);
+        sortCore(arr, 0, arr.length - 1);
+        ArraysUtil.printArray(arr);
+    }
 
 }
