@@ -369,5 +369,63 @@ public enum PayrollDayStrategy {
 
   例如： 行星、一周的天数等等
   
-- 如果多个枚举常量同时共享相同的行为， 则考虑策略枚举
+- 如果多个枚举常量同时共享相同的行为， 则考使用虑策略枚举
+
+## EnumSet 枚举集合
+
+```EnumSet``` 类用来有效地表示从单个枚举类型中提取的多个值的多个集合，实现了 Set 集合，提供了丰富的功能和类型安全性。
+
+```java
+public class EnumSetDemo {
+    public enum Style{
+        BOLD,
+        ITALIC,
+        UNDERLINE,
+        STRIKETHROUGH
+    }
+
+    public void applyStyle(Set<Style> styles){
+        // TODO
+    }
+
+    public static void main(String[] args){
+        EnumSetDemo enumSetDemo = new EnumSetDemo();
+        enumSetDemo.applyStyle(EnumSet.of(Style.BOLD, Style.ITALIC));
+    }
+}
+```
+
+EnumSet 提供了很多静态方法用于创建集合。
+
+### EnumSet.of(...)  源码
+
+```java
+public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2) {
+    EnumSet<E> result = noneOf(e1.getDeclaringClass());
+    result.add(e1);
+    result.add(e2);
+    return result;
+}
+    
+public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementType) {
+    Enum<?>[] universe = getUniverse(elementType);
+    if (universe == null)
+        throw new ClassCastException(elementType + " not an enum");
+
+    if (universe.length <= 64)
+        return new RegularEnumSet<>(elementType, universe);
+    else
+        return new JumboEnumSet<>(elementType, universe);
+}
+
+
+```
+
+其中 ```RegularEnumSet```、```JumboEnumSet``` 是JDK自带的EnumSet的实现类。
+如果底层的枚举类型有64个或者更少的元素————其实大都数如此，整个 EnumSet 就用单个long来表示，性能较好。
+
+
+
+
+
 
