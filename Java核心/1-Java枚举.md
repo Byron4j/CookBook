@@ -427,5 +427,149 @@ public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementType) {
 
 
 
+## EnumMap 枚举映射使用场景
+
+自从我们知道 Enum 存在一个 ordinal 方法之后，可能对其使用就跃跃欲试了，比如，有一个用来表示一种烹饪的香草：
+
+```java
+public enum Herb {
+    ,
+    ;
+    
+    public enum Type{
+        ANNUAL, PERENNIAL, BIENNIAL
+    }
+
+    private String name;
+    private Type type;
+
+    Herb(String name, Type type){
+        this.name = name;
+        this.type = type;
+    }
 
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
+}
+```
+
+**场景** ：
+    现在假设有一个香草的数组，表示一座花园中的植物，但是想要按照类型进行组织后将这些植物列出来。
+**分析**：
+    我们发现，需要按类型分类，然后列出来。可以用作映射，刚好有一个 EnumMap 的类可以达到这样的目的。
+
+```java
+public enum Herb {
+    A("A", Type.ANNUAL),
+    B("B", Type.BIENNIAL),
+    AA("AA", Type.ANNUAL),
+    BB("BB", Type.BIENNIAL),
+    C("C", Type.PERENNIAL),
+    ;
+
+    public enum Type{
+        ANNUAL, PERENNIAL, BIENNIAL
+    }
+
+    private String name;
+    private Type type;
+
+    Herb(String name, Type type){
+        this.name = name;
+        this.type = type;
+    }
+
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public static void main(String[] args){
+        // 这是一个花园，栽种有各种类型的香草
+        Herb[] garden = new Herb[]{Herb.A, Herb.B, Herb.AA, Herb.BB, Herb.C};
+
+        // EnumMap 构造器需要指定 class 作为类型参数
+        Map<Herb.Type, Set<Herb>> herbsByType =
+                new EnumMap<Type, Set<Herb>>(Type.class);
+
+        for (Type t : Herb.Type.values()){
+            // 按类型分类
+            herbsByType.put(t, new HashSet<Herb>());
+        }
+
+        // 开始对花园处理
+        for (Herb h : garden){
+            herbsByType.get(h.type).add(h);
+        }
+
+        // 输出分类信息
+        System.out.println(herbsByType);
+    }
+
+}
+```
+
+
+## 枚举实现接口
+
+**枚举还可以实现接口**，用于实现扩展功能。
+
+改装前面的四则运算案例：
+
+```java
+
+// 接口
+package org.byron4j.cookbook.javacore.enums;
+
+public interface OperationI {
+    public double apply(double x, double y);
+}
+
+
+
+// 实现接口的枚举
+package org.byron4j.cookbook.javacore.enums;
+
+public enum BasicOperation implements OperationI{
+    PLUS("+"){
+        @Override
+        public double apply(double x, double y) {
+            return x + y;
+        }
+    }, MINUS("-") {
+        @Override
+        public double apply(double x, double y) {
+            return x - y;
+        }
+    }, TIMES("*") {
+        @Override
+        public double apply(double x, double y) {
+            return x * y;
+        }
+    }, DIVIDE("/") {
+        @Override
+        public double apply(double x, double y) {
+            return x / y;
+        }
+    };
+
+    // 属性
+    private String symbol;
+    BasicOperation(String symbol){
+        this.symbol = symbol;
+    }
+
+
+}
+
+```
+
+
+参考资料：
+
+- Effective Java（第二版）
