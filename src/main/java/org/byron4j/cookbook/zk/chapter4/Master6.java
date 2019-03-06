@@ -343,6 +343,7 @@ public class Master6 implements Watcher {
                     break;
                 case OK:
                     log.info("assigned a task:" + path);
+                    // 任务分配OK，则删除节点 TODO
                     break;
                 default:
                     log.error("assigned a task failed", KeeperException.create(KeeperException.Code.get(rc), path));
