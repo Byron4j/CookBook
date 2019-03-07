@@ -309,15 +309,176 @@ public class AnnoDemo {
 
 ## 让注解有用武之地
 
-### 注解与反射
+注解仅仅是用作标记，要想它真实发挥作用，式利用Java反射机制编写注解解析器，用作业务需求。
 
-可以通过 Class 对象的 isAnnotationPresent() 可以得知是否存在注解。
-可以通过 <T extends Annotation> T getAnnotation(Class<T> annotationClass) 获取注解对象
-可以通过 Annotation[] getAnnotations() 获取注解列表
+### 注解与反射(java.lang.reflect包下)
+
+- 可以通过 ```java.lang.reflect.Class``` 的 ```isAnnotationPresent()``` 得知是否存在注解。
+- 可以通过 ```<T extends Annotation> T getAnnotation(Class<T> annotationClass)``` 方法获取注解对象
+- 可以通过 ```Annotation[] getAnnotations()``` 方法获取注解列表
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+public @interface ByronAnno {
+    String value() default "ok";
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+public @interface ByronAnno {
+    String value() default "ok";
+}
 
 
+```
+
+运行输出：```注解值为：类```
 
 
+### 注解生产案例
+
+最后以一个生产案例的使用，来结束对注解的介绍。
+
+案例： http接口中，请求参数是字符串形式，将请求参数转换为请求实体类。对参数进行校验时，需要检查某些字段是否为空，以及整型数值的大小校验。
+
+
+#### ValidateVal 注解类
+```java
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface ValidateVal {
+
+	String length() default "";
+
+	boolean isBeNull() default false;
+
+	boolean isNotcheckDecimal() default false;// 验证小数
+
+	int isJudgeLength() default 0; // 0 :不判断 1:定值 2:区间
+
+	int minLength() default 0;
+
+	int maxLength() default 20;
+
+	int minValue() default 0;
+
+	int maxValue() default Integer.MAX_VALUE;
+
+	String expression() default "";
+
+	String errorMsg() default "";
+
+	int neeDivided() default 1; // 是否需要倍数
+	//是否校验数字，是=true,否=false
+	boolean isCheckNumber() default false;
+
+}
+
+```
+
+
+#### 用于解析 @ValidateVal 注解的解析方法
+
+```java
+protected <T> T validateAndConvert(String param, Class<T> cla) throws Exception {
+
+		T t = JSONUtils.json2Object(param, cla);
+		if (t == null) {
+			// 抛出异常
+		}
+		Field[] fields = t.getClass().getDeclaredFields();
+		Field[] parentFields = t.getClass().getSuperclass().getDeclaredFields();
+		
+		List<Field> allFields = Lists.newArrayList(fields);
+		allFields.addAll(Arrays.asList(parentFields));
+		
+		for (Field f : allFields) {
+			f.setAccessible(true);
+			ValidateVal an = f.getAnnotation(ValidateVal.class);
+			String fieldName = f.getName();
+			if (an == null) {
+				String value = String.valueOf(f.get(t));
+				value = value.trim();
+				if (f.getType().equals(String.class)) {
+					f.set(t, value);
+				}
+				if (value == null || value.equals("") || value.equals("null")) {
+					// 抛出异常
+				}
+			} else {
+				if (f.getType().equals(String.class)) {
+					String value = null;
+
+					if (f.get(t) != null) {
+						value = String.valueOf(f.get(t));
+						value = value.trim();
+						f.set(t, value);
+					}
+
+					if (!an.isBeNull()) {
+						if (value == null || value.equals("") || value.equals("null")) {
+							
+							// 抛出异常
+						}
+					} else {// 为空串置为null
+						if (value == null || value.equals("") || value.equals("null")) {
+							f.set(t, null);
+						}
+					}
+
+					if (!an.expression().equals("")) {
+						Pattern pattern = Pattern.compile(an.expression());
+						Matcher matcher = pattern.matcher(value);
+						if (!matcher.matches()) {
+							// 抛出异常
+						}
+					}
+
+					if (an.isJudgeLength() == 1) { // 定值
+						String[] lengthArr = an.length().split(",");
+						boolean in = false;
+						for (int i = 0; i < lengthArr.length; i++) {
+							if (value.length() == Integer.parseInt(lengthArr[i])) {
+								in = true;
+							}
+						}
+						if (!in) {
+							// 抛出异常
+						}
+					} else if (an.isJudgeLength() == 2) {
+						int min = an.minLength();
+						int max = an.maxLength();
+						if (value.length() < min || value.length() > max) {
+							// 抛出异常
+						}
+					}
+				} else if (f.getType().equals(Integer.class)) {
+					
+					
+					if (f.get(t) == null) {
+						if (an.isBeNull()) {
+							f.set(t, null);
+							continue;
+						} else {
+							// 抛出异常
+						}
+					}
+					Integer value = Integer.valueOf(f.get(t).toString());
+					if (an.neeDivided() != 1 && value % an.neeDivided() != 0) {
+						// 抛出异常
+					}
+
+					if (value < an.minValue() || value > an.maxValue()) {
+						// 抛出异常
+					}
+				}
+			}
+		}
+		return t;
+	}
+```
 
 
 参考资料：
