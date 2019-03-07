@@ -3,9 +3,9 @@
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份食谱，你只需要增加自己练习的次数。
 
 - JAVA核心高级知识点
-    - 1.[1-Java枚举](Java核心/1-Java枚举.md)
-    - 2.[2-Java注解](Java核心/2-Java注解.md)
-    - 3.[3-Java反射](Java核心/3-Java反射.md)
+    - 1.[Java枚举](Java核心/1-Java枚举.md)
+    - 2.[Java注解](Java核心/2-Java注解.md)
+    - 3.[Java反射](Java核心/3-Java反射.md)
 - MySQL
     - 1.[MySQL数据库锁、事务隔离级别详解](MySQL/1-MySQL数据库读写锁示例详解、事务隔离级别示例详解.md)
 - Spring
