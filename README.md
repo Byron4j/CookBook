@@ -41,6 +41,7 @@
     - 1.[ZK概览](Zokeeper/Zookeeper分布式过程协同技术详解Note/第1章-Zk概览.md)
     - 2.[了解Zk与Zk集群配置、主从模式案例演示](Zokeeper/Zookeeper分布式过程协同技术详解Note/第2章-了解Zk与Zk集群配置、主从模式案例演示.md)
     - 3.[使用Zk的API进行开发](Zokeeper/Zookeeper分布式过程协同技术详解Note/第3章-使用Zk的API进行开发.md)
+    - 4.[监听节点的状态变更、分配任务](Zokeeper/Zookeeper分布式过程协同技术详解Note/第4章-处理状态变化.md)
 - Dubbo
 - RPC
     - Protobuf

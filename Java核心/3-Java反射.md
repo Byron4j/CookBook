@@ -1,4 +1,3 @@
-@[toc]
 # Java核心（三）反射
 Java反射给我们提供了在运行时检查甚至修改应用行为的机制。 反射是java高级的核心技术，所有有经验的程序员都应该理解。
 
@@ -37,7 +36,7 @@ Java的反射是一种很强大的机制，在正常的编程中使用并不多�
 
 在java中，任何对象要么是原始类型或者引用类型。 所有的类、枚举、数据和其他引用类型均继承自Object类。
 
-<font color=red size=5><b>java.lang.Class</font>是所有反射操作的入口。对于任何类型的对象，JVM 会初始化其一个不可变的java.lang.Class 实例来提供检查对象的运行时的属性、创建新对象、调用方法、get/set 属性。
+<font color=red size=5>java.lang.Class</font>是所有反射操作的入口。对于任何类型的对象，JVM 会初始化其一个不可变的java.lang.Class 实例来提供检查对象的运行时的属性、创建新对象、调用方法、get/set 属性。
 
 我们来看看Class的重要方法，为了方便起见，我们先创建一些类和接口。
 
@@ -155,7 +154,7 @@ public class ConcreteClass extends BaseClass implements BaseInterface{
 
 -  使用示例的getClass()方法
 
--  <font color=red size=5><b>java.lang.Class.forName(String 完整的类名)</font>，完整的类名包含包名。 
+-  <font color=red size=5>java.lang.Class.forName(String 完整的类名)</font>，完整的类名包含包名。 
 
 原始类型的class、包装类型的TYPE均可以获得Class对象。
 
@@ -229,7 +228,7 @@ Class的getCanonicalName()方法返回类的名称。在泛型中使用 java.lan
 
 #### 获取超类Super Class
 
-**<font color=red size=5><b>getSuperclass()</font>** 方法，返回类的超类(基类、父类)的class实例，如果该类是java.lang.Object、原始类型、接口则返回null。如果该class是数组形式，则该方法返回java.lang.Object。
+**<font color=red size=5>getSuperclass()</font>** 方法，返回类的超类(基类、父类)的class实例，如果该类是java.lang.Object、原始类型、接口则返回null。如果该class是数组形式，则该方法返回java.lang.Object。
 
 ```java
 Class<?> superClass = Class.forName("com.byron4j.hightLevel.reflection.ConcreteClass").getSuperclass();
@@ -248,7 +247,7 @@ class java.lang.Object
 
 #### 获取公有的class
 
-Class的<font color=red size=5><b>getClasses()</font> 方法可以获取class的所有继承的超类、接口和自己定义的<font color=red size=5><b>公有</font>类、接口、枚举等的数组形式。 
+Class的<font color=red size=5>getClasses()</font> 方法可以获取class的所有继承的超类、接口和自己定义的<font color=red size=5>公有</font>类、接口、枚举等的数组形式。 
 
 ```java
 Class[] classARR = concreteClass.getClasses();
@@ -267,7 +266,7 @@ class com.byron4j.hightLevel.reflection.BaseClass$BaseClassMemberEnum]
 
 #### 获取自身声明的类
 
-<font color=red size=5><b>**getDeclaredClasses()**</font>获取当前类型自身定义的所有类、接口，并不包含从父类继承过来的来、接口。
+<font color=red size=5>**getDeclaredClasses()**</font>获取当前类型自身定义的所有类、接口，并不包含从父类继承过来的来、接口。
 
 ```java
 Class[] declareClassARR = concreteClass.getDeclaredClasses();
@@ -289,7 +288,7 @@ interface com.byron4j.hightLevel.reflection.ConcreteClass$ConcreteClassPublicInt
 
 #### 获取定义该class的类
 
-class.<font color=red size=5><b>getDeclaringClass()</font>获取定义class的类。如果该类不是任何类或接口的成员，则返回null。
+class.<font color=red size=5>getDeclaringClass()</font>获取定义class的类。如果该类不是任何类或接口的成员，则返回null。
 
 ```java
 /**================================================
@@ -309,7 +308,7 @@ null
 
 #### 获取包名
 
-<font color=red size=5><b>getPackage() </font>方法获取包的class实例。
+<font color=red size=5>getPackage() </font>方法获取包的class实例。
 
 ```java
 /*===========================================
@@ -328,7 +327,7 @@ com.byron4j.hightLevel.reflection
 #### 获取类的修饰符
 
 
-<font color=red size=5><b>getModifiers()</font>方法可以获取class实例的访问修饰符的个数。<font color=red size=5><b>java.lang.reflect.Modifier.toString()</font>可以获取class的修饰符的字符串形式。
+<font color=red size=5>getModifiers()</font>方法可以获取class实例的访问修饰符的个数。<font color=red size=5>java.lang.reflect.Modifier.toString()</font>可以获取class的修饰符的字符串形式。
 
 ```java
 /*===========================================
@@ -349,7 +348,7 @@ public
 
 #### 获取类型参数
 
-<font color=red size=5><b>getTypeParameters()</font>方法获取class的类型声明参数，如果有的话。比如集合框架的接口均制定了泛型。
+<font color=red size=5>getTypeParameters()</font>方法获取class的类型声明参数，如果有的话。比如集合框架的接口均制定了泛型。
 
 ```java
 Arrays.asList(Class.forName("java.util.Map").getTypeParameters()).forEach(
@@ -366,7 +365,7 @@ Arrays.asList(Class.forName("java.util.Map").getTypeParameters()).forEach(
 
 #### 获取class实现的接口
 
-<font color=red size=5><b>getGenericInterfaces()</font> 可以获取class已经实现的接口的数组形式，并包含泛型接口。 <font color=red size=5><b>getInterfaces()</font>方法会返回所有实现的接口，但是不包含泛型接口。
+<font color=red size=5>getGenericInterfaces()</font> 可以获取class已经实现的接口的数组形式，并包含泛型接口。 <font color=red size=5>getInterfaces()</font>方法会返回所有实现的接口，但是不包含泛型接口。
 
 ```java
 /**=============================================
@@ -414,7 +413,7 @@ java.util.ArrayList实现的接口：interface java.io.Serializable
 
 #### 获取所有的public方法
 
-<font color=red size=5><b>getMethods()</font>方法可以获取所有的public方法，包含父类、接口中继承来的public方法。
+<font color=red size=5>getMethods()</font>方法可以获取所有的public方法，包含父类、接口中继承来的public方法。
 
 ```java
 /**=============================================
@@ -449,7 +448,7 @@ public类型的方法:public final native void java.lang.Object.notifyAll()
 
 #### 获取class的所有public构造器
 
-<font color=red size=5><b>getConstructors()方法能够获取所有的public类型构造器</font>
+<font color=red size=5>getConstructors()方法能够获取所有的public类型构造器</font>
 
 ```java
 /**=============================================
@@ -468,7 +467,7 @@ public类型的方法:public final native void java.lang.Object.notifyAll()
 
 #### 获取所有的public属性(成员变量)
 
-<font color=red size=5><b>getFields()</font>方法可以获取所有的public属性。包含父类、接口中的属性。
+<font color=red size=5>getFields()</font>方法可以获取所有的public属性。包含父类、接口中的属性。
 
 ```java
 /**=============================================
@@ -492,7 +491,7 @@ public类型的属性:public int com.byron4j.hightLevel.reflection.BaseClass.bas
 
 #### 获取所有的注解
 
-<font color=red size=5><b>getAnnotations()</font>方法可以获取所有的注解。但是只有保留策略为**RUNTIME**的注解。
+<font color=red size=5>getAnnotations()</font>方法可以获取所有的注解。但是只有保留策略为**RUNTIME**的注解。
 
 我们给  类加上注解@Deprecated。
 
@@ -562,7 +561,7 @@ public String name = "superClass---NAME";
 System.out.println(concreteClass.getField("hello"));
 
 输出：
-> <font color=red size =4>java.lang.NoSuchFieldException: hello
+> <font color=red size =4>java.lang.NoSuchFieldException: hello</font>
 
 #### 获取声明属性的类型
 
@@ -582,7 +581,7 @@ try {
 
 #### 获取属性的类型
 
-<font color=red size =5><b>getType()</font>方法返回属性的类型的class实例。
+<font color=red size =5>getType()</font>方法返回属性的类型的class实例。
 
 ```
 System.out.println(concreteClass.getField("interfaceInt").getType().getCanonicalName());
@@ -628,7 +627,7 @@ System.out.println(privateField.get(obj));
 输出，不能访问private的属性：
 >  java.lang.IllegalAccessException: Class com.byron4j.hightLevel.reflection.ReflectionDemo2 can not access a member of class com.byron4j.hightLevel.reflection.ConcreteClass with modifiers "private"
 
-设置可访问机制<font color=red size=5>Field.setAccessible(true);：
+设置可访问机制<font color=red size=5>Field.setAccessible(true);</font>：
 ```java
 		Field privateField = concreteClass.getDeclaredField("privateString");
 		privateField.setAccessible(true);
@@ -648,7 +647,7 @@ System.out.println(privateField.get(obj));
 
 #### 获得public方法
 
-我们可以使用 <font color=red size=5>getMethod()方法获的public class的方法，需要提供方法的名称、参数类型。如果class找不到指定的方法，则会继续向上从其父类中查找。
+我们可以使用 <font color=red size=5>getMethod()</font>方法获的public class的方法，需要提供方法的名称、参数类型。如果class找不到指定的方法，则会继续向上从其父类中查找。
 
 下面我们以一个获取HashMap 的put方法的例子来展示如何方法的参数类型、方法访问修饰符和返回类型。
 
@@ -678,7 +677,7 @@ public
 
 #### 调用public方法
 
-可以利用<font color=red size=5><b>Method.invoke() </font>方法调用指定的方法。
+可以利用<font color=red size=5>Method.invoke() </font>方法调用指定的方法。
 
 ```java
 //调用方法
@@ -692,7 +691,7 @@ System.out.println(map);
 
 #### 调用private方法
 
-我们可以使用<font color=red size=5><b>getDeclaredMethod()</font>方法获取私有方法，然后关闭访问限制，即可调用。 
+我们可以使用<font color=red size=5>getDeclaredMethod()</font>方法获取私有方法，然后关闭访问限制，即可调用。 
 
 ```java
 /**
@@ -711,7 +710,7 @@ method3.invoke(null, null);
 
 # 反射在构造器中的使用
 
-我们可以使用<font color=red size=5><b>getConstructor()</font>方法获取指定的public构造器。
+我们可以使用<font color=red size=5>getConstructor()</font>方法获取指定的public构造器。
 
 ```java
 /**
@@ -733,7 +732,7 @@ System.out.println(Arrays.toString(hashMapConstructor.getParameterTypes()));
 
 #### 利用构造器初始化对象实例
 
-我们可以利用constructor 实例的<font color=red size=5><b>newInstance() </font>方法获初始化实例。
+我们可以利用constructor 实例的<font color=red size=5>newInstance() </font>方法获初始化实例。
 
 ```java
 /**
