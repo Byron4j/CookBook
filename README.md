@@ -1,7 +1,9 @@
-# CookBook 技术栈手册
+# :tada::tada::tada: Java Cookbook 技术栈手册
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份JAVA开发技术手册，只需要增加自己练习的次数。
 
+- JAVA面试汇总
+    - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
 - JAVA核心高级知识点
     - 1.[Java枚举](Java核心/1-Java枚举.md)
     - 2.[Java注解](Java核心/2-Java注解.md)
@@ -12,7 +14,9 @@
 - Nginx
 - Maven
 - Git
-    - 步步为赢：搭建个人博客
+    - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
+    - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
+    - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
 - Jenkins
 - 设计模式
     - 1.[单例模式](设计模式/1-单例模式/1-单例模式.md)

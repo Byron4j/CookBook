@@ -6,9 +6,16 @@ import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.AbstractQueuedLongSynchronizer;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 建立自己的监视点（Watcher）
@@ -23,11 +30,61 @@ public class Master7 implements Watcher {
 
     static String serverId = Integer.toHexString(new Random().nextInt());
 
+    ExecutorService executorService = Executors.newFixedThreadPool(4);
+
+    /**执行中的任务列表*/
+    List<String> runingTasks = Collections.emptyList();
 
     @Override
     public void process(WatchedEvent event) {
-        System.out.println("process:" + event);
+        if( event.getType() == Event.EventType.NodeChildrenChanged ){
+            // 子节点变化事件
+            assert  new String("/assign/worker-" + serverId).equals(event.getPath());
+            getTasks();
+        }
     }
+
+    void getTasks(){
+        zk.getChildren("assign/worker-" + serverId,
+                this,
+                tasksGetChildrenCallback,
+                null);
+    }
+
+    AsyncCallback.ChildrenCallback tasksGetChildrenCallback = new AsyncCallback.ChildrenCallback(){
+
+        @Override
+        public void processResult(int rc, String path, Object ctx, List<String> children) {
+            switch (KeeperException.Code.get(rc)){
+                case CONNECTIONLOSS:
+                    getTasks();
+                    break;
+                case OK:
+                    if( children != null ){
+                        // 存在子节点
+                        executorService.execute(new Runnable() {
+                            List<String> children;
+                            DataCallback cb;
+                            @Override
+                            public void run() {
+                                log.info("遍历任务");
+                                synchronized (runingTasks){
+                                    for(  String task: children){
+                                        if( runingTasks.contains(task) ){
+                                            log.trace("New task:{}", task);
+                                            zk.getData("assign/worker-" + serverId + "/" + task,
+                                                    false,
+                                                    cb,
+                                                    task);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+            }
+        }
+    };
 
     Master7(String hostPort){
         this.hostPort = hostPort;
@@ -66,6 +123,8 @@ public class Master7 implements Watcher {
             }
         }
     };
-
     /*********************************从节点注册到Zk END*************************************/
+
+
+
 }
