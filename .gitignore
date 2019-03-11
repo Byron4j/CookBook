@@ -23,5 +23,5 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-/.mvn
+#/.mvn
 /test.ser
