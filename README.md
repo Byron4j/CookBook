@@ -18,7 +18,7 @@
     >
     >权限是 100664，你需要把权限改成755
     >
-    >git update-index --chmod=+x gradlew  
+    >git update-index --chmod=+x mvnw  
     >
     >git commit -m "permission access for travis"  
     >
