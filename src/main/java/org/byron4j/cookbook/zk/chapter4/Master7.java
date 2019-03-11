@@ -1,21 +1,15 @@
 package org.byron4j.cookbook.zk.chapter4;
 
-import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.AbstractQueuedLongSynchronizer;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 建立自己的监视点（Watcher）
@@ -32,6 +26,8 @@ public class Master7 implements Watcher {
 
     ExecutorService executorService = Executors.newFixedThreadPool(4);
 
+
+    /*********************************从节点监听任务节点START*************************************/
     /**执行中的任务列表*/
     List<String> runingTasks = Collections.emptyList();
 
@@ -65,6 +61,13 @@ public class Master7 implements Watcher {
                         executorService.execute(new Runnable() {
                             List<String> children;
                             DataCallback cb;
+
+                            public Runnable init(List<String> children, DataCallback cb){
+                                this.children = children;
+                                this.cb = cb;
+                                return this;
+                            }
+
                             @Override
                             public void run() {
                                 log.info("遍历任务");
@@ -72,19 +75,39 @@ public class Master7 implements Watcher {
                                     for(  String task: children){
                                         if( runingTasks.contains(task) ){
                                             log.trace("New task:{}", task);
-                                            zk.getData("assign/worker-" + serverId + "/" + task,
-                                                    false,
-                                                    cb,
-                                                    task);
+                                            getTaskData(task, cb);
+                                            runingTasks.add(task);
                                         }
                                     }
                                 }
                             }
-                        });
+                        }.init(children, taskDataCallback));
                     }
             }
         }
     };
+
+    AsyncCallback.DataCallback taskDataCallback = new AsyncCallback.DataCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, byte[] data, Stat stat) {
+            switch (KeeperException.Code.get(rc)){
+                case OK:
+                    break;
+                case CONNECTIONLOSS:
+                    getTaskData(new String(data), (DataCallback)ctx);
+
+            }
+        }
+    };
+
+    void getTaskData(String task, AsyncCallback.DataCallback cb){
+        zk.getData("assign/worker-" + serverId + "/" + task,
+                false,
+                cb,
+                task);
+    }
+
+    /*********************************从节点监听任务节点END*************************************/
 
     Master7(String hostPort){
         this.hostPort = hostPort;
