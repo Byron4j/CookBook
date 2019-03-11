@@ -13,6 +13,18 @@
 - Spring
 - Nginx
 - Maven
+    - 1.持续集成权限报错(Travis.yml ./mvnw : Permission denied)
+    >git ls-tree HEAD
+    >
+    >权限是 100664，你需要把权限改成755
+    >
+    >git update-index --chmod=+x gradlew  
+    >
+    >git commit -m "permission access for travis"  
+    >
+    >Error: Could not find or load main class org.apache.maven.wrapper.MavenWrapperMain 的解决办法：
+    >
+    >mvn -N io.takari:maven:wrapper
 - Git
     - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
     - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
