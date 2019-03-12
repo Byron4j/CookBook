@@ -1,4 +1,4 @@
-# :tada::tada::tada: Java Cookbook 技术栈手册
+# :tada::tada::tada: Java Cookbook 技术栈手册 [![Build Status](https://travis-ci.com/Byron4j/CookBook.svg?branch=master)](https://travis-ci.com/Byron4j/CookBook)
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份JAVA开发技术手册，只需要增加自己练习的次数。
 
