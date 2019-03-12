@@ -1,1 +1,7 @@
 language: java
+
+notifications:
+  email: false
+
+script:
+- mvn clean package -DskipTests=true
