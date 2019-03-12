@@ -4,4 +4,4 @@ notifications:
   email: false
 
 script:
-- mvn clean package -DskipTests=true
+  - mvn clean package -DskipTests=true
