@@ -2,6 +2,8 @@
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份JAVA开发技术手册，只需要增加自己练习的次数。
 
+<font color=blue size=3>[JAVA程序猿笔试面试干货分享(欢迎加入开源分享)](https://github.com/Byron4j/1024interview/tree/develop)</font>
+
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
 - JAVA核心高级知识点
