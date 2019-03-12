@@ -22,7 +22,7 @@
     >
     >git update-index --chmod=+x mvnw  
     >
-    >git commit -m "permission access for travis"  
+    >git commit -m ":green_heart: permission access for travis"  
     >
     >Error: Could not find or load main class org.apache.maven.wrapper.MavenWrapperMain 的解决办法：
     >
