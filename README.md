@@ -15,22 +15,11 @@
 - Spring
 - Nginx
 - Maven
-    - 1.持续集成权限报错(Travis.yml ./mvnw : Permission denied)
-    >git ls-tree HEAD
-    >
-    >权限是 100664，你需要把权限改成755
-    >
-    >git update-index --chmod=+x mvnw  
-    >
-    >git commit -m ":green_heart: permission access for travis"  
-    >
-    >Error: Could not find or load main class org.apache.maven.wrapper.MavenWrapperMain 的解决办法：
-    >
-    >mvn -N io.takari:maven:wrapper
 - Git
     - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
     - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
     - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
+    - [Github给项目添加徽标](Git/2-github-travis-ci.md)
 - Jenkins
 - 设计模式
     - 1.[单例模式](设计模式/1-单例模式/1-单例模式.md)
@@ -49,7 +38,6 @@
     - 参与开源
         - 1.[翻译客户端配置部分-中文翻译成英文](RocketMQ/参与阿里巴巴RocketMQ项目/1-客户端配置_en.md)
 - NIO/Netty
-    - 0.ByteBuf数据结构![ByteBuf数据结构](Netty/ByteBuf.png)
     - 1.[Netty第一个程序示例](org.byron4j.cookbook.netty.first)
     - 2.[Netty自定义传输协议](org.byron4j.cookbook.netty.PacketCodeCTest)
     - 3.[Netty登陆请求、验证登陆、获取响应示例](org.byron4j.cookbook.netty.login.Server)
@@ -92,7 +80,7 @@
     - [阿里巴巴 fastjson 框架](https://github.com/alibaba/fastjson)
     
 - Mockito
-    - Mockito 基础
-        - [开始： @Mock, @Spy, @Captor and @InjectMocks](Mockito/Mockito 基础/1-开始@Mock-@Spy-@Captor-@InjectMocks.md)
-    - Mockito 高级
-    - Mockito 集成
+    - Mockito基础
+        - [首次使用Mockito](Mockito/Mockito基础/1-开始@Mock-@Spy-@Captor-@InjectMocks.md)
+    - Mockito高级
+    - Mockito集成
