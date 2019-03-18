@@ -4,6 +4,13 @@
 
 <font color=blue size=3>[JAVA程序猿笔试面试干货分享(欢迎加入开源分享)](https://github.com/Byron4j/1024interview/tree/develop)</font>
 
+- Git
+    - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
+    - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
+    - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
+    - [Github给项目添加徽标](Git/2-github-travis-ci.md)
+    - [更多github emoji徽标](Git/gitemojiall.md)
+    
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
 - JAVA核心高级知识点
@@ -15,11 +22,7 @@
 - Spring
 - Nginx
 - Maven
-- Git
-    - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
-    - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
-    - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
-    - [Github给项目添加徽标](Git/2-github-travis-ci.md)
+
 - Jenkins
 - 设计模式
     - 1.[单例模式](设计模式/1-单例模式/1-单例模式.md)
@@ -38,7 +41,7 @@
     - 参与开源
         - 1.[翻译客户端配置部分-中文翻译成英文](RocketMQ/参与阿里巴巴RocketMQ项目/1-客户端配置_en.md)
 - NIO/Netty
-    - 1.[Netty第一个程序示例](org.byron4j.cookbook.netty.first)
+    - 1.[Netty第一个程序示例](https://github.com/Byron4j/CookBook/tree/master/src/main/java/org/byron4j/cookbook/netty)
     - 2.[Netty自定义传输协议](org.byron4j.cookbook.netty.PacketCodeCTest)
     - 3.[Netty登陆请求、验证登陆、获取响应示例](org.byron4j.cookbook.netty.login.Server)
 - Tomcat
@@ -89,4 +92,17 @@
     
 - 研发管理
     - Scrum
-        - Scrum基础入门    
+        - [Scrum基础入门](Scrum/1-Scrum基础入门.md)    
+        
+        
+- **[精华资源链接阅读]()**
+    - [简易RPC框架-客户端限流配置](http://www.cnblogs.com/ASPNET2008/p/7712974.html)
+    - [简易RPC框架-SPI](https://www.cnblogs.com/ASPNET2008/p/9062341.html)        
+    - [简易RPC框架-熔断降级机制](https://www.cnblogs.com/ASPNET2008/p/7954782.html)
+    - [spring mvc+ELK从头开始搭建日志平台](https://www.cnblogs.com/ASPNET2008/p/5594479.html)
+    - [简易RPC框架-过滤器机制](http://www.cnblogs.com/ASPNET2008/p/7636276.html)
+    
+    
+- **[github]()**
+    - [阿里oldratlee](https://github.com/oldratlee)
+    
