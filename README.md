@@ -9,7 +9,7 @@
     - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
     - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
     - [Github给项目添加徽标](Git/2-github-travis-ci.md)
-    - [更多github emoji徽标](Git/gitemojiall.md)
+    - 😆 😆[更多github emoji徽标](Git/gitemojiall.md)
     
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
