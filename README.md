@@ -45,6 +45,11 @@
     - 2.[Netty自定义传输协议](org.byron4j.cookbook.netty.PacketCodeCTest)
     - 3.[Netty登陆请求、验证登陆、获取响应示例](org.byron4j.cookbook.netty.login.Server)
 - Tomcat
+- HttpClient4
+    - 基础
+        - 
+    - 高级
+        - 
 - JVM知识点总结
 - Zookeeper
     - 1.[ZK概览](Zokeeper/Zookeeper分布式过程协同技术详解Note/第1章-Zk概览.md)
