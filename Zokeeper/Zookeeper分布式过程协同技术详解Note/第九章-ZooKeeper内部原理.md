@@ -32,7 +32,7 @@
 
 ![](pictures/chapter9-2ZooKeeper内部原理三--ZooKeeper选举过程(延迟选举时长).jpg)
 
->默认的群选举实现类为```org.apache.zookeeper.server.quorum.FastLeaderElection implements Election```，如果想自定义群首选举算法，需要实现 ***quorum***包中的```Election```接口。
+>默认的群选举实现类为```org.apache.zookeeper.server.quorum.FastLeaderElection implements Election```，如果想自定义群首选举算法，需要实现 ***quorum*** 包中的```Election```接口。
 
 
 ## Zab:状态更新的广播协议

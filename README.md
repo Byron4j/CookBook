@@ -11,6 +11,10 @@
     - [Github给项目添加徽标](Git/2-github-travis-ci.md)
     - 😆 😆[更多github emoji徽标](Git/gitemojiall.md)
     
+- :beer:javassist
+    - [javassist官网](http://www.javassist.org/)：[官方指南](http://www.javassist.org/tutorial/tutorial.html)
+    - [javaagent编程指南](javassist指南/1-javassist.md)
+        
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
 - JAVA核心高级知识点
