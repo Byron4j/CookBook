@@ -51,7 +51,7 @@ child2.childFirstLookup = true;    // 改变child的行为
 
 ## 更改类名以定义新类
 
-一个新的class可以被定义为一个一存在的类的副本。
+一个新的class可以被定义为一个已存在的类的副本。
 ```java
 // 首先获取表示Point类的一个CtClass对象
 // 然后调用setName修改类名
@@ -92,7 +92,7 @@ CtClass ctClass20 = pool20.get("org.byron4j.cookbook.javaagent.Point");
 System.out.println(pool10 == pool20);   // false 不同的ClassPool中表示同一个类的CtClass对象
 ```
 
-## 通过重命名一个冻结的class来第一一个新的类
+## 通过重命名一个冻结的CtClass来创建一个新的CtClass对象
 
 一旦一个CtClass对象已经被writeFile()或者toBytecode()方法转到class文件，Javassist拒绝进一步修改该CtClass对象。因此，如果代表Point类的CtClass对象冻结后不能通过setName()修改它的名称。
 ```java
