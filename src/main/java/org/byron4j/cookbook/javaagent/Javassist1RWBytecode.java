@@ -2,9 +2,11 @@ package org.byron4j.cookbook.javaagent;
 
 import javassist.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
-public class Hello {
+public class Javassist1RWBytecode {
     public void sayHello(){
         System.out.println("Hello!");
     }
@@ -57,6 +59,31 @@ public class Hello {
             cc2.debugWriteFile();
             System.out.println(cc2);//修剪后不能访问方法
 
+
+            //添加class查找路径
+            Javassist1RWBytecode hello = new Javassist1RWBytecode();
+            pool1.insertClassPath(new ClassClassPath(hello.getClass()));
+
+            // 添加文件目录作为class查找路径
+            pool1.insertClassPath("/usr/local/javalib");
+
+            // 添加URL(http://www.javassist.org:80/java/)作为class查找路径，第三个参数必须/开头、第四个参数必须.结尾
+            ClassPath cp = new URLClassPath("www.javassist.org", 80, "/java/", "org.javassist.");
+            pool1.insertClassPath(cp);
+
+
+            // byte数组形式class path
+            ClassPool pool2 = ClassPool.getDefault();
+            byte[] arr = "org.byron4j".getBytes();
+            String name = "org.byron4j.Hello";
+            pool2.insertClassPath(new ByteArrayClassPath(name, arr));
+            CtClass ctClass = pool2.get(name);
+
+
+            // makeClass
+            ClassPool pool3 = ClassPool.getDefault();
+            InputStream ins = new FileInputStream("/usr/local/javalib");
+            CtClass ctClass1 = pool3.makeClass(ins);
         } catch (NotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

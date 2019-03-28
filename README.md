@@ -13,7 +13,9 @@
     
 - :beer:javassist
     - [javassist官网](http://www.javassist.org/)：[官方指南](http://www.javassist.org/tutorial/tutorial.html)
-    - [javaagent编程指南](javassist指南/1-javassist.md)
+    - [javaagent编程指南](javassist指南/0-javassist编程指南概览.md)
+    - 1.[读、写字节码](javassist指南/1-读、写字节码.md)
+    - 2.[ClassPool](javassist指南/2-ClassPool.md)
         
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
@@ -97,7 +99,10 @@
         - [首次使用Mockito](Mockito/Mockito基础/1-开始@Mock-@Spy-@Captor-@InjectMocks.md)
     - Mockito高级
     - Mockito集成
-    
+
+- 百度Disconf    
+    - [github地址](https://github.com/knightliao/disconf)
+    - [文档](https://disconf.readthedocs.io/zh_CN/latest/)
     
     
 - 研发管理
