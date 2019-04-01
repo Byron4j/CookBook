@@ -67,6 +67,89 @@ Class c = cc.toClass(bean.getClass().getClassLoader());
 
 >**注意:**
 >
+>JVM不允许动态的重新加载一个类。一旦一个类加载器加载了一个类后，它就不能在运行时再重新加载一个新的版本的类了。
 >
+>因此，你不能在JVM加载类后，再去变更类的定义。
 >
+>但是，JPDA（Java平台调试架构）提供了有限的类重加载能力。
+
+如果相同的class文件被不同的类加载器加载了，JVM会使用相同的名称和定义创建两个不同的类，这两个类会被看做是不同的。既然这两个类是不同的，所以一个类的示例就不能分配给另一个类类型的变量了。
+
+```java
+MyClassLoader myLoader = new MyClassLoader();
+Class clazz = myLoader.loadClass("Box");
+Object obj = clazz.newInstance();
+Box b = (Box)obj;
+```
+
+>**多个类加载器形成一个树结构**:
 >
+>每个类加载器（引导加载器BootstrapClassLoader除外）都有一个父的类加载器（通常是加载了该子类加载器的类）。因为请求去加载一个类可以沿着这个类加载器层级委托，一个类可以被不是你请求的类加载器去加载。因此，被请求去加载一个类C的类加载器和实际加载这个类C的加载器可能不是同一个类加载器。以示区别，我们将前面的加载器称为<font color=red>***C的启动器***</font>，后面的称为<font color=red>***C的真实加载器***</font>。
+>
+>此外，如果一个类加载器CL被请求去加载一个类C（C的启动器）委托给了它的父类加载器PL，之后，类加载器CL则再也不会被请求去加载类C定义中引用的任何类。
+>
+>CL不是类C的引用的类的启动器，相反，PL成为了类C的引用的类的启动器，且PL将会被请求去加载它们。<font color=red>***类C的定义的引用的类将会被类C的真实加载器去加载。***</font>
+
+为了解释这个行为，我们思考下以下示例：
+
+```java
+public class Point {    // 被父类加载器PL加载
+    private int x, y;
+    public int getX() { return x; }
+        :
+}
+
+public class Box {      // 引导器是CL，但是真实加载器是PL
+    private Point upperLeft, size;
+    public int getBaseX() { return upperLeft.x; }
+        :
+}
+
+public class Window {    // 被类加载器CL加载
+    private Box box;
+    public int getBaseX() { return box.getBaseX(); }
+}
+```
+
+假设一个类```Window```被一个类加载器CL加载了，则它的引导器和真实加载器都是CL。因为类```Window```的定义引用了类```Box```，JVM将会请求CL去加载```Box```。在这里，假设CL将这个任务委托给父加载器PL。```Box```类的引导器是CL但是真实加载器是PL。在这个案例中，```Point```类的引导器不是CL而是PL，因为它与```Box```的真实加载器相同。CL再也不会被请求去加载```Point```。
+
+再看一个有些细微差异的示例：
+
+```java
+public class Point {
+    private int x, y;
+    public int getX() { return x; }
+        :
+}
+
+public class Box {      // 引导器是CL，但是真实加载器是PL
+    private Point upperLeft, size;
+    public Point getSize() { return size; }
+        :
+}
+
+public class Window {    // 被CL加载
+    private Box box;
+    public boolean widthIs(int w) {
+        Point p = box.getSize();
+        return w == p.getX();
+    }
+}
+```
+
+现在```Window```类的定义也引用了```Point```类，在这个案例中，CL在被请求加载```Point```时也将委托给PL。***<font color=red>你必须避免存在两个不同的类加载器重复加载同一个类。</font>***，二者中的其中一个必须委托给另外一个。
+如果在```Point```加载的时候，CL没有委托给PL，```widthIs()```将会抛出一个```ClassCastException```。因为```Box```的真实加载器是PL，```Box```中引用的类```Point```类也会被PL加载。因此，```getSize()```方法返回值是PL加载的```Point```的一个实例，然而```getSize()```方法中的变量是CL加载的```Point```类型，JVM将它们视作不同的类型，所以会抛出类型不匹配的异常。
+
+这种行为有些不方便但是是可行的,如果以下语句：
+```java
+Point p = box.getSize();
+```
+不会抛出一个异常，则```Window```的程序猿就打破了```Point```类的封装性。比如，```Point```中的所有属性```x```是PL加载的。然而，```Window```类可以直接访问```x```的值，如果CL通过以下定义加载```Point```的话：
+```java
+public class Point {
+    public int x, y;    // not private
+    public int getX() { return x; }
+        :
+}
+```
+
