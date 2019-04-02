@@ -54,7 +54,7 @@ public class Javassist3ClassLoaderTest {
 
 **注意**： 上面的程序依赖于Javassist3ClassLoaderTest类所在的类加载器在调用```toClass```之前没有加载过Javassist3ClassLoader类。
 
-***如果程序运行在web容器中例如JBoss、Tomcat中，*** 上下文的类加载器使用```toClass()```方法可能并不适当。在这种情况下，你可能会看到一个不期望的异常```ClassCastException```。为了避免这种情况，你必须明白清楚地给定一个适当的类加载器给```toClass```方法。例如，如果```bean```时你的会话的bean对象：
+***如果程序运行在web容器中例如JBoss、Tomcat中，*** 上下文的类加载器使用```toClass()```方法可能并不适当。在这种情况下，你可能会看到一个不期望的异常```ClassCastException```。为了避免这种情况，你必须明白清楚地给定一个适当的类加载器给```toClass```方法。例如，如果```bean```是你的会话的bean对象：
 ```java
 CtClass cc = ...
 Class c = cc.toClass(bean.getClass().getClassLoader());
