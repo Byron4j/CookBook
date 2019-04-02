@@ -145,11 +145,145 @@ public class Window {    // 被CL加载
 Point p = box.getSize();
 ```
 不会抛出一个异常，则```Window```的程序猿就打破了```Point```类的封装性。比如，```Point```中的所有属性```x```是PL加载的。然而，```Window```类可以直接访问```x```的值，如果CL通过以下定义加载```Point```的话：
+
 ```java
 public class Point {
-    public int x, y;    // not private
+    public int x, y;    // 非私有属性
     public int getX() { return x; }
         :
 }
 ```
 
+如果要获取更多关于Java中的类加载问题，以下论文可能是有帮助的：
+```
+    Sheng Liang and Gilad Bracha, "Dynamic Class Loading in the Java Virtual Machine", 
+    ACM OOPSLA'98, pp.36-44, 1998.
+```
+
+## 使用```javassist.Loader```
+
+Javassist提供了一个类加载器```javassist.Loader```，这个类加载器使用```javassist.ClassPool```对象读取class文件。
+
+例如，```javassist.Loader```可用于使用javassist修改的指定的类：
+
+```java
+ClassPool pool = ClassPool.getDefault();
+// 使用ClassPool创建Loader
+Loader cl = new Loader(pool);
+
+CtClass ct = pool.get("org.byron4j.cookbook.javaagent.Rectangle");
+ct.setSuperclass(pool.get("org.byron4j.cookbook.javaagent.Point"));
+
+Class<?> c = cl.loadClass("org.byron4j.cookbook.javaagent.Rectangle");
+Object o = c.newInstance();
+```
+这个程序修改了类Rectangle类，将其父类设置为Point类，然后程序加载了修改后的Rectangle类，并且创建了一个实例。
+
+**如果用户想在加载一个类的时候按需修改它，则用户可以添加一个```javassist.Loader```的事件监听器。当这个类加载器加载一个类的时候就会通知添加好的事件监听器。**事件监听器必须实现以下接口：
+```java
+
+/**
+* Loader的观察者
+*/
+public interface Translator {
+    /**
+    * 当对象附加到加载器对象时，加载器将调用该对象进行初始化。此方法可用于获取(用于缓存)一些将在Translator的onLoad()中访问的CtClass对象。
+    * @param pool
+    * @throws NotFoundException
+    * @throws CannotCompileException
+    */
+    void start(ClassPool pool)
+            throws NotFoundException, CannotCompileException;
+    
+    /**
+    * 当Loader加载一个类后，就会通知调用该方法。Loader会在<code>onLoad()</code>方法返回后调用
+    * <pre>
+    *     pool.get(classname).toBytecode()
+    * </pre>
+    * 方法去读取class文件，classname可能是尚未创建的类的名称。
+    * 如果这样的话，<code>onLoad()</code>方法必须创建那个class，以便Loader可以在<code>onLoad()</code>方法返回后读取它。
+    * @param pool
+    * @param classname
+    * @throws NotFoundException
+    * @throws CannotCompileException
+    */
+    void onLoad(ClassPool pool, String classname)
+            throws NotFoundException, CannotCompileException;
+}
+```
+
+当```javassist.Loader```对象的```addTranslator()```方法添加事件监听器的时候，```start()```方法就会被调用。
+```onLoad()```方法会在```javassist.Loader```加载一个类之前被调用。
+以下是这两种情况的源码：
+```java
+// 添加事件监听器的时候，就会调用监听器的start方法
+public void addTranslator(ClassPool cp, Translator t)
+    throws NotFoundException, CannotCompileException {
+    source = cp;
+    translator = t;
+    t.start(cp);
+}
+
+// 存在监听器，则在Loader的findClass方法中，先执行监听器的onLoad()方法，再通过.get(name).toBytecode()加载类
+if (source != null) {
+    if (translator != null)
+        translator.onLoad(source, name);
+
+    try {
+        classfile = source.get(name).toBytecode();
+    }
+    catch (NotFoundException e) {
+        return null;
+    }
+}
+```
+
+**所以，```translator.onLoad```的方法中可以修改加载的类的定义。**
+
+以下示例，事件监听器在将所有的类改为public修饰：
+```java
+public class MyTranslator implements Translator {
+    @Override
+    public void start(ClassPool pool) throws NotFoundException, CannotCompileException {
+
+    }
+
+    @Override
+    public void onLoad(ClassPool pool, String classname) throws NotFoundException, CannotCompileException {
+        // 在类加载前执行该方法，所以可以改变类的定义
+        CtClass cc = pool.get(classname);
+        cc.setModifiers(Modifier.PUBLIC);
+    }
+}
+```
+
+注意```onLoad()```方法没有去调用```toBytecode()```或者```writeFile()```，因为```javassist.Loader```会调用这些方法来获取class文件。
+
+要使用```MyTranslator```来运行一个应用程序，main类可以如下编写：
+```java
+public class Point {
+    public static void main(String[] args){
+        System.out.println("org.byron4j.cookbook.javaagent.Point#main invoked!");
+    }
+}
+
+public static void main(String[] args) throws Throwable {
+    Translator t = new MyTranslator();
+    ClassPool cp = ClassPool.getDefault();
+    Loader loader = new Loader();
+    loader.addTranslator(cp, t);
+    // loader.run方法会运行指定classname的main方法
+    loader.run("org.byron4j.cookbook.javaagent.Point", args);
+}
+```
+运行输出： ```org.byron4j.cookbook.javaagent.Point#main invoked!```
+
+注意：应用的类像Point是不能访问加载器的类如MyTranslator、ClassPool的，因为它们是被不同的加载器加载的。应用的类是由javassist.Loader加载，而其他的是由默认的JVM类加载器加载的。
+
+```javassist.Loader```以和```java.lang.ClassLoader```不同的顺序加载类。
+```ClassLoader```首先将加载操作委托给父加载器，如果父加载器找不到它们才由自身尝试加载类。
+反过来说，```javassist.Loader```在委托给父加载器之前尝试加载类。只有当：
+- 类不是由```ClassPool.get()```找到的，或者
+- 类使用了```delegateLoadingOf()```去指定由父加载器加载。
+
+这个搜索顺序允许Javassist加载修改过的类。然而，如果加载失败的话就会委托给父加载器去加载。一旦一个类由其父加载器加载了，这个类引用的其它类也会由其父加载器加载，则这些类不会被修改了。
