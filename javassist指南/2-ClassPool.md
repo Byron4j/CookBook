@@ -1,4 +1,4 @@
-# ClassPool
+# ClassPool 类池
 
 一个```ClassPool```对象是包含```CtClass```对象的容器。一旦一个```CtClass```对象被创建后，就会被记录到一个```ClassPool```中。这是因为编译器在编译源码时会引用代表```CtClass```的类，可能会访问```CtClass```对象。
 
