@@ -17,6 +17,7 @@
     - 👽1.[读、写字节码](javassist指南/1-读、写字节码.md)
     - 👽2.[ClassPool类池](javassist指南/2-ClassPool.md)
     - 👽3.[ClassLoader类加载](javassist指南/3-ClassLoader.md)
+    - 👽4.[Introspection and customization自省和定制](javassist指南/4-自省和定制.md)
         
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)

@@ -1,5 +1,7 @@
 # Class loader 类加载
 
+
+
 如果必须修改的类是预先知道的，最简单的修改类的方式可能是以下这些：
 
 - 1.通过调用```ClassPool.get()```获取一个```CtClass```对象。
@@ -286,4 +288,80 @@ public static void main(String[] args) throws Throwable {
 - 类不是由```ClassPool.get()```找到的，或者
 - 类使用了```delegateLoadingOf()```去指定由父加载器加载。
 
-这个搜索顺序允许Javassist加载修改过的类。然而，如果加载失败的话就会委托给父加载器去加载。一旦一个类由其父加载器加载了，这个类引用的其它类也会由其父加载器加载，则这些类不会被修改了。
+这个搜索顺序允许Javassist加载修改过的类。然而，如果加载失败的话就会委托给父加载器去加载。一旦一个类由其父加载器加载了，这个类引用的其它类也会由其父加载器加载，则这些类就不会被当前类加载器修改了。
+回想一下，类C中所有引用的类都是由类C的真实加载器负责加载的。***如果你的程序不能加载一个修改过的类，***你应该确保所有使用该类的类都已经被```javassist.Loader```加载了。
+
+## 编写一个类加载器
+
+```java
+public class SampleLoader extends ClassLoader {
+
+    private ClassPool pool;
+
+    public SampleLoader() throws NotFoundException {
+        pool = new ClassPool();
+        pool.insertClassPath("./class"); //下面加载的org.byron4j.cookbook.javaagent.Point类要在此路径下
+    }
+
+
+    @Override
+    protected Class<?> findClass(String name) throws ClassNotFoundException {
+        CtClass cc = null;
+        try {
+            cc = pool.get(name);
+            // TODO 在这里可以修改类的定义
+            
+            byte[] bytes = cc.toBytecode();
+            return defineClass(name, bytes, 0, bytes.length);
+        } catch (NotFoundException e) {
+            throw new ClassNotFoundException();
+        }catch (IOException e) {
+            throw new ClassNotFoundException();
+        } catch (CannotCompileException e) {
+            throw new ClassNotFoundException();
+        }
+
+    }
+
+    public static void main(String[] args) throws NotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        SampleLoader s = new SampleLoader();
+        Class<?> c = s.loadClass("org.byron4j.cookbook.javaagent.Point");
+        c.getDeclaredMethod("main", new Class[]{String[].class}).invoke(null, new Object[]{args});
+
+    }
+}
+
+```
+
+假设Point是一个应用程序，为了执行这个程序，首先指定```./class```为class文件目录，当然该目录不能被包含在class查找路径中。否则Point.class会被系统默认的类加载器加载（是SampleLoader的父加载器）。构造器中```insertClassPath()```方法指定了目录名称```./class```，你可以使用不同的目录名称来代替你想要加载的类路径地址。
+执行该程序，类加载器会加载Point类(./class/Point.class文件)并且调用其main方法。
+
+这是使用javassist最简单的示例。然而，如果你想编写一个更加复杂的类加载器，你需要了解更多的java类加载的机制。例如，上面的程序将Point类在命名空间与SampleLoader命名空间分开了，因为这两个由不同的类加载器去加载。
+
+
+## 修改一个系统类
+
+系统类像```java.lang.String```除了系统加载器之外不能被其他类加载器加载。因此，```SampleLoader```或者```javassist.Loader```不能在加载时去修改系统类。
+
+如果你的应用想那样去做的话（修改系统类），必须***静态地***修改系统类。例如，添加一个新的属性字段给```java.lang.String```:
+```java
+// 添加字段给系统类：java.lang.String
+ClassPool pool = ClassPool.getDefault();
+CtClass ctClass = pool.get("java.lang.String");
+// 字段
+CtField cf = new CtField(CtClass.intType, "hiddenValue", ctClass);
+cf.setModifiers(Modifier.PUBLIC);
+ctClass.addField(cf);
+ctClass.writeFile();
+```
+
+***注意：*** 应用程序使用这个技术覆盖```rt.jar```中地系统类是违反JAVA2字节码规范地。
+
+
+## 在运行时重加载一个类
+
+***启动JVM时启动了JPDA***，则一个类可以重加载。在JVM加载一个类后，旧的版本的类的定义可以卸载，新的版本可以重新加载。
+换言之，类的定义可以在运行时动态修改。然而，一个新的类的定义必须与旧的类定义在某种程度上兼容。
+***JVM不允许两个版本之间更改模式。*** 它们拥有相同的方法、成员变量。
+
+Javassist提供了一个便捷的类可以在运行时重加载一个类：```javassist.tools.HotSwapper```。
