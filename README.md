@@ -4,6 +4,21 @@
 
 <font color=blue size=3>[JAVA程序猿笔试面试干货分享(欢迎加入开源分享)](https://github.com/Byron4j/1024interview/tree/develop)</font>
 
+- Git
+    - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
+    - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
+    - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
+    - [Github给项目添加徽标](Git/2-github-travis-ci.md)
+    - 😆 😆[更多github emoji徽标](Git/gitemojiall.md)
+    
+- 👽**Javassist**
+    - 👽[javassist官网](http://www.javassist.org/)：[官方指南](http://www.javassist.org/tutorial/tutorial.html)
+    - 👽[javaagent编程指南](javassist指南/0-javassist编程指南概览.md)
+    - 👽1.[读、写字节码](javassist指南/1-读、写字节码.md)
+    - 👽2.[ClassPool类池](javassist指南/2-ClassPool.md)
+    - 👽3.[ClassLoader类加载](javassist指南/3-ClassLoader.md)
+    - 👽4.[Introspection and customization自省和定制](javassist指南/4-自省和定制.md)
+        
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
 - JAVA核心高级知识点
@@ -15,11 +30,7 @@
 - Spring
 - Nginx
 - Maven
-- Git
-    - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
-    - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
-    - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
-    - [Github给项目添加徽标](Git/2-github-travis-ci.md)
+
 - Jenkins
 - 设计模式
     - 1.[单例模式](设计模式/1-单例模式/1-单例模式.md)
@@ -38,16 +49,22 @@
     - 参与开源
         - 1.[翻译客户端配置部分-中文翻译成英文](RocketMQ/参与阿里巴巴RocketMQ项目/1-客户端配置_en.md)
 - NIO/Netty
-    - 1.[Netty第一个程序示例](org.byron4j.cookbook.netty.first)
+    - 1.[Netty第一个程序示例](https://github.com/Byron4j/CookBook/tree/master/src/main/java/org/byron4j/cookbook/netty)
     - 2.[Netty自定义传输协议](org.byron4j.cookbook.netty.PacketCodeCTest)
     - 3.[Netty登陆请求、验证登陆、获取响应示例](org.byron4j.cookbook.netty.login.Server)
 - Tomcat
+- HttpClient4
+    - 基础
+        - 
+    - 高级
+        - 
 - JVM知识点总结
 - Zookeeper
     - 1.[ZK概览](Zokeeper/Zookeeper分布式过程协同技术详解Note/第1章-Zk概览.md)
     - 2.[了解Zk与Zk集群配置、主从模式案例演示](Zokeeper/Zookeeper分布式过程协同技术详解Note/第2章-了解Zk与Zk集群配置、主从模式案例演示.md)
     - 3.[使用Zk的API进行开发](Zokeeper/Zookeeper分布式过程协同技术详解Note/第3章-使用Zk的API进行开发.md)
     - 4.[监听节点的状态变更、分配任务](Zokeeper/Zookeeper分布式过程协同技术详解Note/第4章-处理状态变化-主节点、从节点.md)
+    - 5.[ZooKeeper内部原理--群首选举等](Zokeeper/Zookeeper分布式过程协同技术详解Note/第九章-ZooKeeper内部原理.md)
 - Dubbo
 - RPC
     - Protobuf
@@ -84,9 +101,25 @@
         - [首次使用Mockito](Mockito/Mockito基础/1-开始@Mock-@Spy-@Captor-@InjectMocks.md)
     - Mockito高级
     - Mockito集成
-    
+
+- 百度Disconf    
+    - [github地址](https://github.com/knightliao/disconf)
+    - [文档](https://disconf.readthedocs.io/zh_CN/latest/)
     
     
 - 研发管理
     - Scrum
-        - Scrum基础入门    
+        - [Scrum基础入门](Scrum/1-Scrum基础入门.md)    
+        
+        
+- **[精华资源链接阅读]()**
+    - [简易RPC框架-客户端限流配置](http://www.cnblogs.com/ASPNET2008/p/7712974.html)
+    - [简易RPC框架-SPI](https://www.cnblogs.com/ASPNET2008/p/9062341.html)        
+    - [简易RPC框架-熔断降级机制](https://www.cnblogs.com/ASPNET2008/p/7954782.html)
+    - [spring mvc+ELK从头开始搭建日志平台](https://www.cnblogs.com/ASPNET2008/p/5594479.html)
+    - [简易RPC框架-过滤器机制](http://www.cnblogs.com/ASPNET2008/p/7636276.html)
+    
+    
+- **[github]()**
+    - [阿里oldratlee](https://github.com/oldratlee)
+    
