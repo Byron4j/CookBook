@@ -118,6 +118,16 @@
             <artifactId>javassist</artifactId>
             <version>3.24.0-GA</version>
         </dependency>
+		<!--查看springmvc源码所用依赖-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>5.0.9.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
     </dependencies>
 
 	<build>
