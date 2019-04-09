@@ -12,7 +12,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 public class SpringMVCStartup {
     public static void main(String[] args){
         AnnotationConfigApplicationContext annotationConfigApplicationContext
-            = new AnnotationConfigApplicationContext();
+            = new AnnotationConfigApplicationContext(SpringMVCStartup.class);
         HelloController bean = annotationConfigApplicationContext.getBean(HelloController.class);
         bean.sayHello();
     }
