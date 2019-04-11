@@ -1,12 +1,10 @@
 package org.byron4j.cookbook.springMVC.root;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -20,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Component
 @Aspect
+@Slf4j
 public class AspectjMain {
 
     // 切点（连接点集合）
@@ -33,33 +32,42 @@ public class AspectjMain {
      */
     @Before("org.byron4j.cookbook.springMVC.root.AspectjMain.pointMethod()")
     public void doAccessCheck() {
-        System.out.println("Before---doAccessCheck()");
+        System.out.println("Before---");
+    }
+
+    @After("org.byron4j.cookbook.springMVC.root.AspectjMain.pointMethod()")
+    public void afterInvoked() {
+        System.out.println("After---");
     }
 
     @Around("org.byron4j.cookbook.springMVC.root.AspectjMain.pointMethod()")
     public Object doMDCAround(ProceedingJoinPoint pjp) throws Throwable {
-        // put
-        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        HttpServletRequest request = sra.getRequest();
 
-        String url = request.getRequestURL().toString();
-        String method = request.getMethod();
-        String uri = request.getRequestURI();
-        String queryString = request.getQueryString();
-        //log.info("MDC日志输出:请求开始, 各个参数, url: {}, method: {}, uri: {}, params: {}", url, method, uri, queryString);
 
         long startTime = System.currentTimeMillis();
         Object retVal = pjp.proceed();
 
-        MDC.put("ApiServiceName", uri);
-        // 返回状态码
-        String s = JSONObject.fromObject(retVal).toString();
-        MDC.put("ResultCode", new ObjectMapper().readValue(s, Object.class).toString());
-        // 单位MS
-        MDC.put("Duration", (System.currentTimeMillis() - startTime) + "");
-        // remove
-        //MDC.clear();
+        try{
+            // put
+            RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+            ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+            HttpServletRequest request = sra.getRequest();
+
+            String url = request.getRequestURL().toString();
+            String method = request.getMethod();
+            String uri = request.getRequestURI();
+            String queryString = request.getQueryString();
+            MDC.put("ApiServiceName", uri);
+            // 返回状态码
+            MDC.put("ResultCode", JSONObject.fromObject(retVal).get("errCode").toString());
+            // 单位MS
+            MDC.put("Duration", (System.currentTimeMillis() - startTime) + "");
+            // remove
+            //MDC.clear();
+        }catch (Exception e){
+            log.error("异常：", e);
+        }
+
 
         return retVal;
     }
