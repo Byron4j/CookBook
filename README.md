@@ -4,6 +4,9 @@
 
 <font color=blue size=3>[JAVA程序猿笔试面试干货分享(欢迎加入开源分享)](https://github.com/Byron4j/1024interview/tree/develop)</font>
 
+- 🌄**数据结构和算法**
+    - 🌄[快速排序](数据结构和算法/1-快速排序.md)
+
 - Git
     - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
     - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
@@ -65,7 +68,8 @@
     - 3.[使用Zk的API进行开发](Zokeeper/Zookeeper分布式过程协同技术详解Note/第3章-使用Zk的API进行开发.md)
     - 4.[监听节点的状态变更、分配任务](Zokeeper/Zookeeper分布式过程协同技术详解Note/第4章-处理状态变化-主节点、从节点.md)
     - 5.[ZooKeeper内部原理--群首选举等](Zokeeper/Zookeeper分布式过程协同技术详解Note/第九章-ZooKeeper内部原理.md)
-- Dubbo
+- 😇**Dubbo**
+    - 😇[]()
 - RPC
     - Protobuf
         - [Protobuf基础教程](Protobuf/ProtobufTutorial/Protobuf基础教程.md)
@@ -106,7 +110,12 @@
     - [github地址](https://github.com/knightliao/disconf)
     - [文档](https://disconf.readthedocs.io/zh_CN/latest/)
     
-    
+  
+- 🏡**架构**
+    - 🏡SOA面向服务架构
+    - 🏡微服务
+    - 🏡ESB企业服务总线
+        
 - 研发管理
     - Scrum
         - [Scrum基础入门](Scrum/1-Scrum基础入门.md)    
