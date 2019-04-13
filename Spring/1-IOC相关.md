@@ -11,3 +11,5 @@
 - SingletonBeanRegistry
 - DefaultSingletonBeanRegistry
 
+![](pictures/Spring-bean注册流程.png)
+
