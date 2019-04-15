@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/mypydb"
+                        userId="root"
+                        password="11111111">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="org.byron4j.cookbook.mybatis.module" targetProject="\MBGTestProject\src">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="org.byron4j.cookbook.mybatis.mapper"  targetProject="\MBGTestProject\src">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="mapper"  targetProject="\MBGTestProject\src">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table schema="mypydb" tableName="ALLTYPES" domainObjectName="Customer" >
+            <property name="useActualColumnNames" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true" />
+            <columnOverride column="DATE_FIELD" property="startDate" />
+            <ignoreColumn column="FRED" />
+            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
+        </table>
+
+    </context>
+</generatorConfiguration>

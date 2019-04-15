@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crfchina.bd.mapper.CrfBankcardOptRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.crfchina.bd.mode.CrfBankcardOptRecord" >
+    <id column="OPT_ID" property="optId" jdbcType="BIGINT" />
+    <result column="BIND_ID" property="bindId" jdbcType="BIGINT" />
+    <result column="CRF_UID" property="crfUid" jdbcType="VARCHAR" />
+    <result column="PARTNER_UID" property="partnerUid" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="BIGINT" />
+    <result column="BANK_CARD_NO" property="bankCardNo" jdbcType="VARCHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="ID_NO" property="idNo" jdbcType="VARCHAR" />
+    <result column="MOBILE_NO" property="mobileNo" jdbcType="VARCHAR" />
+    <result column="BANK_CODE" property="bankCode" jdbcType="VARCHAR" />
+    <result column="BANK_NAME" property="bankName" jdbcType="VARCHAR" />
+    <result column="CARD_FLOW_NO" property="cardFlowNo" jdbcType="VARCHAR" />
+    <result column="OPT_TYPE" property="optType" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OPT_ID, BIND_ID, CRF_UID, PARTNER_UID, USER_ID, BANK_CARD_NO, USER_NAME, ID_NO, MOBILE_NO, 
+    BANK_CODE, BANK_NAME, CARD_FLOW_NO, OPT_TYPE, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from crf_bankcard_opt_record
+    where OPT_ID = #{optId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from crf_bankcard_opt_record
+    where OPT_ID = #{optId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crfchina.bd.mode.CrfBankcardOptRecord" >
+    insert into crf_bankcard_opt_record (OPT_ID, BIND_ID, CRF_UID, 
+      PARTNER_UID, USER_ID, BANK_CARD_NO, 
+      USER_NAME, ID_NO, MOBILE_NO, 
+      BANK_CODE, BANK_NAME, CARD_FLOW_NO, 
+      OPT_TYPE, CREATE_TIME, UPDATE_TIME
+      )
+    values (#{optId,jdbcType=BIGINT}, #{bindId,jdbcType=BIGINT}, #{crfUid,jdbcType=VARCHAR}, 
+      #{partnerUid,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, #{bankCardNo,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{idNo,jdbcType=VARCHAR}, #{mobileNo,jdbcType=VARCHAR}, 
+      #{bankCode,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{cardFlowNo,jdbcType=VARCHAR}, 
+      #{optType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.crfchina.bd.mode.CrfBankcardOptRecord" >
+    insert into crf_bankcard_opt_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="optId != null" >
+        OPT_ID,
+      </if>
+      <if test="bindId != null" >
+        BIND_ID,
+      </if>
+      <if test="crfUid != null" >
+        CRF_UID,
+      </if>
+      <if test="partnerUid != null" >
+        PARTNER_UID,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="bankCardNo != null" >
+        BANK_CARD_NO,
+      </if>
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="idNo != null" >
+        ID_NO,
+      </if>
+      <if test="mobileNo != null" >
+        MOBILE_NO,
+      </if>
+      <if test="bankCode != null" >
+        BANK_CODE,
+      </if>
+      <if test="bankName != null" >
+        BANK_NAME,
+      </if>
+      <if test="cardFlowNo != null" >
+        CARD_FLOW_NO,
+      </if>
+      <if test="optType != null" >
+        OPT_TYPE,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="optId != null" >
+        #{optId,jdbcType=BIGINT},
+      </if>
+      <if test="bindId != null" >
+        #{bindId,jdbcType=BIGINT},
+      </if>
+      <if test="crfUid != null" >
+        #{crfUid,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerUid != null" >
+        #{partnerUid,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="bankCardNo != null" >
+        #{bankCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNo != null" >
+        #{idNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileNo != null" >
+        #{mobileNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null" >
+        #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardFlowNo != null" >
+        #{cardFlowNo,jdbcType=VARCHAR},
+      </if>
+      <if test="optType != null" >
+        #{optType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crfchina.bd.mode.CrfBankcardOptRecord" >
+    update crf_bankcard_opt_record
+    <set >
+      <if test="bindId != null" >
+        BIND_ID = #{bindId,jdbcType=BIGINT},
+      </if>
+      <if test="crfUid != null" >
+        CRF_UID = #{crfUid,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerUid != null" >
+        PARTNER_UID = #{partnerUid,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="bankCardNo != null" >
+        BANK_CARD_NO = #{bankCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNo != null" >
+        ID_NO = #{idNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileNo != null" >
+        MOBILE_NO = #{mobileNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null" >
+        BANK_CODE = #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        BANK_NAME = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardFlowNo != null" >
+        CARD_FLOW_NO = #{cardFlowNo,jdbcType=VARCHAR},
+      </if>
+      <if test="optType != null" >
+        OPT_TYPE = #{optType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where OPT_ID = #{optId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crfchina.bd.mode.CrfBankcardOptRecord" >
+    update crf_bankcard_opt_record
+    set BIND_ID = #{bindId,jdbcType=BIGINT},
+      CRF_UID = #{crfUid,jdbcType=VARCHAR},
+      PARTNER_UID = #{partnerUid,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=BIGINT},
+      BANK_CARD_NO = #{bankCardNo,jdbcType=VARCHAR},
+      USER_NAME = #{userName,jdbcType=VARCHAR},
+      ID_NO = #{idNo,jdbcType=VARCHAR},
+      MOBILE_NO = #{mobileNo,jdbcType=VARCHAR},
+      BANK_CODE = #{bankCode,jdbcType=VARCHAR},
+      BANK_NAME = #{bankName,jdbcType=VARCHAR},
+      CARD_FLOW_NO = #{cardFlowNo,jdbcType=VARCHAR},
+      OPT_TYPE = #{optType,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where OPT_ID = #{optId,jdbcType=BIGINT}
+  </update>
+</mapper>
