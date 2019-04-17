@@ -36,10 +36,11 @@ Spring解决了全局性事务和本地事务的缺陷，它可以让应用开�
 ## Spring事务相关的类
 
 
-- org.springframework.transaction.PlatformTransactionManager
-- org.springframework.transaction.TransactionDefinition
-- org.springframework.transaction.TransactionStatus
-- org.springframework.transaction.support.TransactionSynchronization
+- ```org.springframework.transaction.PlatformTransactionManager```
+- ```org.springframework.transaction.TransactionDefinition```
+- ```org.springframework.transaction.TransactionStatus```
+- ```org.springframework.transaction.support.TransactionSynchronization```
+- ```org.springframework.transaction.support.AbstractPlatformTransactionManager``` 其它框架集成Spring一般会继承该类
 
 
 ![](pictures/Spring-tx.png)
@@ -115,7 +116,9 @@ public interface TransactionStatus extends SavepointManager {
 无论您在Spring中选择声明式事务管理还是编程式事务管理，定义正确的PlatformTransactionManager实现都是绝对必要的。通常是通过依赖注入来定义此实现。
 
 ```PlatformTransactionManager``` 实现通常需要了解他们的环境：JDBC，JTA，Hibernate等等。以下示例展示了定义了一个本地的```PlatformTransactionManager```实现（此例中，使用了简单的JDBC）。
-你可以像以下一样创建一个类似的beam，定义一个JDBC DataSource：
+你可以像以下一样创建一个类似的beam，定义一个
+
+- 1.```JDBC DataSource```配置如下：
 
 ```xml
 <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -141,6 +144,146 @@ public PlatformTransactionManager txManager(DataSource dataSource) {
     return new DataSourceTransactionManager(dataSource);
 }
 ```
+
+
+如果你是在Java EE容器中使用JTA，你可以使用一个容器DataSource，可以通过JNDI获取数据源，再结合Spring框架的```JtaTransactionManager```。
+- 2.```JTA和JDNI查找配置如下```：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/jee
+        https://www.springframework.org/schema/jee/spring-jee.xsd">
+
+    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/jpetstore"/>
+
+    <bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager" />
+
+    <!-- other <bean/> definitions here -->
+
+</beans>
+```
+
+```JtaTransactionManager``` 不需要知道DataSource（或其他指定的数据源）因为它使用了容器的全局事务管理基础设施。
+
+
+你也可以使用Hibernate本地事务，像以下示例展示的一样。在此案例中，你需要定义一个Hibernate的```LocalSessionFactoryBean``` bean，则你的应用可以使用来获取Hibernate的会话```session```实例，而DataSource bean则和本地JDBC示例类似。
+
+>❕ ❕
+>
+>如果```DataSource```(被任何非JTA事务管理器使用的)是在一个Java EE容器中管理且通过JNDI查找到的，则它应该是非事务的，因为Spring框架(而不是Java EE容器)负责管理事务。
+
+在这个案例中的 ```txManager``` bean是一个```HibernateTransactionManager```类型。和```DataSourceTransactionManager```类似，也需要依赖一个DataSource的引用，```HibernateTransactionManager```需要一个```SessionFactory```的引用。示例如下：
+
+```xml
+<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="mappingResources">
+        <list>
+            <value>org/springframework/samples/petclinic/hibernate/petclinic.hbm.xml</value>
+        </list>
+    </property>
+    <property name="hibernateProperties">
+        <value>
+            hibernate.dialect=${hibernate.dialect}
+        </value>
+    </property>
+</bean>
+
+<bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+```
+
+如果你是使用Hibernate和Java EE容器管理JTA事务，你应该和之前一样使用```JtaTransactionManager```：
+```xml
+<bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager"/>
+```
+
+>❕ ❕
+>
+>如果你使用的是JTA，你的事务管理器则应该看起来很像，不管使用什么数据访问技术，不管是JDBC、Hibernate JPA还是任何其他受支持的技术。这是因为JTA事务是全局性事务，它可以征募任何事务资源。
+
+在这些案例中，应用的代码是不需要变更的。您可以仅通过更改配置来更改事务的管理方式，即使这种变化意味着从本地事务转移到全局事务，或者反之亦然。
+
+
+## 事务资源同步
+
+怎样创建不同的事务管理器和它们是怎样关联那些需要同步到事务中的资源的（例如，```DataSourceTransactionManager```之余一个JDBC DataSource，```HibernateTransactionManager```之于一个Hibernate的```SessionFactory，等等）现在应该是比较清晰的了。
+
+这个部分描述应用代码（直接或间接使用持久化API如JDBC、Hibernate，或者JPA）怎样确保这些资源是如何创建、复用和清除的。
+
+也讨论事务同步（transaction synchronization）是如何通过关联的```PlatformTransactionManager```触发的。
+
+
+### 高级同步方法
+
+首选的方法是使用Spring最高级的基于模板的持久性集成api或者使用基于transaction-aware factory的原生的ORM API ben 或者代理 去管理本地资源工厂。
+这种transaction-aware（事务感知）解决方案是在内部处理资源、重用、清除，资源的可选事务同步，异常映射。
+因此，用户数据访问代码可以不用关心这些处理而仅仅将关注持久化逻辑的编写。
+一般而言，你可以使用原生ORM API或者使用JdbcTemplate处理JDBC数据访问。
+
+### 低级同步方法
+
+像```DataSourceUtils```类（for JDBC）一样，```EntityManagerFactoryUtils```类(for JPA),```SessionFactoryUtils```类(for Hibernate  )，等等就是比较低级的API了。
+当你想在应用代码中直接处理原生持久API的资源类型的时候，你可以使用这些类确保实例是由Spring框架管理的、事务同步是可选的、异常映射到合适的持久化API中。
+
+例如，在 JDBC 的案例中，在DataSource中用于替代传统的 JDBC的```getConnection()```的方法，可以使用 ```org.springframework.jdbc.datasource.DataSourceUtils```类：
+
+```java
+Connection conn = DataSourceUtils.getConnection(dataSource);
+```
+
+如果一个已经存在的事务已经有一个连接connection同步给它了，则会返回该connection。否则，该方法会触发创建一个新的connection，它(可选地)同步到任何现有事务，并可用于该事务的后续重用。
+像之前提到过的一样，任何 SQLException 都被包装在Spring框架中的```CannotGetJdbcConnectionException```（这是一个Spring框架的未检查unchecked的DataAccessException类型的层次结构之一）。
+这种方法提供的信息比从SQLException获得的信息要多，并且确保了跨数据库甚至跨不同持久性技术的可移植性。
+这种方式是没有在Spring事务管理机制下工作的，因此，无论你是否使用Spring事务管理机制都可以使用它。
+
+### ```TransactionAwareDataSourceProxy``` 事务感知数据源代理类
+
+在最底层存在 ```TransactionAwareDataSourceProxy```类。这是一个数据源DataSource的代理类，包装了一个数据源并且将其添加到Spring事务的感知中。在这方面，类似于Java EE服务器提供的传统的JNDI数据源。
+
+你应该几乎从不会使用这个类，除非当前的代码必须通过一个标准的JDBC数据源接口调用实现。在这个场景中，这些代码是有用的，但是它参与了Spring管理的事务。你可以使用高级的抽象编写新的代码。
+
+## 声明式事务管理
+
+>❕ ❕
+>
+>大部分的Spring框架使用者会选择声明式事务管理。这个选择对应用代码影响更小，因此，它更符合非侵入式轻量级容器理念。
+
+<u>**Spring框架的声明式事务管理是通过Spring面向切面编程（AOP）实现的。**</u>
+
+然而，因为事务相关的代码是随Spring框架发行版本一块发布的，可以以样板方式使用，通常不需要理解AOP的概念就可以使用这些代码了。
+
+Spring框架的声明式事务管理机制类似于EJB CMT，在这种情况下，你可以将事务行为(或缺少事务行为)指定到单个方法级别。如果有必要的话，你可以在一个事务上下文中调用```setRollbackOnly()```方法。这两种类型的事务管理的差异在于：
+
+- 不像EJB CMT是绑定了JTA的。Spring框架的声明式事务管理可以在任何环境中工作，它可以通过调整配置文件就可以轻易地和JTA事务、使用JDBC的本地事务、JPA或者Hibernate一块工作。
+- 你可以在任何类中使用Spring框架声明式事务，而不是像EJB一样只能指定某些类。
+- Spring框架提供了声明式回滚规则，这是和EJB等同的特性。编程式、声明式的回滚规则都提供了。
+- Spring框架可以让你通过AOP自定义事务行为。例如，你可以在事务回滚的时候插入自定义行为。还可以添加任意的advice(通知)，以及事务advice。而如果是EJB CMT的话，你不可能影响容器的事务管理机制，除非使用```setRollbackOnly()```。
+- Spring框架不像高端应用服务器那样支持在远程调用之间传播事务上下文。如果你需要这个特性，推荐你使用EJB。但是，在你使用该特性之前需要慎重，因为，正常情况下，是不想在远程调用之间传播事务的。
+
+<u>**回滚规则的概念是非常重要的。**</u> 它们可以让你指定哪些异常应该引发自动回滚。你可以在配置中而不是Java代码中指定这些声明。所以，尽管你可以在```TransactionStatus```对象中调用```setRollbackOnly()```方法去回滚当前的事务，大都数情况下你可以指定一个规则，即可以自定义异常必须导致事务回滚。这种选择的重要优点是业务对象不依赖事务基础设施。例如，它们通常不需要导入Spring事务API或者其它Spring API。
+
+尽管EJB容器默认行为是在事务发生系统异常（通常是运行时异常）时自动回滚，EJB CMT并不会在出现应用异常时自动回滚。但是Spring声明式事务的默认行为是允许自定义异常变更回滚策略的。
+
+### 理解Spring声明式事务实现
+
+仅仅告诉你使用 ```@Transactional```注解标注你的类是不够的，添加```EnabledTransactionManagement```到你的配置中，并希望你理解它是如何工作的。为了提供一个深刻的理解，这个部分解释在发生与事务相关的问题时，Speing声明式事务机制的内部工作原理。
+
+掌握Spring框架声明式事务的最重要的概念是通过AOP代理实现的，事务通知由元数据（XML或者基于注解的）驱动。
+
+<u>**AOP与事务元数据的结合产生了一个AOP代理，它使用一个事务拦截器```TransactionInterceptor```和一个适当的```PlatformTransactionManager```实现来驱动围绕方法调用的事务。**</u>
+
+以下是通过事务代理调用方法的概念试图：
+
+![](pictures/Spring声明式事务代理调用方法的概念试图.png)
+
 
 
 
