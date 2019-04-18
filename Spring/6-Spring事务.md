@@ -1,6 +1,6 @@
 # Spring事务
 
-关于数据库事务、锁可以先行查看此文：[MySQL数据库读写锁示例详解、事务隔离级别示例详解](MySQL/1-MySQL数据库读写锁示例详解、事务隔离级别示例详解.md)。
+关于数据库事务、锁可以先行查看此文：[MySQL数据库读写锁示例详解、事务隔离级别示例详解](https://github.com/Byron4j/CookBook/blob/master/MySQL/1-MySQL数据库读写锁示例详解、事务隔离级别示例详解.md)。
 
 Spring事务属于Data Access模块中的内容，该模块包含事务管理支持以及其它数据访问的集成。
 
