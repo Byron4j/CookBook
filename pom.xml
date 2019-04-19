@@ -90,7 +90,7 @@
 			<version>1.2.55</version>
 		</dependency>
 
-		<!--<dependency>
+		<dependency>
 			<groupId>org.apache.rocketmq</groupId>
 			<artifactId>rocketmq-all</artifactId>
 			<version>4.2.0</version>
@@ -99,7 +99,7 @@
 			<groupId>org.apache.rocketmq</groupId>
 			<artifactId>rocketmq-client</artifactId>
 			<version>4.2.0</version>
-		</dependency>-->
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
 		<dependency>

@@ -56,7 +56,12 @@
     - 🍁[传统JDBC弊端与MyBatis的优点](MyBatis/1-传统JDBC弊端与MyBatis的优点.md)
     - 🍁[MyBatis使用介绍](MyBatis/2-MyBatis使用介绍.md)
     - 🍁[逆向工程](MyBatis/3-逆向工程.md)
-- Redis
+- 🍅**Redis**
+    - 🍅[Redis内存淘汰策略]()
+    - 🍅[redis数据类型]()
+    - 🍅[redis缓存]()
+    - 🍅[redis哨兵]()
+    - 🍅[redis集群]()
 - RabbitMQ
     - 参与开源
         - 1.[翻译客户端配置部分-中文翻译成英文](RocketMQ/参与阿里巴巴RocketMQ项目/1-客户端配置_en.md)
@@ -141,7 +146,7 @@
     - [简易RPC框架-熔断降级机制](https://www.cnblogs.com/ASPNET2008/p/7954782.html)
     - [spring mvc+ELK从头开始搭建日志平台](https://www.cnblogs.com/ASPNET2008/p/5594479.html)
     - [简易RPC框架-过滤器机制](http://www.cnblogs.com/ASPNET2008/p/7636276.html)
-    
+    - [Java-SPI机制解读](https://zhuanlan.zhihu.com/p/28909673)
     
 - **[github]()**
     - [阿里oldratlee](https://github.com/oldratlee)

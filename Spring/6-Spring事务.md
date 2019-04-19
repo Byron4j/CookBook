@@ -36,11 +36,11 @@ Spring解决了全局性事务和本地事务的缺陷，它可以让应用开�
 ## Spring事务相关的类
 
 
-- ```org.springframework.transaction.PlatformTransactionManager```
-- ```org.springframework.transaction.TransactionDefinition```
-- ```org.springframework.transaction.TransactionStatus```
+- ```org.springframework.transaction.PlatformTransactionManager``` 事务管理器接口。
+- ```org.springframework.transaction.TransactionDefinition``` 事务定义。
+- ```org.springframework.transaction.TransactionStatus``` 事务状态。
 - ```org.springframework.transaction.support.TransactionSynchronization```
-- ```org.springframework.transaction.support.AbstractPlatformTransactionManager``` 其它框架集成Spring一般会继承该类
+- ```org.springframework.transaction.support.AbstractPlatformTransactionManager``` 实现了PlatformTransactionManager。其它框架集成Spring一般会继承该类。
 
 
 ![](pictures/Spring-tx.png)
@@ -737,6 +737,326 @@ public class AppConfig {
 |proxy-target-class|proxyTargetClass|false|仅仅在proxy模式下有用。控制使用@Transactional注释为类创建什么类型的事务代理。如果设置为```true```，基于类的代理会被创建。为false或者忽略设置，则基于JDK接口动态代理的类被创建。可以查看[Spring AOP](3-SpringAOP.md)获取更多关于代理机制的信息。|
 |order|order|Ordered.LOWEST_PRECEDENCE|定义@Transactional标注的事务通知的顺序。更多关于通知顺序的信息可以参考[Spring AOP](3-SpringAOP.md)|
 
+
+>🔕🔕🔕
+>
+>默认处理```@Transactional```注解的通知模式是```proxy```，只允许通过代理拦截调用。同一类内的本地调用不能以这种方式被拦截。对于更高级的拦截模式，可以考虑结合编译时或加载时织入切换到```aspectj```模式。
+
+
+>🔕🔕🔕
+>
+>```proxy-target-class```属性控制被```@Transactional```标注时创建何种类型的事务代理类。如果设置为```true```，基于proxy的类会被创建。如果设置为false或者忽略这个属性，标准的基于JDK接口的代理会被创建。
+
+>🔕🔕🔕
+>
+>```@EnableTransactionManagement``` 和 ```<tx:annotation-driven/>```会查找在同一个上下文中被 ```@Transactional``` 标注的bean。意味着，如果你在一个```WebApplicationContext```为```DispatcherServlet```配置了annotation-driven的话，它会检查```@Transactional```标记的controller的bean而不是你的service bean，可以查看[SpringMVC](https://github.com/Byron4j/CookBook/blob/master/Spring/SpringMVC处理流程.png)。
+
+
+**计算事务设置时，最派生的位置优先。**  如下示例中，```DefaultFooService```类，在类定义中被注解标记为一个只读事务。但是在updateFoo(Foo)方法中标记了非只读事务，且传播行为设置为新建事务，则update方法的事务设置以```@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)```为准：
+```java
+@Transactional(readOnly = true)
+public class DefaultFooService implements FooService {
+
+    public Foo getFoo(String fooName) {
+        // do something
+    }
+
+    // 该方法以这个事务设置优先级别高
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void updateFoo(Foo foo) {
+        // do something
+    }
+}
+```
+
+#### ```@Transactional```属性设置
+
+@Transactional 注解是拥有事务性语义的接口、类、方法的元数据（例如，开启一个read-only事务，则当一个方法被调用时，会挂起已经存在的事务）。默认情况下@Transactional的属性设置如下：
+
+- 传播行为设置为 PROPAGATION_REQUIRED。
+- 隔离级别设置为 ISOLATION_DEFAULT。
+- 事务是可读可写的。
+- 事务超时时间默认依赖底层事务系统，不支持超时则为none。
+- 运行时异常会回滚事务，任何checked异常则不会。
+
+```java
+@Transactional(rollbackFor = { Exception.class }, propagation = Propagation.REQUIRED)
+public CoreOffsetReturn2AgentData handlerRepayFlowAndOffsetBill(
+        String dataSourceKey, RepayServiceModel model,
+        RepayOffsetCommonRequestDTO offsetCommonRequestDTO,
+        RepayOrderNo repayOrderNo, Date offsetDate, List<String> loanNos,
+        List<CoreOffsetCoupon2AgentParam> couponList, String mctNo)
+        throws Exception {
+            // TODO
+}
+```
+
+设置属性清单：
+
+|属性|类型|描述|
+|---|---|---|
+|value|String|指定要使用的事务管理器的可选限定符。|
+|propagation|enum: Propagation|可选的传播行为设置|
+|isolation|enum: Isolation|可选的事务隔离级别。仅仅在传播行为为REQUIRED和REQUIRES_NEW时才有效|
+|timeout|int 秒单位|可选的事务超时设置。仅仅在传播行为为REQUIRED和REQUIRES_NEW时才有效|
+|readOnly|boolean|读写事务与只读事务的设置。仅仅在传播行为为REQUIRED和REQUIRES_NEW时才有效|
+|rollbackFor|Class数组，类型必须为Throwable的派生类|可选的事务回滚指定的异常|
+|rollbackForClassName|String数组，指定类名|可选|
+|noRollbackFor|Class数组|可选项，用于指定不会引发事务回滚的异常|
+|noRollbackForClassName|String数组|可选|
+
+目前，您无法显式控制事务的名称，其中“name”表示出现在事务监视器(如果适用的话)和日志输出中的事务名称(例如，WebLogic的事务监视器)。
+对于声明式事务，事务名称总是为 ```类的全限定名+.+方法名称```。例如，如果```BusinessService```类的```handlePayment(...)```方法被事务注解标记，则该事务名称为：```com.example.BusinessService.handlePayment```。
+
+#### 使用```@Transactional```的多个事务管理器
+
+大都数Spring应用只需要一个事务管理器，但是还是可能会在单个应用中使用多个独立的事务管理器的。你可以使用```value```属性指定需要使用的```PlatformTransactionManager```事务管理器。这可以是一个bean的name或者是事务管理器bean的限定名。例如，使用限定符，你可以将java代码结合上下文中的事务管理bean一块使用：
+
+```java
+public class TransactionalService {
+
+    @Transactional("order")
+    public void setSomething(String name) { ... }
+
+    @Transactional("account")
+    public void doSomething() { ... }
+}
+```
+
+以下是事务bean的配置声明：
+```xml
+<tx:annotation-driven/>
+
+<bean id="transactionManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    ...
+    <qualifier value="order"/>
+</bean>
+
+<bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    ...
+    <qualifier value="account"/>
+</bean>
+```
+在这个情况中，```TransactionService```中的两个方法在不同的事务管理器中运行。
+
+#### 自定义快捷注解
+
+如果你需要在不同方法中重复使用 ```@Transactional```注解的相同属性，[Spring元注解支持](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-meta-annotations)可以让你自定义快捷注解。
+
+自定义快捷注解如下：
+```java
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Transactional("order")
+public @interface OrderTx {
+}
+```
+
+```java
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Transactional("account")
+public @interface AccountTx {
+}
+```
+
+使用自定义快捷注解：
+```java
+public class TransactionalService {
+
+    @OrderTx
+    public void setSomething(String name) { ... }
+
+    @AccountTx
+    public void doSomething() { ... }
+}
+```
+
+在前面的示例中，我们使用语法来定义事务管理器限定符，但是我们也可以包含传播行为、回滚规则、超时和其他特性。
+
+### 事务传播行为
+
+详细描述了Spring中关于事务传播的一些语义.
+
+在spring管理的事务中，请注意物理事务和逻辑事务之间的差异，以及传播设置如何应用于这种差异。
+
+#### 理解 ```PROPAGATION_REQUIRED```
+
+![](pictures/Spring事务传播性---PROPAGATION_REQUIRED.png)
+
+```PROPAGATION_REQUIRED``` 强制执行物理事务，如果当前范围还不存在事务，则在本地执行当前范围的事务，或者参与为更大范围定义的现有“外部”事务。这在同一个线程中通常是一个比较好的处理方式（例如，一个service门面委托给几个repository的方法，其中底层资源必须参与service层的事务）。
+
+>默认情况下，一个事务参与了外部事务的特征的话，会静默地忽略本地事务隔离级别、超时设置、read-only标志。考虑在你的事务管理中开启```validateExistingTransactions```标志为true，如果你想拒绝接收外部事务隔离级别设置的话。这种非宽松模式还拒绝只读不匹配(即，试图参与只读外部范围的内部读写事务)。
+
+当传播行为设置为 PROPAGATION_REQUIRED 时，就会为应用该设置的每个方法创建逻辑事务范围。每个这样的逻辑事务范围都可以单独确定回滚状态，外部事务范围在逻辑上独立于内部事务范围。标准的 PROPAGATION_REQUIRED 传播行为，所有这些事务范围都会映射到物理事务中。所以如果一个内部事务标记了仅仅回滚的标志会影响到外部事务提交的机会。
+
+但是，当一个内部事务设置为仅仅回滚的标记时，外部事务并没有决定回滚本身，所以被内部事务触发回滚操作不是外部事务所期望的。一个相应的```UnexpectedRollbackException ```异常会被抛出。这是所期望的行为，因此事务调用者永远不会被误导，以为提交是在实际没有执行的情况下执行的。So，如果一个内部事务(外部调用方并不知道)静默地标记为一个事务为仅仅回滚，外部调用者仍然会调用commit。外部调用者需要接受一个```UnexpectedRollbackException```以清楚地表明执行了回滚。
+
+#### 理解 ```PROPAGATION_REQUIRES_NEW```
+
+![](pictures/Spring事务传播性---PROPAGATION_REQUIRES_NEW.png)
+
+```PROPAGATION_REQUIRES_NEW``` 和 ```PROPAGATION_REQUIRED``` 刚好相反，总是为每个可影响的事务范围使用一个独立的物理事务，从来不会参与外部已经存在的事务。
+在这个布置中，底层资源事务是不同的，因此，可以独立提交或者回滚，外部事务不会受内部事务回滚状态的影响，并且内部事务锁会在它执行完后立马释放。
+这样的独立的内部事务也可以声明自己的隔离级别、超时时间、read-only属性，并不会继承外部事务的特征。
+
+#### 理解 ```PROPAGATION_NESTED```
+
+```PROPAGATION_NESTED``` 在多个保存点savepoints中使用一个物理事务。所以一个内部事务的回滚会触发其事务范围内的回滚，外部事务可以继续处理物理事务尽管已经回滚了一些操作。这个设置通常映射到JDBC保存点，所以仅仅在JDBC资源事务才会工作。
+
+### 事务通知操作
+
+假设你想同时执行事务操作和profiling通知，如何在```<tx:annotation-driven/>```上下文中实现？
+
+当你调用 ```updateFoo(Foo)``` 方法的时候，你可能会看到以下行为：
+- 启动已配置的profiling aspect。
+- 执行事务通知(transactional advice)。
+- 被adviced的对象的执行方法。
+- 事务提交。
+- profiling aspect报告在整个事务方法调用时间。
+
+以下是一个简单的展示profiling aspect案例(StopWatch是一个关于打印时间的封装，会记录执行方法的耗时类似于System.currentTimeMillis()的一个改进，不建议使用在生产环境中。)：
+
+```java
+package x.y;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.util.StopWatch;
+import org.springframework.core.Ordered;
+
+public class SimpleProfiler implements Ordered {
+
+    private int order;
+
+    // allows us to control the ordering of advice
+    public int getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    // this method is the around advice
+    public Object profile(ProceedingJoinPoint call) throws Throwable {
+        Object returnValue;
+        StopWatch clock = new StopWatch(getClass().getName());
+        try {
+            clock.start(call.toShortString());
+            returnValue = call.proceed();
+        } finally {
+            clock.stop();
+            System.out.println(clock.prettyPrint());
+        }
+        return returnValue;
+    }
+}
+```
+
+通知的顺序是通过```Ordered```接口控制的。
+以下配置创建了一个```fooService```bean，并且通过切面和事务通知指定了期望的顺序：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        https://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="fooService" class="x.y.service.DefaultFooService"/>
+
+    <!-- this is the aspect -->
+    <bean id="profiler" class="x.y.SimpleProfiler">
+        <!-- 更低的order为1会使得其在事务前面执行，因为后面的事务通知的order是200 -->
+        <property name="order" value="1"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="txManager" order="200"/>
+
+    <aop:config>
+            <!-- 这个通知会环绕事务通知执行 -->
+            <aop:aspect id="profilingAspect" ref="profiler">
+                <aop:pointcut id="serviceMethodWithReturnValue"
+                        expression="execution(!void x.y..*Service.*(..))"/>
+                <aop:around method="profile" pointcut-ref="serviceMethodWithReturnValue"/>
+            </aop:aspect>
+    </aop:config>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@rj-t42:1521:elvis"/>
+        <property name="username" value="scott"/>
+        <property name="password" value="tiger"/>
+    </bean>
+
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+</beans>
+```
+
+你可以以类似的方式配置任意数量的切面。
+以下示例创建了同样的设置：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        https://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="fooService" class="x.y.service.DefaultFooService"/>
+
+    <!-- the profiling advice -->
+    <bean id="profiler" class="x.y.SimpleProfiler">
+        <!-- execute before the transactional advice (hence the lower order number) -->
+        <property name="order" value="1"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="entryPointMethod" expression="execution(* x.y..*Service.*(..))"/>
+        <!-- will execute after the profiling advice (c.f. the order attribute) -->
+
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="entryPointMethod" order="2"/>
+        <!-- order value is higher than the profiling aspect -->
+
+        <aop:aspect id="profilingAspect" ref="profiler">
+            <aop:pointcut id="serviceMethodWithReturnValue"
+                    expression="execution(!void x.y..*Service.*(..))"/>
+            <aop:around method="profile" pointcut-ref="serviceMethodWithReturnValue"/>
+        </aop:aspect>
+
+    </aop:config>
+
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- other <bean/> definitions such as a DataSource and a PlatformTransactionManager here -->
+
+</beans>
+```
+
+上面的示例中```fooService``` bean被带有order属性的切面和事务通知作用。order值越小优先级越高。
+参考：org.springframework.core.annotation.Order以及org.springframework.core.Ordered
+
+### 通过AspectJ使用```@Transactional```注解
 
 
 
