@@ -1058,6 +1058,232 @@ public class SimpleProfiler implements Ordered {
 
 ### 通过AspectJ使用```@Transactional```注解
 
+您还可以通过AspectJ切面在Spring容器之外使用Spring框架的```@Transactional```支持。
+为了达到这个目标，首先使用```@Transactional```注解标注你的类，然后使用spring-aspects.jar中定义的```org.springframework.transaction.aspectj.AnnotationTransactionAspect```织入到你的应用中去。
+你也可以通过事务管理器配置切面。
+你可以使用Spring框架的IOC容器来处理依赖注入的切面。
+配置事务管理的切面的最简单方式是使用```<tx:annotation-driven/>```元素并且指定```mode```属性为```aspectj```（上面已经提到过了）。因为我们在这里聚焦于在Spring容器外面使用，展示如何编程式处理。
+
+以下示例展示了如何创建一个事务管理器、配置```AnnotationTransactionAspect ```使用它：
+```java
+// 构造一个核实的事务管理器
+DataSourceTransactionManager txManager = new DataSourceTransactionManager(getDataSource());AnnotationTransactionAspect
+
+// 配置 AnnotationTransactionAspect 使用；必须在事务方法之前执行。
+AnnotationTransactionAspect.aspectOf().setTransactionManager(txManager);
+```
+
+>当你使用这个切面的时候，你必须注解到实现类上面（或者实现类的方法中），而不是接口上。Aspectj遵循Java规则--在接口上的注解是不会继承的。
+
+类中方法的```@Transactional```注解指定了类中的public方法的默认的事务语义。
+类中方法的```@Transactional```注解覆盖了类中（如果指定了的话）的事务语义。
+为了在你的应用中织入```AnnotationTransactionAspect```，你必须通过Aspectj构建你的应用（[Aspectj开发指南](https://www.eclipse.org/aspectj/doc/released/devguide/index.html)）或者在加载时织入。加载时织入可以查看[在Spring框架中通过AspectJ织入](https://docs.spring.io/spring/docs/5.1.6.RELEASE/spring-framework-reference/core.html#aop-aj-ltw)
+
+
+
+## 编程式事务管理
+
+Spring框架提供了两种编程式事务管理方式，通过使用：
+
+- ```TransactionTemplate```
+- ```PlatformTransactionManager```实现
+
+Spring项目组推荐编程式事务管理使用```TransactionTemplate```。第二种方式和使用 JTA UserTransaction API 类似，尽管异常处理没那么麻烦。
+
+### 使用事务模板类```TransactionTemplate```和```TransactionCallback```事务回调类
+
+```TransactionTemplate```采用了和Spring中其他模板类如```JdbcTemplate```类似的方式。使用回调的方式（将应用代码从必须执行样板文件获取和释放事务资源中解放出来）产生意图驱动的代码，在你的代码中你只需聚焦于做你想做的。
+
+>如下示例中，使用```TransactionTemplate```从Spring事务基础结构的API中完全解耦出来。编程式事务管理是否适合你的开发需要由你自己决定。
+
+应用代码必须在事务上下文中执行并显示使用```TransactionTemplate```。
+作为一个程序开发者，你可以编写一个```TransactionCallback```实现(通常表示为匿名内部类)包含你想在事务上下文中执行的代码。
+然后，你需要将自定义的```TransactionCallback```实例传入到```TransactionTemplate```暴露的```execute(...)```方法中，以下是两个示例：
+
+```java
+public class SimpleService implements Service {
+
+    // single TransactionTemplate shared amongst all methods in this instance
+    private final TransactionTemplate transactionTemplate;
+
+    // use constructor-injection to supply the PlatformTransactionManager
+    public SimpleService(PlatformTransactionManager transactionManager) {
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
+    }
+
+    public Object someServiceMethod() {
+        return transactionTemplate.execute(new TransactionCallback() {
+            // the code in this method executes in a transactional context
+            public Object doInTransaction(TransactionStatus status) {
+                updateOperation1();
+                return resultOfUpdateOperation2();
+            }
+        });
+    }
+}
+```
+
+
+如果没有返回值的话，可以使用```TransactionCallbackWithoutResult```更简洁：
+
+```java
+transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+    @Override
+    protected void doInTransactionWithoutResult(TransactionStatus status) {
+        try {
+            repayConfirm(dataSourceKey, resultDto);
+        } catch (Exception e) {
+            logger.error("确认还款处理数据失败:" , e);
+            throw new BusinessException(e);
+        }
+    }
+});
+```
+
+- org.springframework.transaction.support.TransactionTemplate 操作事务模板类
+- org.springframework.transaction.support.TransactionCallback 事务回调，在该回调中可以编写自己的代码
+- org.springframework.transaction.support.TransactionCallbackWithoutResult Spring中自带的一个事务回调实现抽象类
+
+事务回调中的代码可以调用```TransactionStatus```的 ```setRollbackOnly()```方法回滚事务：
+```java
+transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+
+    protected void doInTransactionWithoutResult(TransactionStatus status) {
+        try {
+            updateOperation1();
+            updateOperation2();
+        } catch (SomeBusinessException ex) {
+            status.setRollbackOnly();//回滚事务
+        }
+    }
+});
+```
+
+**指定事务设置**
+
+你可以在通过编程式或者配置中指定```TransactionTemplate```的事务设置（例如传播行为、隔离级别、超时设置或者其他的设置）。
+默认情况下，```TransactionTemplate```具有默认的事务设置。
+
+编程式设置：
+```java
+public class SimpleService implements Service {
+
+    private final TransactionTemplate transactionTemplate;
+
+    public SimpleService(PlatformTransactionManager transactionManager) {
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
+
+        // the transaction settings can be set here explicitly if so desired
+        this.transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_UNCOMMITTED);
+        this.transactionTemplate.setTimeout(30); // 30 seconds
+        // and so forth...
+    }
+}
+```
+
+XML配置：
+```xml
+<bean id="sharedTransactionTemplate"
+        class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="isolationLevelName" value="ISOLATION_READ_UNCOMMITTED"/>
+    <property name="timeout" value="30"/>
+</bean>"
+```
+
+然后你可以将```sharedTransactionTemplate```这个bean注入到任何需要的service中去。
+
+最后，```TransactionTemplate```类是线程安全的，在则种情况下不会维护任何会话状态。
+但是，```TransactionTemplate```实例，会维护配置状态。所以，很多类会共享一个单例的```TransactionTemplate```实例。
+如果一个类需要使用不同的配置，则需要才能创建不同的```TransactionTemplate```实例。
+
+### 使用```PlatformTransactionManager```
+
+也可以使用```org.springframework.transaction.PlatformTransactionManager```直接管理你的应用。为此，请通过bean引用将使用的```PlatformTransactionManager```的实现传递给bean。然后，通过使用```TransactionDefinition```和```TransactionStatus```对象，你可以初始化事务、回滚、提交。
+```java
+DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+// 显示指定事务名称
+def.setName("SomeTxName");
+def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+TransactionStatus status = txManager.getTransaction(def);
+try {
+    // 执行业务逻辑代码
+}
+catch (MyException ex) {
+    txManager.rollback(status);
+    throw ex;
+}
+txManager.commit(status);
+```
+
+## 在编程式事务管理和声明式事务管理二者的选择
+
+编程式事务管理通常是一个好点子但仅仅在于存在少部分的事务操作的场景中。例如，如果你有一个web应用仅仅在update操作中需要事务，你不想使用Spring或者其他技术设置事务代理。在这种情况下，使用```TransactionTemplate```可能是一个很好的方式。
+另一方面，如果你的应用存在大量的事务性操作，声明式事务管理更好，它容易配置、并且是在业务逻辑外面管理事务。
+使用Spring框架而不是EJB CMT，声明性事务管理的配置成本将大大降低。
+
+
+## Spring事务监听器、事务绑定的事件
+
+从Spring4.2开始，一个事件的监听器可以绑定到事务的各个阶段。典型的示例就是在事务成功处理完成后处理事件。
+当事务结果对监听器很重要的时候，这个特点可以使得事务处理更灵活。
+
+你可以使用```@EventListener```注解注册一个常规的事件监听器。如果你想将其绑定到事务中去，则使用```@TransactionEventListener```。默认情况下，是绑定到commit阶段的。
+
+以下示例展示了该概念，假设组件发布了一个订单创建的事件，并且我们希望定义一个监听器，该监听器应该只在发布事件的事务提交成功后才处理该事件。
+```java
+@Component
+public class MyComponent{
+    @TransactionalEventListener
+    public void handleOrderCreatedEvent(CreationEvent<Order> creationEvent){
+        ...
+    }
+}
+```
+
+```@TransactionalEventListener```注解暴露了一个事务阶段的属性。可以让你自定义绑定到事务的某个阶段。```TransactionPhase```枚举类指定了有效的事务阶段值：
+
+- **BEFORE_COMMIT** : 事务提交之前
+- **AFTER_COMMIT** ： 事务提交成功之后。默认值。
+- **AFTER_ROLLBACK** ： 事务回滚。
+- **AFTER_COMPLETION** : 事务完成（包含回滚、或者提交完成）。
+
+如果没有事务运行，监听器则不会被调用，因为不能遵守所需的事务语义。但是你可以通过设置```fallbackExecution```属性为```true```来覆盖其行为。
+
+
+
+## 特定于应用服务器的集成
+
+Spring的事务抽象通常与应用服务器无关。另外，Spring的```JtaTransactionManager```类（可以选择通过JNDI查找JTA UserTransaction和TransactionManager对象）自动发现后一个对象的位置，后者因应用服务器的不同而不同。
+在访问JTA ```TransactionManager```时允许增强的事务语义——特别的，支持事务挂起。可以查看[JtaTransactionManager](https://docs.spring.io/spring-framework/docs/5.1.6.RELEASE/javadoc-api/org/springframework/transaction/jta/JtaTransactionManager.html)获取更多的信息。
+
+Spring的```JtaTransactionManager```是众所周知的运行Java EE应用服务的标准选择。更高级的功能：例如事务挂起，在很多服务器中（GlassFish、JBoss等）不需要做额外的配置就能运行很好。但是，为了支持完整的事务挂起和更多高级功能的集成，Spring为WebLogic服务器和WebSphere服务器指定了特殊的适配器。
+
+对于标准的场景，包括WebLogic服务器和WebSphere服务器，考虑使用```<tx:jta-transaction-manager/>```配置元素。在配置的时候，这个元素会自动地查找出下面的服务并选择适用于平台最好的事务管理器。这意味着你不必显示地配置服务指定地适配器，相反```JtaTransactionManager```会自动地选择。
+
+### IBM WebSphere
+
+在WebSphere 6.1.0.9及以上版本中，推荐使用的Spring JTA事务管理器是```WebSphereUowTransactionManager```。这个适配器使用了IBM的```UOWManager```的API，存在于WebSphere 6.1.0.9及以上版本的服务器中。
+使用这个适配器，支持Spring驱动的事务挂起(挂起和恢复由PROPAGATION_REQUIRES_NEW启动)。
+
+### Oracle WebLogic 服务器
+
+在WebLogic Server 9.0或更高版本上，通常使用```WebLogicJtaTransactionManager```而不是```JtaTransactionManager```类。这是```JtaTransactionManager```的一个子类，在weblogic管理的事务环境中支持Spring事务定义的全部功能，超出标准JTA语义。
+特性包括：事务名称、事务隔离级别设置、合适的事务重启机制等。
+
+## 常见问题的解决方案
+
+### 对于指定的```DataSource```使用了错误的事务管理器
+
+根据你的事务技术选择和需求选择正确的```PlatformTransactionManager```实现。为了使用适当，Spring仅仅提供了一个简单且可移植的抽象。如果你要使用全局性事务，你必须使用```org.springframework.transaction.jta.JtaTransactionManager```类。否则，事务基础结构会将尝试对容器数据源实例等资源执行本地事务。这样的本地事务没有意义，好的应用程序服务器会将它们视为错误。
+
+## 更多资源
+
+更多关于Spring框架事务支持，可以查看：
+
+- [Spring中的分布式事务，使用XA和不使用XA](https://www.javaworld.com/javaworld/jw-01-2009/jw-01-spring-transactions.html)
+- [Java事务设计策略](https://www.infoq.com/minibooks/JTDS)
+
 
 
 
@@ -1076,13 +1302,17 @@ public class SimpleProfiler implements Ordered {
 - org.springframework.jdbc.datasource.JdbcTransactionObjectSupport#rollbackToSavepoint
 - org.springframework.jdbc.datasource.ConnectionHolder 事务提交、回滚的委托类，占有一个java.sql.Connection
 
-- org.springframework.transaction.annotation.EnableTransactionManagement
-## Spring事务监听器
+- org.springframework.transaction.annotation.EnableTransactionManagement 事务管理配置注解
 
-### 相关类
+- org.springframework.transaction.support.DefaultTransactionDefinition 默认事务行为类
 
-- org.springframework.transaction.event.TransactionalEventListener
-- org.springframework.transaction.event.TransactionPhase
+- org.springframework.transaction.support.TransactionTemplate 操作事务模板类
+- org.springframework.transaction.support.TransactionCallback 事务回调，在该回调中可以编写自己的代码
+- org.springframework.transaction.support.TransactionCallbackWithoutResult Spring中自带的一个事务回调实现抽象类
 
-### 事务监听器示例
+- org.springframework.transaction.event.TransactionalEventListener  事务监听器
+- org.springframework.transaction.event.TransactionPhase 事务阶段
+- org.springframework.transaction.support.TransactionSynchronization 用于事务同步回调的接口
+
+
 

@@ -166,6 +166,14 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 		</dependency>
+
+		<!-- springaspect -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>5.0.9.RELEASE</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

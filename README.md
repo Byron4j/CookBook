@@ -147,6 +147,10 @@
     - [spring mvc+ELK从头开始搭建日志平台](https://www.cnblogs.com/ASPNET2008/p/5594479.html)
     - [简易RPC框架-过滤器机制](http://www.cnblogs.com/ASPNET2008/p/7636276.html)
     - [Java-SPI机制解读](https://zhuanlan.zhihu.com/p/28909673)
+    - [加载时织入可以查看在Spring框架中通过AspectJ织入](https://docs.spring.io/spring/docs/5.1.6.RELEASE/spring-framework-reference/core.html#aop-aj-ltw)
+    - [Aspectj开发指南](https://www.eclipse.org/aspectj/doc/released/devguide/index.html)
+    - [Spring中的分布式事务，使用XA和不使用XA](https://www.javaworld.com/javaworld/jw-01-2009/jw-01-spring-transactions.html)
+    - [Java事务设计策略](https://www.infoq.com/minibooks/JTDS)
     
 - **[github]()**
     - [阿里oldratlee](https://github.com/oldratlee)

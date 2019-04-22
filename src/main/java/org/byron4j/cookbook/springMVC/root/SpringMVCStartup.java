@@ -15,5 +15,6 @@ public class SpringMVCStartup {
             = new AnnotationConfigApplicationContext(SpringMVCStartup.class);
         HelloController bean = annotationConfigApplicationContext.getBean(HelloController.class);
         bean.sayHello();
+
     }
 }
