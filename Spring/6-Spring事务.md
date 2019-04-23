@@ -69,6 +69,7 @@ PlatformTransactionManager 实现的定义与Spring框架IOC容器中其他任�
 
 
 
+## 七种事务传播行为、四种事务隔离级别
 
 ```TransactionDefinition ``` 接口指定了：
 
@@ -1241,6 +1242,8 @@ public class MyComponent{
 }
 ```
 
+### 事务的阶段
+
 ```@TransactionalEventListener```注解暴露了一个事务阶段的属性。可以让你自定义绑定到事务的某个阶段。```TransactionPhase```枚举类指定了有效的事务阶段值：
 
 - **BEFORE_COMMIT** : 事务提交之前
@@ -1314,5 +1317,33 @@ Spring的```JtaTransactionManager```是众所周知的运行Java EE应用服务�
 - org.springframework.transaction.event.TransactionPhase 事务阶段
 - org.springframework.transaction.support.TransactionSynchronization 用于事务同步回调的接口
 
+- org.springframework.transaction.interceptor.TransactionInterceptor 事务拦截器
+- org.springframework.transaction.interceptor.TransactionProxyFactoryBean 事务代理AOP工厂bean
+- org.springframework.transaction.interceptor.TransactionAttributeSource  TransactionInterceptor用于元数据检索的策略接口。其实现知道如何从配置、源级别的元数据属性(如Java 5注释)或其他任何地方获取事务属性。```org.springframework.core.annotation.AnnotatedElementUtils#searchWithFindSemantics(java.lang.reflect.AnnotatedElement, java.lang.Class<? extends java.lang.annotation.Annotation>, java.lang.String, java.lang.Class<? extends java.lang.annotation.Annotation>, org.springframework.core.annotation.AnnotatedElementUtils.Processor<T>, java.util.Set<java.lang.reflect.AnnotatedElement>, int)```
+
+
+## 使用 ```TransactionProxyFactoryBean```类
+
+```xml
+<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+     abstract="true">
+   <property name="transactionManager" ref="transactionManager"/>
+   <property name="transactionAttributes">
+     <props>
+       <prop key="insert*">PROPAGATION_REQUIRED</prop>
+       <prop key="update*">PROPAGATION_REQUIRED</prop>
+       <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+     </props>
+   </property>
+ </bean>
+
+ <bean id="myProxy" parent="baseTransactionProxy">
+   <property name="target" ref="myTarget"/>
+ </bean>
+
+ <bean id="yourProxy" parent="baseTransactionProxy">
+   <property name="target" ref="yourTarget"/>
+ </bean>
+```
 
 

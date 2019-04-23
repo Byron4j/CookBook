@@ -93,18 +93,18 @@
     - [官网](https://www.atomikos.com/)
         
 - Code Refactoring 代码重构
-- Linux
-    - [Linux基础](Linux/1-Linux基础.md)
-    - [Linux用户磁盘管理](Linux/2-Linux用户磁盘管理.md)
-    - [Linux的vi、vim使用](Linux/3-Linux的vi、vim使用.md)
-    - [Linux的yum命令](Linux/4-Linux的yum命令.md)
-    - awk 脚本语言
-        - [AWK 脚本语言](Linux/awk/1-awk入门.md)
-    - Shell 脚本编程语言
-        - [shell基础入门知识](Linux/shell/1-shell基础教程.md)
-        - [shell基本语法](Linux/shell/2-shell基本语法.md)
-        - [shell运算符汇总](Linux/shell/3-shell运算符汇总.md)
-        - [shell的echo、printf、test详细介绍](Linux/shell/4-shell的echo、printf、test详细介绍.md)
+- 🐧**Linux**
+    - 🐧[Linux基础](Linux/1-Linux基础.md)
+    - 🐧[Linux用户磁盘管理](Linux/2-Linux用户磁盘管理.md)
+    - 🐧[Linux的vi、vim使用](Linux/3-Linux的vi、vim使用.md)
+    - 🐧[Linux的yum命令](Linux/4-Linux的yum命令.md)
+    - 🐧awk 脚本语言
+        - 🐧[AWK 脚本语言](Linux/awk/1-awk入门.md)
+    - 🐧Shell 脚本编程语言
+        - 🐧[shell基础入门知识](Linux/shell/1-shell基础教程.md)
+        - 🐧[shell基本语法](Linux/shell/2-shell基本语法.md)
+        - 🐧[shell运算符汇总](Linux/shell/3-shell运算符汇总.md)
+        - 🐧[shell的echo、printf、test详细介绍](Linux/shell/4-shell的echo、printf、test详细介绍.md)
 
 - Python3 编程语言
     - 1.[概览](Python3/1-Python3概览.md)
