@@ -12,7 +12,7 @@
     - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
     - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
     - [Github给项目添加徽标](Git/2-github-travis-ci.md)
-    - 😆 😆[更多github emoji徽标](Git/gitemojiall.md)
+    - 😆[更多github emoji徽标](Git/gitemojiall.md)
     
 - 👽**Javassist**
     - 👽[javassist官网](http://www.javassist.org/)：[官方指南](http://www.javassist.org/tutorial/tutorial.html)
@@ -24,10 +24,15 @@
         
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
-- JAVA核心高级知识点
-    - 1.[Java枚举](Java核心/1-Java枚举.md)
-    - 2.[Java注解](Java核心/2-Java注解.md)
-    - 3.[Java反射](Java核心/3-Java反射.md)
+- 🌰**JAVA核心高级知识点**
+    - 🌰**语法专题**
+        - 1.[Java枚举](Java核心/1-Java枚举.md)
+        - 2.[Java注解](Java核心/2-Java注解.md)
+        - 3.[Java反射](Java核心/3-Java反射.md)
+    - 🌰**并发专题**
+        - 🌰**并发源码解读类**
+            - 1.AQS: ```AbstractQueuedSynchronizer```
+            - 2.重入锁：```ReentrantLock```
 - MySQL
     - 1.[MySQL数据库锁、事务隔离级别详解](MySQL/1-MySQL数据库读写锁示例详解、事务隔离级别示例详解.md)
 - 🚻**Spring**

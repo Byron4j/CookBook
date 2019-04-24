@@ -178,6 +178,12 @@
 			<version>5.0.9.RELEASE</version>
 		</dependency>
 
+		<!-- 为查看Tomcat源码而引入的依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
