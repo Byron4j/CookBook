@@ -66,6 +66,7 @@ public class AspectjMain {
             //MDC.clear();
         }catch (Exception e){
             log.error("异常：", e);
+            log.info("调用结束");
         }
 
 

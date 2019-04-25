@@ -1,11 +1,14 @@
 package org.byron4j.cookbook.web;
 
 import net.sf.json.JSONObject;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import java.time.LocalDate;
+
+@RestController("hello")
 public class HelloController {
 
     /**
@@ -18,5 +21,11 @@ public class HelloController {
         JSONObject obj = new JSONObject();
         obj.put(name, "Hello");
         return obj.toString();
+    }
+
+    @RequestMapping("/getDate")
+    public String getDate(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")LocalDate localDate){
+
+        return localDate.toString();
     }
 }
