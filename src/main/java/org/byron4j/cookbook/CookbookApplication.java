@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("org.byron4j.cookbook.web")
+@ComponentScan("org.byron4j.cookbook")
 public class CookbookApplication {
 
 	public static void main(String[] args) {
