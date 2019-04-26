@@ -1,5 +1,6 @@
 package org.byron4j.cookbook.util;
 
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -8,6 +9,7 @@ public class Utils {
     static final int THREAD_COUNT = CPU_COUNT * 2;
     static final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
     static volatile boolean isLoadMade = false;
+    static final Random random = new Random();
 
     public static synchronized void makeLoad() {
         if (isLoadMade) return;
@@ -31,5 +33,10 @@ public class Utils {
             Thread.sleep(l);
         } catch (InterruptedException e) {
         }
+    }
+
+    public static Integer random(){
+        return random.nextInt(Integer.MAX_VALUE);
+
     }
 }
