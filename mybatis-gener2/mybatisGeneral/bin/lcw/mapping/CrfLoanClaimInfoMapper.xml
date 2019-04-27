@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lcw.dao.CrfLoanClaimInfoMapper" >
+  <resultMap id="BaseResultMap" type="lcw.model.CrfLoanClaimInfo" >
+    <id column="CLAIM_ID" property="claimId" jdbcType="BIGINT" />
+    <result column="ACCT_ID" property="acctId" jdbcType="BIGINT" />
+    <result column="CONTRACT_ID" property="contractId" jdbcType="BIGINT" />
+    <result column="USER_ID_NO" property="userIdNo" jdbcType="VARCHAR" />
+    <result column="FULL_NAME" property="fullName" jdbcType="VARCHAR" />
+    <result column="USER_MOBILE" property="userMobile" jdbcType="VARCHAR" />
+    <result column="CLAIM_AMT" property="claimAmt" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CLAIM_ID, ACCT_ID, CONTRACT_ID, USER_ID_NO, FULL_NAME, USER_MOBILE, CLAIM_AMT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from crf_loan_claiminfo
+    where CLAIM_ID = #{claimId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from crf_loan_claiminfo
+    where CLAIM_ID = #{claimId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="lcw.model.CrfLoanClaimInfo" >
+    insert into crf_loan_claiminfo (CLAIM_ID, ACCT_ID, CONTRACT_ID, 
+      USER_ID_NO, FULL_NAME, USER_MOBILE, 
+      CLAIM_AMT)
+    values (#{claimId,jdbcType=BIGINT}, #{acctId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, 
+      #{userIdNo,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, #{userMobile,jdbcType=VARCHAR}, 
+      #{claimAmt,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="lcw.model.CrfLoanClaimInfo" >
+    insert into crf_loan_claiminfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="claimId != null" >
+        CLAIM_ID,
+      </if>
+      <if test="acctId != null" >
+        ACCT_ID,
+      </if>
+      <if test="contractId != null" >
+        CONTRACT_ID,
+      </if>
+      <if test="userIdNo != null" >
+        USER_ID_NO,
+      </if>
+      <if test="fullName != null" >
+        FULL_NAME,
+      </if>
+      <if test="userMobile != null" >
+        USER_MOBILE,
+      </if>
+      <if test="claimAmt != null" >
+        CLAIM_AMT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="claimId != null" >
+        #{claimId,jdbcType=BIGINT},
+      </if>
+      <if test="acctId != null" >
+        #{acctId,jdbcType=BIGINT},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=BIGINT},
+      </if>
+      <if test="userIdNo != null" >
+        #{userIdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="userMobile != null" >
+        #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="claimAmt != null" >
+        #{claimAmt,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="lcw.model.CrfLoanClaimInfo" >
+    update crf_loan_claiminfo
+    <set >
+      <if test="acctId != null" >
+        ACCT_ID = #{acctId,jdbcType=BIGINT},
+      </if>
+      <if test="contractId != null" >
+        CONTRACT_ID = #{contractId,jdbcType=BIGINT},
+      </if>
+      <if test="userIdNo != null" >
+        USER_ID_NO = #{userIdNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        FULL_NAME = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="userMobile != null" >
+        USER_MOBILE = #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="claimAmt != null" >
+        CLAIM_AMT = #{claimAmt,jdbcType=INTEGER},
+      </if>
+    </set>
+    where CLAIM_ID = #{claimId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="lcw.model.CrfLoanClaimInfo" >
+    update crf_loan_claiminfo
+    set ACCT_ID = #{acctId,jdbcType=BIGINT},
+      CONTRACT_ID = #{contractId,jdbcType=BIGINT},
+      USER_ID_NO = #{userIdNo,jdbcType=VARCHAR},
+      FULL_NAME = #{fullName,jdbcType=VARCHAR},
+      USER_MOBILE = #{userMobile,jdbcType=VARCHAR},
+      CLAIM_AMT = #{claimAmt,jdbcType=INTEGER}
+    where CLAIM_ID = #{claimId,jdbcType=BIGINT}
+  </update>
+</mapper>
