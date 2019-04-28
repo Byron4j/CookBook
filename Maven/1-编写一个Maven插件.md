@@ -115,3 +115,8 @@ Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-comp
 ```
 
 
+## 编写插件更多资料
+
+- https://maven.apache.org/guides/mini/guide-configuring-plugins.html
+- https://maven.apache.org/plugin-developers/index.html
+- https://maven.apache.org/guides/plugin/guide-java-plugin-development.html

@@ -157,7 +157,9 @@
     - [Aspectj开发指南](https://www.eclipse.org/aspectj/doc/released/devguide/index.html)
     - [Spring中的分布式事务，使用XA和不使用XA](https://www.javaworld.com/javaworld/jw-01-2009/jw-01-spring-transactions.html)
     - [Java事务设计策略](https://www.infoq.com/minibooks/JTDS)
-    
+    - [腾讯云-Mybatis拦截器专栏](https://cloud.tencent.com/developer/information/mybatis%E6%8B%A6%E6%88%AA%E5%99%A8)
+    - [Mybatis拦截器CSDN](https://blog.csdn.net/zsj777/article/details/81986096)
+
 - **[github]()**
     - [阿里oldratlee](https://github.com/oldratlee)
     
