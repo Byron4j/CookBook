@@ -6,7 +6,12 @@
 	<groupId>org.byron4j</groupId>
 	<artifactId>cookbook</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<modules>
+		<module>mvn-local-plugin</module>
+		<module>plugin-use</module>
+		<module>mvn-local-plugin-use</module>
+	</modules>
+	<packaging>pom</packaging>
 
 	<name>cookbook</name>
 	<description>Demo project for Spring Boot</description>

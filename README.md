@@ -43,7 +43,8 @@
     - 🚻[Spring拦截器](Spring/5-拦截器.md)
     - 🚻[Spring事务](Spring/6-Spring事务.md)
 - Nginx
-- Maven
+- 🐶**Maven**
+    - 🐶[编写一个Maven插件](Maven/1-编写一个Maven插件.md)
 
 - Jenkins
 - 设计模式
