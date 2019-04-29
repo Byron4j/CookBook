@@ -74,8 +74,10 @@
     - 🍅[redis哨兵]()
     - 🍅[redis集群]()
 - 👲RocketMQ
+    - 👲[RocketMQ基础入门须知](RocketMQ/1-RocketMQ基础入门.md)
     - 👲参与开源
         - 1.[翻译客户端配置部分-中文翻译成英文](RocketMQ/参与阿里巴巴RocketMQ项目/1-客户端配置_en.md)
+    
 - NIO/Netty
     - 1.[Netty第一个程序示例](src/main/java/org/byron4j/cookbook/netty)
     - 2.[Netty自定义传输协议](src/main/java/org/byron4j/cookbook/netty)
