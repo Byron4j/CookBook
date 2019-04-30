@@ -52,10 +52,10 @@ set "JAVA_OPT=%JAVA_OPT% -cp %CLASSPATH%"
 
 ### 生产者发送消息
 
-示例代码参见：[```org.byron4j.cookbook.rocketmq.MQProducerDemo```](src/main/java/org/byron4j/cookbook/rocketmq/MQProducerDemo.java)
+示例代码参见：[```org.byron4j.cookbook.rocketmq.MQProducerDemo```](../src/main/java/org/byron4j/cookbook/rocketmq/MQProducerDemo.java)
 
 
 ### 消费者消费消息
 
-示例代码参见：[```org.byron4j.cookbook.rocketmq.MQConsumerDemo```](src/main/java/org/byron4j/cookbook/rocketmq/MQConsumerDemo.java)
+示例代码参见：[```org.byron4j.cookbook.rocketmq.MQConsumerDemo```](../src/main/java/org/byron4j/cookbook/rocketmq/MQConsumerDemo.java)
 
