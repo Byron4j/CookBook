@@ -27,7 +27,7 @@ public class MQConsumerDemo {
         consumer.subscribe("TopicTest", "*");
 
         // 5. 推送型 Push Consumer 要注册消费监昕器， 当监听器被触发后才开始消费消息
-        consumer.registerMessageListener(new MessageListenerOrderly() {
+        /*consumer.registerMessageListener(new MessageListenerOrderly() {
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
                 if( null != msgs ){
@@ -37,7 +37,16 @@ public class MQConsumerDemo {
                 }
                 return ConsumeOrderlyStatus.SUCCESS;
             }
-        });
+        });*/
+        // lambda表达式
+        consumer.registerMessageListener( (List<MessageExt> msgs, ConsumeOrderlyContext context) -> {
+            if( null != msgs ){
+                for( MessageExt ele : msgs ){
+                    System.out.println(new Date() + "" + new String(ele.getBody(), CharsetUtil.UTF_8));
+                }
+            }
+            return ConsumeOrderlyStatus.SUCCESS;
+        } );
 
         // 6. 启动消费者
         consumer.start();
