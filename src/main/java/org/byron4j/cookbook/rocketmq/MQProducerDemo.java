@@ -26,7 +26,7 @@ public class MQProducerDemo {
 
 
         // 4. 生产者发送消息
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 350; i++) {
             try {
 
                 /*

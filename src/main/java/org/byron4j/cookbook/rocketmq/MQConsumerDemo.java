@@ -38,6 +38,9 @@ public class MQConsumerDemo {
                 return ConsumeOrderlyStatus.SUCCESS;
             }
         });*/
+
+        // 可以设置批量处理的数量
+        consumer.setConsumeMessageBatchMaxSize(100);
         // lambda表达式
         consumer.registerMessageListener( (List<MessageExt> msgs, ConsumeOrderlyContext context) -> {
             if( null != msgs ){
