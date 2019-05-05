@@ -25,6 +25,19 @@
 
 ​消息发送成功或者失败要打印消息日志，务必要打印SendResult和key字段。send消息方法只要不抛异常，就代表发送成功。发送成功会有多个状态，在sendResult里定义。以下对每个状态进行说明：     
 
+参见枚举值： ```org.apache.rocketmq.client.producer.SendStatus```:
+```java
+public enum SendStatus {
+    SEND_OK,
+    FLUSH_DISK_TIMEOUT,
+    FLUSH_SLAVE_TIMEOUT,
+    SLAVE_NOT_AVAILABLE;
+
+    private SendStatus() {
+    }
+}
+```
+
 - **SEND_OK**
 
 消息发送成功。要注意的是消息发送成功也不意味着它是可靠的。要确保不会丢失任何消息，还应启用同步Master服务器或同步刷盘，即SYNC_MASTER或SYNC_FLUSH。
@@ -41,6 +54,19 @@
 - **SLAVE_NOT_AVAILABLE**
 
 消息发送成功，但是此时Slave不可用。如果Broker服务器的角色是同步Master，即SYNC_MASTER（默认是异步Master服务器即ASYNC_MASTER），但没有配置slave Broker服务器，则将返回该状态——无Slave服务器可用。
+
+
+如，/conf/目录下的broker-a.properties默认配置：
+
+```properties
+brokerClusterName=DefaultCluster
+brokerName=broker-a
+brokerId=0
+deleteWhen=04
+fileReservedTime=48
+brokerRole=ASYNC_MASTER
+flushDiskType=ASYNC_FLUSH
+```
 
 
 ### 1.2 消息发送失败处理方式
