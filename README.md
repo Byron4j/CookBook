@@ -74,8 +74,8 @@
     - 🍅[redis哨兵]()
     - 🍅[redis集群]()
 - 👲RocketMQ
-    - 👲[windows安装RocketMQ采坑之路](RocketMQ/0-windows安装RocketMQ.md)
-    - 👲[RocketMQ基础入门须知](RocketMQ/1-RocketMQ基础入门.md)
+    - 👲[windows安装RocketMQ采坑之路](RocketMQ/0-windows安装RocketMQ以及运行第一个MQ程序.md)
+    - 👲[RocketMQ基础入门须知](RocketMQ/1-RocketMQ核心知识.md)
     - 👲参与开源
         - 1.[翻译客户端配置部分-中文翻译成英文](RocketMQ/参与阿里巴巴RocketMQ项目/1-客户端配置_en.md)
     

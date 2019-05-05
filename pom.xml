@@ -97,15 +97,16 @@
 			<version>1.2.55</version>
 		</dependency>
 
+		<!-- 升级到4.3.0使用事务新的API -->
 		<dependency>
 			<groupId>org.apache.rocketmq</groupId>
 			<artifactId>rocketmq-all</artifactId>
-			<version>4.2.0</version>
+			<version>4.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.rocketmq</groupId>
 			<artifactId>rocketmq-client</artifactId>
-			<version>4.2.0</version>
+			<version>4.3.0</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
