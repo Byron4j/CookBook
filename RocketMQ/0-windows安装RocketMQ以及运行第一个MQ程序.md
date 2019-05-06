@@ -53,9 +53,9 @@ set "JAVA_OPT=%JAVA_OPT% -cp %CLASSPATH%"
 
 ```xml
 <dependency>
-    <groupid>org . apache . rocketmq</groupid>
-    <artfactid>rocketmq client</artfactid>
-    <version>4.2.0</version>
+    <groupid>org.apache.rocketmq</groupid>
+    <artfactid>rocketmq-client</artfactid>
+    <version>4.3.0</version>
 </dependency> 
 ```
 
