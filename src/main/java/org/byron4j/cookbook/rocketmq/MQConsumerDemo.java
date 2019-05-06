@@ -18,7 +18,7 @@ public class MQConsumerDemo {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("repay_order_handler_group");
 
         // 2. 指定 NameServer
-        consumer.setNamesrvAddr("localhost:9876");
+        consumer.setNamesrvAddr("localhost:9876;localhost:2058");
 
         // 3. 设置第一次启动时是从队列头还是尾开始消费
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);

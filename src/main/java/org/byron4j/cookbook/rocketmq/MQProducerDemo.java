@@ -14,7 +14,7 @@ public class MQProducerDemo {
         DefaultMQProducer producer = new DefaultMQProducer("repay_order_create_group");
 
         // 2. 指定生产者要关联的 NameServer 地址
-        producer.setNamesrvAddr("localhost:9876");
+        producer.setNamesrvAddr("localhost:9876;localhost:2058");
 
 
 

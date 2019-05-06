@@ -25,7 +25,7 @@ public class MQTransactionProducerDemo {
         TransactionMQProducer   producer = new TransactionMQProducer("repay_tx_pro_group");
 
         // 2. 注册
-        producer.setNamesrvAddr("localhost:9876");
+        producer.setNamesrvAddr("localhost:5432");
 
 
         ExecutorService executorService = new ThreadPoolExecutor(4, 10, 100L, TimeUnit.SECONDS,
