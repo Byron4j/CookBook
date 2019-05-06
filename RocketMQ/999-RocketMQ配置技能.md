@@ -46,7 +46,7 @@ listenPort=10911
 
 
 
-## 2主2从同步集群配置
+## 2主2从同步(2m-2s-sync)集群配置
 
 2m-2s-sync目录下：
 
@@ -165,7 +165,7 @@ storeCheckpoint=/usr/local/rocketmq/bs/store/checkpoint
 abortFile=/usr/local/rocketmq/bs/store/abort
 ```
 
-在bin目录下分别执行，依次启动1主2从集群的Broker：
+在bin目录下分别执行，依次启动2主2从集群的Broker：
 
 ```
 ./mqbroker -n localhost:9876;localhost:2058 -c ../conf/2m-2s-sync/broker-a.properties
