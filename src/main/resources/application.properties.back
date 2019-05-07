@@ -1,8 +1,10 @@
+# hikari
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/mypydb
 spring.datasource.username=root
 spring.datasource.password=11111111
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
 
-
-
+# 禁用JTA
 spring.jta.enabled=false
+
+# 调整日志级别

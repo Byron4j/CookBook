@@ -1,0 +1,13 @@
+# hikari
+
+spring:
+    datasource:
+      url: jdbc:mysql://127.0.0.1:3306/mypydb?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      username: root
+      password: 11111111
+      driverClassName: com.mysql.jdbc.Driver
+# 禁用JTA
+    jta:
+      enabled: false
+
+# 调整日志级别

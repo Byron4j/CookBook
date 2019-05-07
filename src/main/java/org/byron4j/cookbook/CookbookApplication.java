@@ -1,11 +1,13 @@
 package org.byron4j.cookbook;
 
+import com.spring4all.swagger.EnableSwagger2Doc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+
 
 @SpringBootApplication
-@ComponentScan("org.byron4j.cookbook")
+//@ComponentScan("org.byron4j.cookbook")
+@EnableSwagger2Doc
 public class CookbookApplication {
 
 	public static void main(String[] args) {

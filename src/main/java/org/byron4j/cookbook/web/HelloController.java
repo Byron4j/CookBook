@@ -1,5 +1,7 @@
 package org.byron4j.cookbook.web;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import net.sf.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -8,10 +10,7 @@ import org.byron4j.cookbook.springMVC.root.repo.JdbcTemplateDao;
 import org.byron4j.cookbook.springMVC.root.repo.NamedParameterJdbcTemplateDao;
 import org.byron4j.cookbook.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,6 +36,7 @@ public class HelloController {
      * @param name
      * @return
      */
+    @ApiOperation(value = "Hello World", authorizations = {@Authorization(value = "Authorization")})
     @RequestMapping("/hello")
     public String sayHello(@RequestParam  String name){
         JSONObject obj = new JSONObject();

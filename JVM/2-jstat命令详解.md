@@ -250,3 +250,7 @@ jstat -options
    
    
    
+#### 参考资料
+
+- [https://www.cnblogs.com/lizhonghua34/p/7280699.html](https://www.cnblogs.com/lizhonghua34/p/7280699.html)  
+- [https://www.cnblogs.com/lizhonghua34/p/7307139.html](https://www.cnblogs.com/lizhonghua34/p/7307139.html) 
