@@ -101,6 +101,9 @@
     - 🎽高级
         
 - 💥**JVM**
+    - 💥[JVM参数](JVM/1-JVM参数.md)
+    - 💥[jstat命令详解](JVM/2-jstat命令详解.md)
+    
 - 🏃**Zookeeper**
     - 🏃1.[ZK概览](Zokeeper/Zookeeper分布式过程协同技术详解Note/第1章-Zk概览.md)
     - 🏃2.[了解Zk与Zk集群配置、主从模式案例演示](Zokeeper/Zookeeper分布式过程协同技术详解Note/第2章-了解Zk与Zk集群配置、主从模式案例演示.md)
