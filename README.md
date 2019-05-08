@@ -83,6 +83,7 @@
     - 👲[Windows安装RocketMQ以及运行第一个MQ程序](RocketMQ/0-windows安装RocketMQ以及运行第一个MQ程序.md)
     - 👲[RocketMQ核心知识](RocketMQ/1-RocketMQ核心知识.md)
     - 👲[RocketMQ最佳实践-来自官网](RocketMQ/2-RocketMQ最佳实践-来自官网.md)
+    - [RocketMQ控制台搭建](RocketMQ/3-RocketMQ控制台搭建.md)
     - 👲[RocketMQ源码片段阅读(一)](RocketMQ/4-RocketMQ源码片段阅读(一).md)
     
     - [RocketMQ配置技能](RocketMQ/999-RocketMQ配置技能.md)

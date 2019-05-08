@@ -50,6 +50,7 @@ public class MQProducerDemo {
         }
 
         // 5. 关闭资源，注销自己
+        Thread.sleep(100000);
         producer.shutdown();
     }
 }
