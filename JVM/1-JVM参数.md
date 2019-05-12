@@ -15,6 +15,11 @@
     - 使用JDK8的的G1垃圾收集器
 
 
+# 程序运行时添加示例
+
+- -verbose:class -XX:+TraceClassLoading  -XX:+PrintGCDetails
+    - 会打印类加载详情、以及输出GC日志详情
+
 # 参考资料
 
 - [偏向锁](https://www.sogou.com/link?url=DOb0bgH2eKh1ibpaMGjuy905KHxwxXOYdv1q5jK9p-tRa6NQaxCrEpFZhCcrseC8MZuZ9waVJJw.)
