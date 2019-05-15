@@ -74,11 +74,11 @@
     - 🍁[Mybatis源码相关类](MyBatis/4-MyBatis源码.md)
     - 🍁[Mybatis拦截器](MyBatis/5-Mybatis拦截器.md)
 - 🍅**Redis**
-    - 🍅[Redis内存淘汰策略]()
-    - 🍅[redis数据类型]()
-    - 🍅[redis缓存]()
-    - 🍅[redis哨兵]()
-    - 🍅[redis集群]()
+    - 🍅[Redis内存淘汰策略](Redis/1-Redis内存淘汰策略.md)
+    - 🍅[Redis数据类型以及数据结构实现](Redis/2-Redis数据类型以及数据结构实现.md)
+    - 🍅[Redis缓存](Redis/3-Redis缓存.md)
+    - 🍅[Redis哨兵](Redis/4-Redis哨兵.md)
+    - 🍅[Redis Cluster集群](Redis/5-Redis Cluster集群.md)
 - 👲RocketMQ
     - 👲[Windows安装RocketMQ以及运行第一个MQ程序](RocketMQ/0-windows安装RocketMQ以及运行第一个MQ程序.md)
     - 👲[RocketMQ核心知识](RocketMQ/1-RocketMQ核心知识.md)
