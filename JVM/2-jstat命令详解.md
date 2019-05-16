@@ -249,6 +249,10 @@ jstat -options
 - Method：方法名标识  
    
    
+  
+#### 可能碰到的问题
+
+- [jstat Could not attach to $pid](https://stackoverflow.com/questions/15401937/can-not-take-jstat-metrics-using-bash-as-sensu-plugin)  
    
 #### 参考资料
 
