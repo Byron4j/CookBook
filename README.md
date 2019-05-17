@@ -55,6 +55,7 @@
     - 🐯[5-HystrixDashboard仪表盘](SpringCloud/5-HystrixDashboard仪表盘.md)
     - 🐯[6-Zuul动态路由转发-过滤](SpringCloud/6-Zuul动态路由转发-过滤.md)
     - 🐯[7-SpringCloud-Config配置](SpringCloud/7-SpringCloud-Config配置.md)
+    - 🐯[8-SpringCloud-Config高可用架构](SpringCloud/8-SpringCloud-Config高可用架构.md)
     - 🐯[999-附加参考资料](SpringCloud/999-附加参考资料.md)  
     
 - 🚀**Nginx**
