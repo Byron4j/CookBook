@@ -1,4 +1,4 @@
-# Zuul网关-动态路由转发-过滤
+# Zuul动态路由转发-过滤
 
 >[Zuul是一个边缘服务，提供动态路由、监视、弹性、安全性等等](https://github.com/Netflix/zuul)
 
