@@ -1,4 +1,4 @@
-# Tech Stack of Java back-end developer  [![Build Status](https://travis-ci.com/Byron4j/fuckjava-thread-concurrency.svg?branch=master)](https://travis-ci.com/Byron4j/fuckjava-thread-concurrency)![APM](https://img.shields.io/apm/l/vim-mode.svg?label=License&style=popout) ![](https://img.shields.io/badge/author-%E4%B8%9C%E9%99%86%E4%B9%8B%E6%BB%87-red.svg)
+ma# Tech Stack of Java back-end developer  [![Build Status](https://travis-ci.com/Byron4j/fuckjava-thread-concurrency.svg?branch=master)](https://travis-ci.com/Byron4j/fuckjava-thread-concurrency)![APM](https://img.shields.io/apm/l/vim-mode.svg?label=License&style=popout) ![](https://img.shields.io/badge/author-%E4%B8%9C%E9%99%86%E4%B9%8B%E6%BB%87-red.svg)
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份JAVA开发技术手册，只需要增加自己练习的次数。
 
@@ -66,6 +66,7 @@
 
 - 🐶**Maven**
     - 🐶[编写一个Maven插件](Maven/1-编写一个Maven插件.md)
+    - [Maven-profile配置](Maven/2-Maven-profile配置.md)
 
 - **Jenkins**
 
@@ -91,8 +92,13 @@
     - 🍅[Redis内存淘汰策略](Redis/1-Redis内存淘汰策略.md)
     - 🍅[Redis数据类型以及数据结构实现](Redis/2-Redis数据类型以及数据结构实现.md)
     - 🍅[Redis缓存](Redis/3-Redis缓存.md)
-    - 🍅[Redis哨兵](Redis/4-Redis哨兵-复制.md)
+    - 🍅[Redis哨兵-复制](Redis/4-Redis哨兵-复制.md)
     - 🍅[Redis-Cluster集群](Redis/5-Redis-Cluster集群.md)
+    - 🍅[Redis分布式锁](Redis/6-Redis分布式锁.md)
+    - 🍅[Redis持久化](Redis/7-Redis持久化.md)
+    - 🍅[Redis应用场景分析](Redis/8-Redis应用场景分析.md)
+    - 🍅[Redis-conf配置文件解析](Redis/9-Redis-conf配置文件解析.md)
+    - 🍅[Redis运维系统命令](Redis/999-Redis运维系统命令.md)
 - 👲RocketMQ
     - 👲[Windows安装RocketMQ以及运行第一个MQ程序](RocketMQ/0-windows安装RocketMQ以及运行第一个MQ程序.md)
     - 👲[RocketMQ核心知识](RocketMQ/1-RocketMQ核心知识.md)

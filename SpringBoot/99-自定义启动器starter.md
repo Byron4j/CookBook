@@ -76,13 +76,30 @@ Spring Boot 使用一个注解处理器收集在元数据文件```META-INF/sprin
                 ...
             }
         ```
-        
-- 编写```META-INF/spring-configuration-metadata.json``` 文件
+ 
+- 在```resources/META-INF/spring.factories```中加入这个AutoConfiguration：
+    -   ```properties
+            org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+            com.spring4all.swagger.SwaggerAutoConfiguration
+        ```        
 
+- 添加该starter依赖，并且设置properties:
+    -   ```properties
+            swagger.url=localhost:11111
+        ```
 
+在测试类运行时则会加载```swagger.url```属性。
+
+## 总结
+
+自定义springboot的starter，注意这几点：
+
+- 如果自动化配置类需要在程序启动的时候就加载，可以在```META-INF/spring.factories```文件（该文件在SpringBootApplication.run方法执行的时候会加载）中定义。
+- 如果本次加载还需要其他一些lib类的话，可以使用```ConditionalOnClass```注解协助
+- 如果自动化配置类要在使用自定义注解后才加载，可以使用```自定义注解+@Import注解```或```@ImportSelector注解```完成
 
 #### 参考资料
 
 - [SpringBoot自定义启动器](https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#boot-features-custom-starter)
 - [简单示例](https://www.cnblogs.com/cz-xjw/p/6632402.html)
-- [Mybatis-starter](http://www.importnew.com/24164.html)
+- [Mybatis-starter案例参考](http://www.importnew.com/24164.html)
