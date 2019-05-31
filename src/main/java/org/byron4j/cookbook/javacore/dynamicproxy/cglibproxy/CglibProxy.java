@@ -32,7 +32,9 @@ public class CglibProxy implements MethodInterceptor {
 
     public static void main(String[] args){
         CglibProxy cglibProxy = new CglibProxy();
-        BookStore instance = (BookStore)cglibProxy.getInstance(new BookStore());
+        Object obj = cglibProxy.getInstance(new BookStore());
+        System.out.println("cglib代理出来的对象：" + obj);
+        BookStore instance = (BookStore)obj;
         instance.buyBook();
     }
 }
