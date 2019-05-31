@@ -1,4 +1,4 @@
-ma# Tech Stack of Java back-end developer  [![Build Status](https://travis-ci.com/Byron4j/fuckjava-thread-concurrency.svg?branch=master)](https://travis-ci.com/Byron4j/fuckjava-thread-concurrency)![APM](https://img.shields.io/apm/l/vim-mode.svg?label=License&style=popout) ![](https://img.shields.io/badge/author-%E4%B8%9C%E9%99%86%E4%B9%8B%E6%BB%87-red.svg)
+# Tech Stack of Java back-end developer  [![Build Status](https://travis-ci.com/Byron4j/fuckjava-thread-concurrency.svg?branch=master)](https://travis-ci.com/Byron4j/fuckjava-thread-concurrency)![APM](https://img.shields.io/apm/l/vim-mode.svg?label=License&style=popout) ![](https://img.shields.io/badge/author-%E4%B8%9C%E9%99%86%E4%B9%8B%E6%BB%87-red.svg)
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份JAVA开发技术手册，只需要增加自己练习的次数。
 
