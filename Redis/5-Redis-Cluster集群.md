@@ -19,3 +19,8 @@ codis是豌豆荚基于go编写的redis。
 - 一致性哈希思想
 - 客户端直连redis
 
+
+
+
+
+- [redis缓存-单机、集群](https://www.cnblogs.com/fengli9998/p/6755591.html)
