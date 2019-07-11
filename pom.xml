@@ -255,11 +255,6 @@
 			<artifactId>snakeyaml</artifactId>
 			<version>1.19</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.zookeeper</groupId>
-			<artifactId>zookeeper</artifactId>
-			<version>3.4.13</version>
-		</dependency>
 
 	</dependencies>
 
