@@ -13,7 +13,7 @@ public class GManagerLeaveHandler extends AbstractLeaveHandler {
 
     @Override
     protected void handlerRequest(LeaveRequest request) {
-        if(request.getLeaveDays() > this.MIDDLE && request.getLeaveDays() <= this.MAX){
+        if(request.getLeaveDays() <= this.MAX){
             System.out.println("总经理:" + handlerName + ",已经处理;流程结束。");
             return;
         }

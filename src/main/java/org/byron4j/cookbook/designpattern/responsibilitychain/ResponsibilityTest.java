@@ -8,7 +8,7 @@ package org.byron4j.cookbook.designpattern.responsibilitychain;
  */
 public class ResponsibilityTest {
     public static void main(String[] args) {
-        LeaveRequest request = LeaveRequest.builder().leaveDays(35).name("小明").build();
+        LeaveRequest request = LeaveRequest.builder().leaveDays(3).name("小明").build();
 
 
         AbstractLeaveHandler directLeaderLeaveHandler = new DirectLeaderLeaveHandler("县令");
