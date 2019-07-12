@@ -6,7 +6,7 @@ package org.byron4j.cookbook.designpattern.responsibilitychain;
  * @author: Byron
  * @create: 2019/07/11 09:34
  */
-public class AbstractLeaveHandler {
+public abstract class AbstractLeaveHandler {
     /**直接主管审批处理的请假天数*/
     protected int MIN = 1;
     /**部门经理处理的请假天数*/
@@ -26,9 +26,7 @@ public class AbstractLeaveHandler {
     }
 
     /**处理请假的请求，子类实现*/
-    protected void handlerRequest(LeaveRequest request){
-
-    }
+    abstract void handlerRequest(LeaveRequest request);
 
 
 }
