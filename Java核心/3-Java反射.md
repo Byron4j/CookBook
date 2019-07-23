@@ -708,7 +708,7 @@ method3.invoke(null, null);
 > Method3
 
 
-# 反射在构造器中的使用
+## 反射在构造器中的使用
 
 我们可以使用<font color=red size=5>getConstructor()</font>方法获取指定的public构造器。
 
@@ -745,3 +745,6 @@ myObjMethod.invoke(myObj, null); //prints "Method1 impl."
 
 HashMap<String,String> myMap = (HashMap<String,String>)hashMapConstructor.newInstance(null);
 ```
+
+##  Reflection.getCallerClass();
+
