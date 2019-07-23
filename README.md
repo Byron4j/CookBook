@@ -1,4 +1,4 @@
-# Tech Stack of Java back-end developer  ==  JAVA高级架构师技术栈
+# JAVA高级架构师技术栈 ![](https://img.shields.io/badge/author-%E4%B8%9C%E9%99%86%E4%B9%8B%E6%BB%87-red.svg) Tech Stack of Java back-end developer
 
 [![Build Status](https://travis-ci.com/Byron4j/1024interview.svg?branch=develop)](https://travis-ci.com/Byron4j/1024interview)
 ![GitHub release](https://img.shields.io/github/release-pre/byron4j/1024interview.svg)
