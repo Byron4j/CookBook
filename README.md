@@ -12,6 +12,12 @@
 
 :bowtie: :bowtie:  **您的 ★Star 是对我工作的肯定。** 😜 😜😜 😜:bowtie: :bowtie:  **您的 ★Star 是对我工作的肯定。** 😜 😜😜 😜
 
+
+
+<font color=#82B2FE>扫码关注，更方便阅读喔😜!</font>
+
+![](dlzdgzh.jpg)
+
 <hr>
 
 - 🌄**数据结构和算法**
@@ -43,7 +49,7 @@
     - 👽2.[ClassPool类池](javassist指南/2-ClassPool.md)
     - 👽3.[ClassLoader类加载](javassist指南/3-ClassLoader.md)
     - 👽4.[Introspection and customization自省和定制](javassist指南/4-自省和定制.md)
-        
+    
 - JAVA面试汇总
     - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
 - 🌰**JAVA核心高级知识点**
@@ -149,9 +155,9 @@
 - 🐝**Tomcat**
 - 🎽**HttpClient4**
     - 🎽基础
-        
+      
     - 🎽高级
-        
+    
 - 💥**JVM**
     - 💥[JVM参数](JVM/1-JVM参数.md)
     - 💥[jstat命令详解](JVM/2-jstat命令详解.md)
@@ -169,10 +175,10 @@
     - Protobuf
         - [Protobuf基础教程](Protobuf/ProtobufTutorial/Protobuf基础教程.md)
         
-        
+    
 - 🎹**Atomikos分布式事务方案**
     - [官网](https://www.atomikos.com/)
-        
+    
 - Code Refactoring 代码重构
 - 🐧**Linux**
     - 🐧[Linux基础](Linux/1-Linux基础.md)
@@ -193,7 +199,6 @@
     - 3.[Python3 分支决策、循环控制](Python3/2-Python3基本语法.md)
     - 4.[Python3 迭代器、生成器](Python3/2-Python3基本语法.md)
     
-    
 - Lua 编程语言
     - 1.[Lua 编程语言入门指南](Lua/1-Lua语言入门指南.md)
     
@@ -210,19 +215,18 @@
     - [github地址](https://github.com/knightliao/disconf)
     - [文档](https://disconf.readthedocs.io/zh_CN/latest/)
     
-  
 - 🏡**架构**
     - 🏡SOA面向服务架构
     - 🏡微服务
     - 🏡ESB企业服务总线
-        
+    
 - 研发管理
     - Scrum
         - [Scrum基础入门](Scrum/1-Scrum基础入门.md)    
         
- 
+
 - [初中级Java工程师技术栈](初中级Java工程师技术栈)
- 
+
 - **术语**        
 - **[精华资源链接阅读]()**
     - [简易RPC框架-客户端限流配置](http://www.cnblogs.com/ASPNET2008/p/7712974.html)
