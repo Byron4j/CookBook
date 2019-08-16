@@ -130,7 +130,7 @@
     - 🍅[Redis运维系统命令](Redis/999-Redis运维系统命令.md)
 - **Kafka**
 
-    - [1-Kafka 基础](Kafka/1-Kafka 基础.md)
+    - [1-Kafka基础](Kafka/1-Kafka基础.md)
 - 👲RocketMQ
     - 👲[Windows安装RocketMQ以及运行第一个MQ程序](RocketMQ/0-windows安装RocketMQ以及运行第一个MQ程序.md)
     - 👲[RocketMQ核心知识](RocketMQ/1-RocketMQ核心知识.md)
