@@ -1,4 +1,4 @@
-# Scrum基础入门
+# Scrum基础入门基础教程
 
 Scrum官网地址：https://www.scrum.org/。
 Scrum官网帮助文档：https://www.scrumguides.org/index.html。
