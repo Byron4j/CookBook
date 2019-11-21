@@ -22,7 +22,6 @@ public class TestCase {
         String str = "总<b>公司</b>的<b>本</b>25名，分（子）<b>公司</b>s<b>本bu</b>86名<b>hello</b>你好<b>sa</b>";
 
         Matcher match = pattern.matcher(str);
-
         // 保存匹配到的字符串去除标签后的内容
         List<String> list = new ArrayList<>();
         boolean headFlag = false;
