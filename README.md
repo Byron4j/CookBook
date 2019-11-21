@@ -65,6 +65,9 @@
     - 🌊.[InnoDB存储引擎](MySQL/3-InnoDB存储引擎.md)
     - 🌊.[MySQL数据库锁、事务隔离级别详解](MySQL/1-MySQL数据库读写锁示例详解、事务隔离级别示例详解.md)
     - 🌊.[Mysql主从复制](MySQL/999-Mysql主从复制.md)
+    - 🌊.MySQL索引
+    - 🌊.MySQL优化篇
+      - [MySQL数据库的索引原理、与慢SQL优化的5大原则](https://yq.aliyun.com/articles/661447?spm=a2c4e.11153940.0.0.527d158fbcXSEn)
 - 🚻**Spring**
     - 🚻[Spring-IOC](Spring/1-IOC相关.md)
     - 🚻[SpringMVC原理解析](Spring/2-SpringMVC原理解析.md)
@@ -129,8 +132,7 @@
     - 🍅[Redis-conf配置文件解析](Redis/9-Redis-conf配置文件解析.md)
     - 🍅[Redis运维系统命令](Redis/999-Redis运维系统命令.md)
 - **Kafka**
-
-    - [1-Kafka基础](Kafka/1-Kafka基础.md)
+- [1-Kafka基础](Kafka/1-Kafka基础.md)
 - 👲RocketMQ
     - 👲[Windows安装RocketMQ以及运行第一个MQ程序](RocketMQ/0-windows安装RocketMQ以及运行第一个MQ程序.md)
     - 👲[RocketMQ核心知识](RocketMQ/1-RocketMQ核心知识.md)
@@ -166,7 +168,6 @@
 - RPC
     - Protobuf
         - [Protobuf基础教程](Protobuf/ProtobufTutorial/Protobuf基础教程.md)
-        
 - 🎹**Atomikos分布式事务方案**
     - [官网](https://www.atomikos.com/)
 - Code Refactoring 代码重构
@@ -190,7 +191,17 @@
 - Lua 编程语言
     - 1.[Lua 编程语言入门指南](Lua/1-Lua语言入门指南.md)
 - JSON
-    - [阿里巴巴 fastjson 框架](https://github.com/alibaba/fastjson)
+    - [**Fastjson**](https://github.com/alibaba/fastjson)
+    - net.sf.json
+    - **Jackson**
+    - **Gson**
+    - 应用场景示例
+      - bean转String
+      - String转bean
+      - List转String
+      - String转List
+      - Map转String
+      - String转Map
 - Mockito
     - Mockito基础
         - [首次使用Mockito](Mockito/Mockito基础/1-开始@Mock-@Spy-@Captor-@InjectMocks.md)
@@ -202,11 +213,12 @@
 - 🏡**架构**
     - 🏡SOA面向服务架构
     - 🏡微服务
+      - [微服务+分布式+性能优化+JVM调优+团队开发](https://yq.aliyun.com/articles/661448?spm=a2c4e.11153940.0.0.71d76c14KsnDF1)
     - 🏡ESB企业服务总线
+    - 🏡==[架构资源](架构/内容/架构内容.md)==
 - 研发管理
     - Scrum
         - [Scrum基础入门](Scrum/1-Scrum基础入门.md)    
-        
 - [初中级Java工程师技术栈](初中级Java工程师技术栈)
 - **术语**        
 - **[精华资源链接阅读]()**
