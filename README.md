@@ -216,6 +216,9 @@
       - [微服务+分布式+性能优化+JVM调优+团队开发](https://yq.aliyun.com/articles/661448?spm=a2c4e.11153940.0.0.71d76c14KsnDF1)
     - 🏡ESB企业服务总线
     - 🏡==[架构资源](架构/内容/架构内容.md)==
+    - 🏡==[缓存](架构/缓存/01_mysql和redis缓存一致性解决方案.png)==
+    - 🏡==[高可用](架构/缓存/01_mysql和redis缓存一致性解决方案.png)==
+    - 🏡==[存储](架构/缓存/01_mysql和redis缓存一致性解决方案.png)==
 - 研发管理
     - Scrum
         - [Scrum基础入门](Scrum/1-Scrum基础入门.md)    
