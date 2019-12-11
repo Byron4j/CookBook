@@ -60,6 +60,10 @@
         - 🌰**并发源码解读类**
             - 1.AQS: ```AbstractQueuedSynchronizer```
             - 2.重入锁：```ReentrantLock```
+- 🔨**XML**
+	- [1-XML介绍](XML/1-XML介绍.md)
+	- [2-dom4j解析XML](XML/2-dom4j解析XML.md)
+	- [3-XPath解析XML](XML/3-XPath解析XML.md)
 - 🌊**MySQL**
     - 🌊.[MySql存储引擎](MySQL/2-MySql存储引擎.md)
     - 🌊.[InnoDB存储引擎](MySQL/3-InnoDB存储引擎.md)
