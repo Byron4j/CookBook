@@ -43,6 +43,7 @@
 
 - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
 - [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
+  - [博客](https://zyt505050.gitee.io/2019/01/28/ji-yu-github-hexo-cong-ling-kai-shi-da-jian-ge-ren-bo-ke-xia/)
 - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
 - [Github给项目添加徽标](Git/2-github-travis-ci.md)
 - 😆[更多github emoji徽标](Git/gitemojiall.md)
