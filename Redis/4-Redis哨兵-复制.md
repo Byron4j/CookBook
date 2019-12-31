@@ -84,7 +84,7 @@ sentinel monitor resque 192.168.1.3 6380 4
 sentinel down-after-milliseconds resque 10000
 sentinel failover-timeout resque 180000
 sentinel parallel-syncs resque 5
- ```
+```
 
 ## Redis复制
 
@@ -113,7 +113,7 @@ Redis为了解决单点故障问题，会把数据复制到多个副本部署到
 **集群目的是提高并发量；**
 
 
-  
+
 
 
 #### 参考资料

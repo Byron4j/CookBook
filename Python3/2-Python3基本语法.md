@@ -165,7 +165,7 @@ print (file_text)
 
 Python 中的语句通常以新行结束。Python 允许连续行字符 **\\** 表示行在继续。例如：
 
-```pyhon
+```python
 >>> a = 14+\
     12+\
     20
@@ -432,7 +432,7 @@ abcd
 [123, 'john', 123, 'john']
 >>> print(tinylist + list)
 [123, 'john', 'abcd', 786, 2.23, 'john', 70.2]
-``` 
+```
 
 ## Python 中的元组数据类型
 
@@ -654,7 +654,7 @@ python 中的身份标志运算符用来比较两个对象在内存中的位置�
 
 主要语句： if、 else、 elif 
 
-![决策图](decision_making.jpg)
+![决策图](img/decision_making.jpg)
 
 ### if 语句
 
@@ -700,7 +700,7 @@ while expression:
 
 数据流图：
 
-![](python_while_loop.jpg)
+![](img/python_while_loop.jpg)
 
 示例：
 ```python
@@ -754,7 +754,7 @@ for iterating_var in sequence:
 
 for 循环数据流图：
 
-![](python_for_loop.jpg)
+![](img/python_for_loop.jpg)
 
 #### range() 函数
 
@@ -845,7 +845,7 @@ break 语句会终止当前循环，可用于 while 和 for 循环中。
 
 程序流图:
 
-![](cpp_break_statement.jpg)
+![](img/cpp_break_statement.jpg)
 
 示例:
 

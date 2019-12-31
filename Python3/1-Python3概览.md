@@ -54,7 +54,7 @@ Python3 支持 Windows、Mac OS 和大都数 Linux 操作系统。
 可以到 Python 官网下载适合Windows版本的安装包。
 下载地址： https://www.python.org/downloads/windows/
 
-![当前最新版本Python安装包](1-windows版本安装包下载.png)
+![当前最新版本Python安装包](img/1-windows版本安装包下载.png)
 
 
 #### Linux 平台
@@ -65,7 +65,8 @@ sudo apt-get install python3-minimal
 ```
 从源码中安装：
 下载gzip压缩包哦，https://www.python.org/downloads/release/python-372/ 找到界面：
-![源码安装包](2-源码安装Python.png)
+![源码安装包](img/2-源码安装Python.png)
+
 ```shell
 wget wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
 tar xvfz Python-3.7.2.tgz
@@ -80,7 +81,7 @@ sudo make install
 #### Mac OS 平台
 
 下载 MacOS 安装包, https://www.python.org/downloads/mac-osx/:
-![MacOS安装Python](3-MacOS安装Python.png)
+![MacOS安装Python](img/3-MacOS安装Python.png)
 
 
 #### Python 官网： https://www.python.org/
