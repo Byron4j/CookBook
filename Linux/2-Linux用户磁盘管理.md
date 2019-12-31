@@ -125,7 +125,7 @@ passwd 开可以使用-l锁定某个用户，使其不能登录：
 实例：
 ```shell
 groupadd group1
-``` 
+```
 向系统增加一个新用户组group1，新组的组标识符是在当前已有的最大组标识符的基础上加1.
 还可以显示指定新组标识符：
 ```shell
@@ -157,7 +157,7 @@ groupdel group 1
 
 ```shell
 groupmod -g 102 group2
-``` 
+```
 此命令将组group2的组标识号修改为102.
 
 ```shell
