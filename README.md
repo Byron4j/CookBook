@@ -130,6 +130,7 @@
 - 🚀[Nginx实现虚拟主机、反向代理、负载均衡、高可用](Nginx/007-Nginx实现虚拟主机、反向代理、负载均衡、高可用.md)
 - 🚀**[Keepalived+Nginx搭建高可用服务](Nginx/007-Nginx实现虚拟主机、反向代理、负载均衡、高可用.md)**
 - 🚀**[Nginx配置文件nginx.conf全解](Nginx/9-Nginx配置文件nginx.conf详细介绍.md)**
+- 🚀**[如何给nginx添加外部模块](Nginx/10-如何给nginx添加外部模块.md)**
 - 🚀[资料分享](Nginx/999-资料分享.md)
 
 ## 🐶**Maven**
