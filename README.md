@@ -95,6 +95,7 @@
 - 🌊.MySQL索引
 - 🌊.MySQL优化篇
   - [MySQL数据库的索引原理、与慢SQL优化的5大原则](https://yq.aliyun.com/articles/661447?spm=a2c4e.11153940.0.0.527d158fbcXSEn)
+- 🌊.[CentOS7安装MariaDB的流程步骤](MySQL/007-CentOS7安装MariaDB的流程步骤.md)
 
 ## 🚻**Spring**
 
