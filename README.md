@@ -10,7 +10,7 @@
 
 <font color=blue size=3>[JAVA程序猿笔试面试干货分享(欢迎加入开源分享)](https://github.com/Byron4j/1024interview/tree/develop)</font>
 
-:bowtie: :bowtie:  **您的 ★Star 是对我工作的肯定。** 😜 😜😜 😜:bowtie: :bowtie:  **您的 ★Star 是对我工作的肯定。** 😜 😜😜 😜
+
 
 
 
@@ -22,7 +22,7 @@
 
 **[IDEA-2019-1永久激活教程](软件激活/IDEA-2019-1永久激活教程.md)**
 
-:bowtie: :bowtie:  **您的 ★Star 是对我工作的肯定。** 😜 😜😜 😜:bowtie: :bowtie:  **您的 ★Star 是对我工作的肯定。** 😜 😜😜 😜
+:bowtie: :bowtie:  **觉得不错，就 ★Star 吧**
 
 
 
