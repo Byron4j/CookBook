@@ -8,23 +8,17 @@
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份JAVA开发技术手册，只需要增加自己练习的次数。
 
-<font color=blue size=3>[JAVA程序猿笔试面试干货分享(欢迎加入开源分享)](https://github.com/Byron4j/1024interview/tree/develop)</font>
-
-
-
-
-
-<font color=#82B2FE>扫码关注，更方便阅读喔😜!</font>
-
-![](dlzdgzh.jpg)
+<font color=blue size=3>[JAVA程序猿笔试面试干货分享](https://github.com/Byron4j/depthgoods)</font>
 
 
 
 **[IDEA-2019-1永久激活教程](软件激活/IDEA-2019-1永久激活教程.md)**
 
-:bowtie: :bowtie:  **觉得不错，就 ★Star 吧**
+:bowtie:     **觉得不错，就 ★Star 吧**
 
 
+
+## [:tada:刷题吧:tada:](https://github.com/Byron4j/leetcode)
 
 ## :tada:**数据结构和算法**
 
