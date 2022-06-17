@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.55</version>
+			<version>1.2.83</version>
 		</dependency>
 
 		<!-- 升级到4.3.0使用事务新的API -->
