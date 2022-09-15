@@ -243,7 +243,7 @@
 		<dependency>
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
-			<version>1.19</version>
+			<version>1.31</version>
 		</dependency>
 
 
