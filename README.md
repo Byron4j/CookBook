@@ -1,9 +1,9 @@
 # JAVA高级架构师技术栈
 
-[![Build Status](https://travis-ci.com/Byron4j/1024interview.svg?branch=develop)](https://travis-ci.com/Byron4j/1024interview)
-![GitHub release](https://img.shields.io/github/release-pre/byron4j/1024interview.svg)
-[![codecov](https://scan.coverity.com/projects/17857/badge.svg)](https://scan.coverity.com/projects/17857)
-![APM](https://img.shields.io/apm/l/vim-mode.svg?label=License&style=popout)
+![GitHub Release](https://img.shields.io/github/v/release/Byron4j/CookBook)
+![GitHub Stars](https://img.shields.io/github/stars/Byron4j/CookBook)
+![License](https://img.shields.io/github/license/Byron4j/CookBook)
+![Last Commit](https://img.shields.io/github/last-commit/Byron4j/CookBook)
 ![](https://img.shields.io/badge/author-%E4%B8%9C%E9%99%86%E4%B9%8B%E6%BB%87-red.svg)
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份JAVA开发技术手册，只需要增加自己练习的次数。
