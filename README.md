@@ -8,6 +8,75 @@
 
 >任何技能通过 “刻意练习” 都可以达到融会贯通的境界，就像烹饪一样，这里有一份JAVA开发技术手册，只需要增加自己练习的次数。
 
+## 项目总览（作者与读者共用）
+
+`CookBook` 是一个以 `Java` 技术栈为核心的知识仓库，采用“知识文档 + 示例代码”双轨组织方式：
+
+- 知识文档层：按技术域沉淀专题内容（如 `Java核心`、`JVM`、`Spring`、`SpringCloud`、`架构`、`分布式高并发`）。
+- 示例代码层：在 `src/main/java/org/byron4j/cookbook` 中提供可运行、可阅读的实践示例（如 Netty、RocketMQ、Zookeeper、设计模式等）。
+- 工程化层：基于 `Maven` 构建（`pom.xml`、`mvnw`），配有测试与 CI 入口（`src/test`、`.travis.yml`）。
+
+本仓库既适合作为个人/团队技术知识地图，也适合作为分层进阶学习路线图。
+
+## 学习深度分层（基础 → 中级 → 高级 → 资深专家）
+
+### 1) 基础层
+目标：夯实 Java 基础语法、常用机制与基础框架认知。
+
+- 推荐先读：`Java核心`（枚举、注解、反射、动态代理）
+- 配套基础：`数据结构和算法`、`Spring/1-IOC相关.md`
+- 产出能力：能独立完成常规业务编码与基础问题排查
+
+### 2) 中级层
+目标：形成并发、JVM、数据库与主流框架的系统理解。
+
+- 推荐重点：`Java核心/线程池`、`JVM`、`SpringAOP`、`Spring事务`、`MyBatis`、`Redis`
+- 代码建议：阅读 `src/main/java/org/byron4j/cookbook/javacore`
+- 产出能力：能负责模块设计、性能基础优化与常见故障定位
+
+### 3) 高级层
+目标：掌握高并发与分布式系统核心组件及治理能力。
+
+- 推荐重点：`分布式高并发`、`SpringCloud`、`RocketMQ`、`Nginx`、`Zookeeper`
+- 代码建议：阅读 `src/main/java/org/byron4j/cookbook/netty`、`rocketmq`、`zk`
+- 产出能力：能完成服务治理、限流降级、消息异步化与高可用设计
+
+### 4) 资深专家层
+目标：建立架构方法论与源码级分析、性能调优与工程治理能力。
+
+- 推荐重点：`架构/内容/架构内容.md`、`架构/高可用`、`架构/云原生`、`RocketMQ源码片段阅读`、`javassist指南`
+- 综合能力：架构权衡、容量评估、可观测性建设、复杂问题根因分析
+- 作者向建议：持续维护目录一致性与版本化标记，保持“知识图谱 + 示例代码”同步演进
+
+## 快速导航建议
+
+- 新读者：按“基础 → 中级 → 高级 → 资深专家”顺序阅读。
+- 作者/维护者：优先维护 `README` 导航与目录一致性，减少失效链接与重复入口。
+- 进阶读者：文档学习与 `src` 示例代码并行阅读，优先关注 Netty、RocketMQ、Zookeeper 三类链路示例。
+
+## 推荐阅读顺序（可跳转）
+
+### 路线 A：基础到中级
+1. [数据结构和算法](#topic-algorithm)
+2. [JAVA核心高级知识点](#topic-java-core)
+3. [Spring](#topic-spring)
+4. [MySQL](#topic-mysql)
+5. [Redis](#topic-redis)
+
+### 路线 B：中级到高级
+1. [JVM](#topic-jvm)
+2. [SpringCloud](#topic-springcloud)
+3. [RocketMQ](#topic-rocketmq)
+4. [NIO/Netty](#topic-netty)
+5. [Zookeeper](#topic-zookeeper)
+
+### 路线 C：高级到资深专家
+1. [架构](#topic-architecture)
+2. [Nginx](#topic-nginx)
+3. [Maven](#topic-maven)
+4. [Javassist](#topic-javassist)
+5. [设计模式](#topic-design-pattern)
+
 <font color=blue size=3>[JAVA程序猿笔试面试干货分享](https://github.com/Byron4j/depthgoods)</font>
 
 
@@ -18,9 +87,12 @@
 
 
 
-## [:tada:刷题吧:tada:](https://github.com/Byron4j/leetcode)
+## **刷题吧**
 
-## :tada:**数据结构和算法**
+- [LeetCode刷题仓库](https://github.com/Byron4j/leetcode)
+
+<a id="topic-algorithm"></a>
+## **数据结构和算法**
 
 
 - 数据结构
@@ -36,16 +108,17 @@
 - 算法
   	- :tada:[快速排序](数据结构和算法/算法/1-快速排序.md)
 
-## :sparkles:Git
+## **Git**
 
 - [基于Github从零开始搭建个人博客(上)](Git/0-基于Github从零开始搭建个人博客.md)
-- [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客(下).md)
+- [基于Github从零开始搭建个人博客(下)](Git/0-基于Github从零开始搭建个人博客%28下%29.md)
   - [博客](https://zyt505050.gitee.io/2019/01/28/ji-yu-github-hexo-cong-ling-kai-shi-da-jian-ge-ren-bo-ke-xia/)
 - :sparkles:[Git提交添加emoji图标](Git/gitCookbook/1-Git提交添加emoji图标.md)
 - [Github给项目添加徽标](Git/2-github-travis-ci.md)
 - 😆[更多github emoji徽标](Git/gitemojiall.md)
 
-## 👽**Javassist**
+<a id="topic-javassist"></a>
+## **Javassist**
 
 - 👽[javassist官网](http://www.javassist.org/)：[官方指南](http://www.javassist.org/tutorial/tutorial.html)
 - 👽[javaagent编程指南](javassist指南/0-javassist编程指南概览.md)
@@ -54,11 +127,12 @@
 - 👽3.[ClassLoader类加载](javassist指南/3-ClassLoader.md)
 - 👽4.[Introspection and customization自省和定制](javassist指南/4-自省和定制.md)
 
-## :tada:JAVA面试汇总
+## **JAVA面试汇总**
 
 - 1.:tada:[面试常问题目](面试汇总/1-面试常问题目.md)
 
-## 🌰**JAVA核心高级知识点**
+<a id="topic-java-core"></a>
+## **JAVA核心高级知识点**
 
 ### 🌰**SE专题**
 
@@ -74,13 +148,14 @@
     - 1.AQS: ```AbstractQueuedSynchronizer```
     - 2.重入锁：```ReentrantLock```
 
-## 🔨**XML**
+## **XML**
 
 - [1-XML介绍](XML/1-XML介绍.md)
 - [2-dom4j解析XML](XML/2-dom4j解析XML.md)
 - [3-XPath解析XML](XML/3-XPath解析XML.md)
 
-## 🌊**MySQL**
+<a id="topic-mysql"></a>
+## **MySQL**
 
 - 🌊.[MySql存储引擎](MySQL/2-MySql存储引擎.md)
 - 🌊.[InnoDB存储引擎](MySQL/3-InnoDB存储引擎.md)
@@ -91,7 +166,8 @@
   - [MySQL数据库的索引原理、与慢SQL优化的5大原则](https://yq.aliyun.com/articles/661447?spm=a2c4e.11153940.0.0.527d158fbcXSEn)
 - 🌊.[CentOS7安装MariaDB的流程步骤](MySQL/007-CentOS7安装MariaDB的流程步骤.md)
 
-## 🚻**Spring**
+<a id="topic-spring"></a>
+## **Spring**
 
 - 🚻[Spring-IOC](Spring/1-IOC相关.md)
 - 🚻[SpringMVC原理解析](Spring/2-SpringMVC原理解析.md)
@@ -100,13 +176,13 @@
 - 🚻[Spring拦截器](Spring/5-拦截器.md)
 - 🚻[Spring事务](Spring/6-Spring事务.md)
 
-## 🍂**SpringBoot**
+## **SpringBoot**
 
 - 🍂[自定义启动器starter](SpringBoot/99-自定义启动器starter.md)
 
-## 🐯**SpringCloud**
+<a id="topic-springcloud"></a>
+## **SpringCloud**
 
-- 🐯[SpringCloud资料链接](SpringCloud/0-SpringCloud资料链接.md)  
 - 🐯[0-SpringCloud资料链接](SpringCloud/0-SpringCloud资料链接.md)
 - 🐯[1-Eureka服务注册发现](SpringCloud/1-Eureka服务注册发现.md)
 - 🐯[2-Ribbon负载均衡](SpringCloud/2-Ribbon负载均衡.md)
@@ -119,7 +195,8 @@
 - 🐯[9-SpringCloud-Bus消息总线](SpringCloud/9-SpringCloud-Bus消息总线.md)
 - 🐯[999-附加参考资料](SpringCloud/999-附加参考资料.md)  
 
-## 🚀**Nginx**
+<a id="topic-nginx"></a>
+## **Nginx**
 
 - 🚀[Windows环境Ngin](Nginx/1-Windows环境Ngin.md)
 - 🚀[Nginx基础入门](Nginx/2-Nginx基础入门.md)
@@ -131,14 +208,16 @@
 - 🚀**[如何给nginx添加外部模块](Nginx/10-如何给nginx添加外部模块.md)**
 - 🚀[资料分享](Nginx/999-资料分享.md)
 
-## 🐶**Maven**
+<a id="topic-maven"></a>
+## **Maven**
 
 - 🐶[编写一个Maven插件](Maven/1-编写一个Maven插件.md)
 - [Maven-profile配置](Maven/2-Maven-profile配置.md)
 
 ## **Jenkins**
 
-## 🏦**设计模式**
+<a id="topic-design-pattern"></a>
+## **设计模式**
 
 - 🏦1.[单例模式](设计模式/1-单例模式/1-单例模式.md)
 - 🏦2.[观察者模式](设计模式/2-观察者模式/2-观察者模式.md)
@@ -153,7 +232,7 @@
 - 🏦11.[责任链模式](设计模式/11-责任链模式/11-责任链模式.md)
 - 🏦12.[装饰器模式](设计模式/12-装饰器模式/12-装饰器模式.md)
 
-## 🍁**MyBatis**
+## **MyBatis**
 
 - 🍁[Mybatis面试题](MyBatis/0-Mybatis面试题.md)
 - 🍁[传统JDBC弊端与MyBatis的优点](MyBatis/1-传统JDBC弊端与MyBatis的优点.md)
@@ -162,7 +241,8 @@
 - 🍁[Mybatis源码相关类](MyBatis/4-MyBatis源码.md)
 - 🍁[Mybatis拦截器](MyBatis/5-Mybatis拦截器.md)
 
-## 🍅**Redis**
+<a id="topic-redis"></a>
+## **Redis**
 
 - 🍅[Redis内存淘汰策略](Redis/1-Redis内存淘汰策略.md)
 - 🍅[Redis数据类型以及数据结构实现](Redis/2-Redis数据类型以及数据结构实现.md)
@@ -182,40 +262,44 @@
 
     
 
-## 👲RocketMQ
+<a id="topic-rocketmq"></a>
+## **RocketMQ**
 
 - 👲[Windows安装RocketMQ以及运行第一个MQ程序](RocketMQ/0-windows安装RocketMQ以及运行第一个MQ程序.md)
 - 👲[RocketMQ核心知识](RocketMQ/1-RocketMQ核心知识.md)
 - 👲[RocketMQ最佳实践-来自官网](RocketMQ/2-RocketMQ最佳实践-来自官网.md)
 - 👲[RocketMQ控制台搭建](RocketMQ/3-RocketMQ控制台搭建.md)
-- 👲[RocketMQ源码片段阅读(一)](RocketMQ/4-RocketMQ源码片段阅读(一).md)
+- 👲[RocketMQ源码片段阅读(一)](RocketMQ/4-RocketMQ源码片段阅读%28一%29.md)
 
 - [RocketMQ配置技能](RocketMQ/999-RocketMQ配置技能.md)
 - [RocketMQ配置参数大全-持续收录](RocketMQ/9999-RocketMQ配置参数大全-持续收录.md)
 - 👲参与开源
     - 1.[翻译客户端配置部分-中文翻译成英文](RocketMQ/参与阿里巴巴RocketMQ项目/1-客户端配置_en.md)
 
-## NIO/Netty
+<a id="topic-netty"></a>
+## **NIO/Netty**
 
 - 1.[Netty第一个程序示例](src/main/java/org/byron4j/cookbook/netty)
 - 2.[Netty自定义传输协议](src/main/java/org/byron4j/cookbook/netty)
 - 3.[Netty登陆请求、验证登陆、获取响应示例](src/main/java/org/byron4j/cookbook/netty)
 
-🐝**Tomcat**
+## **Tomcat**
 
-## 🎽**HttpClient4**
+## **HttpClient4**
 
 - 🎽基础
   
 - 🎽高级
 
-## 💥**JVM**
+<a id="topic-jvm"></a>
+## **JVM**
 
 - 💥[JVM参数](JVM/1-JVM参数.md)
 - 💥[jstat命令详解](JVM/2-jstat命令详解.md)
 - 💥[JVM内存分配与回收策略案例](JVM/11-内存分配与回收策略案例.md)
 
-## 🏃**Zookeeper**
+<a id="topic-zookeeper"></a>
+## **Zookeeper**
 
 - 🏃1.[ZK概览](Zokeeper/Zookeeper分布式过程协同技术详解Note/第1章-Zk概览.md)
 - 🏃2.[了解Zk与Zk集群配置、主从模式案例演示](Zokeeper/Zookeeper分布式过程协同技术详解Note/第2章-了解Zk与Zk集群配置、主从模式案例演示.md)
@@ -223,7 +307,7 @@
 - 🏃4.[监听节点的状态变更、分配任务](Zokeeper/Zookeeper分布式过程协同技术详解Note/第4章-处理状态变化-主节点、从节点.md)
 - 🏃5.[ZooKeeper内部原理--群首选举等](Zokeeper/Zookeeper分布式过程协同技术详解Note/第九章-ZooKeeper内部原理.md)
 
-## 😇**Dubbo**
+## **Dubbo**
 
 - 😇[]()
 
@@ -231,13 +315,13 @@
     - Protobuf
         - [Protobuf基础教程](Protobuf/ProtobufTutorial/Protobuf基础教程.md)
 
-## 🎹**Atomikos分布式事务方案**
+## **Atomikos分布式事务方案**
 
 - [官网](https://www.atomikos.com/)
 
-## Code Refactoring 代码重构
+## Code Refactoring（代码重构）
 
-## 🐧**Linux**
+## **Linux**
 
 - 🐧[1-Linux基础](Linux/1-Linux基础.md)
 
@@ -264,7 +348,7 @@
     - 🐧[shell运算符汇总](Linux/shell/3-shell运算符汇总.md)
     - 🐧[shell的echo、printf、test详细介绍](Linux/shell/4-shell的echo、printf、test详细介绍.md)
 
-## Python3 编程语言
+## **Python3**
 
 - 1.[概览](Python3/1-Python3概览.md)
 - 2.[Python3 基本语法、操作运算符](Python3/2-Python3基本语法.md)
@@ -274,7 +358,7 @@
 - Lua 编程语言
     - 1.[Lua 编程语言入门指南](Lua/1-Lua语言入门指南.md)
 
-## JSON
+## **JSON**
 
 ### [**Fastjson**](https://github.com/alibaba/fastjson)
 
@@ -293,21 +377,22 @@
 - Map转String
 - String转Map
 
-## Mockito
+## **Mockito**
 
 - Mockito基础
     - [首次使用Mockito](Mockito/Mockito基础/1-开始@Mock-@Spy-@Captor-@InjectMocks.md)
 - Mockito高级
 - Mockito集成
 
-## 分布式配置中心
+## **分布式配置中心**
 
 ### 百度Disconf
 
 - [github地址](https://github.com/knightliao/disconf)
 - [文档](https://disconf.readthedocs.io/zh_CN/latest/)
 
-## 🏡**架构**
+<a id="topic-architecture"></a>
+## **架构**
 
 ### 🏡SOA面向服务架构
 
@@ -329,17 +414,17 @@
 
 - [为什么大公司一定要使用微服务](架构/微服务/01-为什么大公司一定要使用微服务.md)
 
-## 研发管理
+## **研发管理**
 
 ### Scrum
 
 - [Scrum基础入门](Scrum/1-Scrum基础入门.md)    
 
-- [初中级Java工程师技术栈](初中级Java工程师技术栈)
+- 初中级Java工程师技术栈（建设中）
 
 ## **术语**        
 
-## **[精华资源链接阅读]()**
+## **精华资源链接阅读**
 
 - [简易RPC框架-客户端限流配置](http://www.cnblogs.com/ASPNET2008/p/7712974.html)
 - [简易RPC框架-SPI](https://www.cnblogs.com/ASPNET2008/p/9062341.html)        
@@ -354,7 +439,7 @@
 - [腾讯云-Mybatis拦截器专栏](https://cloud.tencent.com/developer/information/mybatis%E6%8B%A6%E6%88%AA%E5%99%A8)
 - [Mybatis拦截器CSDN](https://blog.csdn.net/zsj777/article/details/81986096)
 
-## **[github资源分享]()**
+## **GitHub资源分享**
 
 - [阿里oldratlee](https://github.com/oldratlee)
 
