@@ -2,7 +2,25 @@ package org.byron4j.cookbook.algrithms;
 
 import org.byron4j.cookbook.util.ArraysUtil;
 
+import java.util.Arrays;
+
 public class QuickSort {
+    public static void sort(int[] array) {
+        if (array == null || array.length < 2) {
+            return;
+        }
+        sortCore(array, 0, array.length - 1);
+    }
+
+    public static int[] sortedCopy(int[] array) {
+        if (array == null) {
+            return null;
+        }
+        int[] copy = Arrays.copyOf(array, array.length);
+        sort(copy);
+        return copy;
+    }
+
     /**
      * 排序的核心算法
      *
@@ -61,7 +79,7 @@ public class QuickSort {
     public static void main(String[] args){
         int[] arr = ArraysUtil.generateRandomIntArray(10, 100);
         ArraysUtil.printArray(arr);
-        sortCore(arr, 0, arr.length - 1);
+        sort(arr);
         ArraysUtil.printArray(arr);
     }
 

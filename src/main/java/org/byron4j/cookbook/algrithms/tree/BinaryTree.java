@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 二叉树遍历实例--深度遍历：
@@ -29,12 +30,24 @@ public class BinaryTree {
      * @param treeNode
      */
     public static void preOrderTraveral(TreeNode treeNode){
+        for (Integer value : preOrderTraversalAsList(treeNode)) {
+            System.out.println(value);
+        }
+    }
+
+    public static List<Integer> preOrderTraversalAsList(TreeNode treeNode) {
+        List<Integer> result = new ArrayList<>();
+        preOrder(treeNode, result);
+        return result;
+    }
+
+    private static void preOrder(TreeNode treeNode, List<Integer> result) {
         if(null == treeNode){
             return;
         }
-        System.out.println(treeNode.data);
-        preOrderTraveral(treeNode.leftChild);
-        preOrderTraveral(treeNode.rightChild);
+        result.add(treeNode.data);
+        preOrder(treeNode.leftChild, result);
+        preOrder(treeNode.rightChild, result);
     }
 
     /**
@@ -42,12 +55,24 @@ public class BinaryTree {
      * @param treeNode
      */
     public static void middleOrderTraveral(TreeNode treeNode){
+        for (Integer value : middleOrderTraversalAsList(treeNode)) {
+            System.out.println(value);
+        }
+    }
+
+    public static List<Integer> middleOrderTraversalAsList(TreeNode treeNode) {
+        List<Integer> result = new ArrayList<>();
+        middleOrder(treeNode, result);
+        return result;
+    }
+
+    private static void middleOrder(TreeNode treeNode, List<Integer> result) {
         if(null == treeNode){
             return;
         }
-        middleOrderTraveral(treeNode.leftChild);
-        System.out.println(treeNode.data);
-        middleOrderTraveral(treeNode.rightChild);
+        middleOrder(treeNode.leftChild, result);
+        result.add(treeNode.data);
+        middleOrder(treeNode.rightChild, result);
     }
 
     /**
@@ -55,12 +80,24 @@ public class BinaryTree {
      * @param treeNode
      */
     public static void backOrderTraveral(TreeNode treeNode){
+        for (Integer value : backOrderTraversalAsList(treeNode)) {
+            System.out.println(value);
+        }
+    }
+
+    public static List<Integer> backOrderTraversalAsList(TreeNode treeNode) {
+        List<Integer> result = new ArrayList<>();
+        backOrder(treeNode, result);
+        return result;
+    }
+
+    private static void backOrder(TreeNode treeNode, List<Integer> result) {
         if(null == treeNode){
             return;
         }
-        backOrderTraveral(treeNode.leftChild);
-        backOrderTraveral(treeNode.rightChild);
-        System.out.println(treeNode.data);
+        backOrder(treeNode.leftChild, result);
+        backOrder(treeNode.rightChild, result);
+        result.add(treeNode.data);
     }
 
     /**
@@ -87,7 +124,7 @@ public class BinaryTree {
 
 
     public static void main(String[] args) {
-        LinkedList linkedList = new LinkedList(Arrays.asList(1, 2, 3, null, null, 4, null, null, 5, 6, null, 7));
+        LinkedList<Integer> linkedList = new LinkedList<>(Arrays.asList(1, 2, 3, null, null, 4, null, null, 5, 6, null, 7));
         TreeNode tree = createBinaryTree(linkedList);
         System.out.println("前序遍历：");
         preOrderTraveral(tree);
