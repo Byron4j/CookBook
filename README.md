@@ -649,6 +649,11 @@ cd CookBook
 
 - [为什么大公司一定要使用微服务](架构/微服务/01-为什么大公司一定要使用微服务.md)
 
+### 🏡云原生
+
+- [00-什么是云原生](架构/云原生/00-什么是云原生.md) - 云原生概念、CNCF、容器化、微服务、DevOps
+- :tada:[1-Kubernetes容器编排基础](架构/云原生/1-Kubernetes容器编排基础.md) - K8s 架构、Pod/Deployment/Service/Ingress、Spring Boot 集成、HPA 自动扩缩容
+
 ## **面试专区**
 
 专为 Java 面试准备的知识汇总，覆盖阿里、字节、腾讯等大厂高频考点：
@@ -712,14 +717,14 @@ cd CookBook
 - 保持与现有文档风格一致（标题层级、代码注释、ASCII 图示）
 
 ### 待办清单
-- [ ] Tomcat 架构与调优专题
+- [x] Tomcat 架构与调优专题
 - [ ] HttpClient4 高级用法
 - [ ] Jenkins Pipeline 流水线
 - [ ] Kafka 高级特性与源码分析
-- [ ] Docker / Kubernetes 容器化专题
-- [ ] Seata 分布式事务实战
-- [ ] ELK 日志采集与分析
-- [ ] Prometheus + Grafana 监控体系
+- [x] Docker / Kubernetes 容器化专题
+- [x] Seata 分布式事务实战
+- [x] ELK 日志采集与分析
+- [x] Prometheus + Grafana 监控体系
 
 ## **术语**
 

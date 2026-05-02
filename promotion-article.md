@@ -179,11 +179,12 @@ cd CookBook
 4. **创建 Pull Request**
 
 目前待办清单中还有不少内容建设中：
-- [ ] Tomcat 架构与调优专题
-- [ ] Docker / Kubernetes 容器化专题
-- [ ] Seata 分布式事务实战
-- [ ] ELK 日志采集与分析
-- [ ] Prometheus + Grafana 监控体系
+- [x] Tomcat 架构与调优专题
+- [x] Docker 容器化专题
+- [x] Kubernetes 容器编排专题
+- [x] Seata 分布式事务实战
+- [x] ELK 日志采集与分析
+- [x] Prometheus + Grafana 监控体系
 
 欢迎一起完善！
 
