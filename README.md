@@ -219,6 +219,7 @@ cd CookBook
 ├── Java核心/5-线程池.md
 ├── Java核心/6-AQS-抽象队列同步器.md
 ├── Java核心/7-ReentrantLock重入锁.md
+├── Java核心/8-Java并发编程核心机制.md
 ├── JVM/1-JVM参数.md
 └── JVM/2-jstat命令详解.md
 
@@ -233,6 +234,8 @@ cd CookBook
 ├── Spring/1-IOC相关.md
 ├── Spring/3-SpringAOP.md
 ├── Spring/6-Spring事务.md
+├── SpringBoot/1-SpringBoot自动装配原理.md
+├── SpringBoot/2-SpringBoot起步依赖与Actuator.md
 ├── SpringCloud/1-Eureka服务注册发现.md
 └── SpringCloud/2-Ribbon负载均衡.md
 
@@ -370,6 +373,7 @@ cd CookBook
 - 🌰**并发源码解读类**
     - 1.AQS: ```AbstractQueuedSynchronizer```
     - 2.重入锁：```ReentrantLock```
+- 🌰[Java并发编程核心机制](Java核心/8-Java并发编程核心机制.md) - volatile、synchronized、CAS、ThreadLocal、CompletableFuture、并发集合
 
 ## **XML**
 
@@ -401,7 +405,9 @@ cd CookBook
 
 ## **SpringBoot**
 
-- 🍂[自定义启动器starter](SpringBoot/99-自定义启动器starter.md)
+- 🍂[1-SpringBoot自动装配原理](SpringBoot/1-SpringBoot自动装配原理.md) - @SpringBootApplication、@EnableAutoConfiguration、条件注解、自定义Starter
+- 🍂[2-SpringBoot起步依赖与Actuator](SpringBoot/2-SpringBoot起步依赖与Actuator.md) - Starter机制、Actuator监控、Metrics、Profiles、事件监听
+- 🍂[99-自定义启动器starter](SpringBoot/99-自定义启动器starter.md)
 
 <a id="topic-springcloud"></a>
 ## **SpringCloud**
@@ -482,8 +488,8 @@ cd CookBook
 
 ## **Kafka**
 
-
 - [1-Kafka基础](Kafka/1-Kafka基础.md)
+- [2-Kafka核心知识与实战](Kafka/2-Kafka核心知识与实战.md) - 生产者消费者设计、副本机制、事务消息、Spring Kafka集成、性能调优
 
     
 
@@ -673,6 +679,11 @@ cd CookBook
 - **高并发**：限流降级（Sentinel）、秒杀系统设计、短链系统、排行榜设计
 - **微服务**：服务拆分原则、注册中心选型、配置中心、链路追踪（SkyWalking）
 - **网络**：TCP/HTTP 原理、Netty 线程模型、WebSocket、长连接与短连接
+
+### 工程实践面试
+- **单元测试**：JUnit 5、Mockito、Spring Boot Test、TDD、代码覆盖率
+- **安全**：JWT、OAuth2、HTTPS、SQL注入、XSS、CSRF防护
+- **性能优化**：JVM调优、SQL优化、缓存优化、JMeter压测
 
 ---
 
